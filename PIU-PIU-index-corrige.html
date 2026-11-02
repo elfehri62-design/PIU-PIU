@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#8b45ee">
+<title>PIU-PIU 💜</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f7f5ff;color:#222}
+header{background:linear-gradient(120deg,#8b45ee,#bd48d9);color:white;padding:22px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.logo{font-size:27px;font-weight:bold}
+header button{background:white;color:#8b45ee;border:0;border-radius:22px;padding:12px 16px;font-weight:bold;cursor:pointer}
+#userLine{font-size:13px;margin-top:7px;overflow-wrap:anywhere}
+h2{padding:0 16px}
+.stories{display:flex;gap:15px;overflow-x:auto;padding:12px 16px}
+.story{min-width:65px;text-align:center}
+.circle{width:60px;height:60px;border-radius:50%;background:linear-gradient(45deg,#ff65ae,#8b45ee);border:3px solid white;margin:auto auto 6px;display:grid;place-items:center;font-size:25px}
+.live{background:white;margin:16px;border-radius:16px;overflow:hidden;box-shadow:0 3px 12px #ddd}
+.live-image{background:linear-gradient(135deg,#a54cf2,#fa72bb);height:190px;display:grid;place-items:center;color:white;font-size:35px}
+.live-info{padding:14px}
+.tag{color:#e52d63;font-weight:bold}
+.live-info button{background:#8b45ee;color:white;border:0;padding:10px 18px;border-radius:10px;cursor:pointer}
+nav{position:fixed;bottom:0;left:0;width:100%;background:white;display:flex;justify-content:space-around;padding:12px 4px;box-shadow:0 -2px 10px #ddd;z-index:5}
+nav button{border:0;background:none;font-size:13px;color:#555;cursor:pointer}
+nav button span{display:block;font-size:23px;margin-bottom:4px}
+main{padding-bottom:90px}
+.modal-backdrop{display:none;position:fixed;inset:0;background:#1d123dcc;z-index:10;align-items:center;justify-content:center;padding:18px}
+.modal-backdrop.open{display:flex}
+.modal{background:white;width:100%;max-width:420px;max-height:90vh;overflow-y:auto;border-radius:20px;padding:22px;box-shadow:0 12px 40px #0003}
+.modal h2{padding:0;margin:0 0 8px;color:#7134c5}
+.modal p{color:#555;line-height:1.45}
+.modal label{display:block;font-weight:bold;margin:14px 0 6px}
+.modal input{width:100%;padding:13px;border:1px solid #d8cbea;border-radius:10px;font-size:16px}
+.actions{display:flex;gap:9px;margin-top:18px}
+.actions button{flex:1;padding:12px 8px;border:0;border-radius:12px;background:#8b45ee;color:white;font-weight:bold;font-size:15px;cursor:pointer}
+.actions button.secondary{background:#f0e8fb;color:#7134c5}
+.actions button:disabled{opacity:.6;cursor:wait}
+.close{float:right;background:none;border:0;font-size:24px;color:#777;cursor:pointer}
+#authMessage{min-height:22px;font-size:14px;color:#7134c5;margin-top:12px;line-height:1.5;overflow-wrap:anywhere}
+@media(max-width:360px){.logo{font-size:22px}header{padding:16px 12px}.actions{flex-direction:column}}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="logo">💜 PIU-PIU</div>
+    <div id="userLine"></div>
+  </div>
+  <button id="authButton" type="button">Se connecter</button>
+</header>
+
+<main>
+  <h2>Découvrir les amis</h2>
+  <div class="stories">
+    <div class="story"><div class="circle">＋</div>Ajouter</div>
+    <div class="story"><div class="circle">😍</div>Emma</div>
+    <div class="story"><div class="circle">😎</div>Lucas</div>
+    <div class="story"><div class="circle">🥰</div>Sarah</div>
+    <div class="story"><div class="circle">🔥</div>Alex</div>
+  </div>
+
+  <h2>🔴 Lives en direct</h2>
+  <div class="live">
+    <div class="live-image">📹 LIVE</div>
+    <div class="live-info">
+      <span class="tag">● EN DIRECT</span>
+      <h3>Bienvenue sur PIU-PIU</h3>
+      <p>Découvre les lives de la communauté.</p>
+      <button type="button" onclick="alert('Les lives seront bientôt disponibles !')">Regarder</button>
+    </div>
+  </div>
+
+  <h2>📸 Publications</h2>
+  <div class="live">
+    <div class="live-image">📷</div>
+    <div class="live-info">
+      <h3>La communauté PIU-PIU</h3>
+      <p>Partage tes meilleurs moments !</p>
+      ❤️ J'aime
+    </div>
+  </div>
+</main>
+
+<nav>
+  <button type="button" onclick="location.href='#'"><span>🏠</span>Accueil</button>
+  <button type="button" onclick="alert('Lives bientôt disponibles')"><span>📹</span>Live</button>
+  <button type="button" onclick="alert('Photos bientôt disponibles')"><span>📸</span>Photos</button>
+  <button type="button" onclick="alert('Messages bientôt disponibles')"><span>💬</span>Messages</button>
+  <button type="button" onclick="alert('Profil bientôt disponible')"><span>👤</span>Profil</button>
+</nav>
+
+<div class="modal-backdrop" id="authBackdrop">
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <button class="close" id="closeAuth" type="button" aria-label="Fermer">×</button>
+    <h2 id="authTitle">Bienvenue sur PIU-PIU 💜</h2>
+    <p>Connecte-toi ou crée ton compte avec ton adresse e-mail.</p>
+    <label for="email">Adresse e-mail</label>
+    <input id="email" type="email" autocomplete="email" placeholder="exemple@email.com">
+    <label for="password">Mot de passe</label>
+    <input id="password" type="password" autocomplete="current-password" placeholder="Au moins 6 caractères">
+    <div class="actions">
+      <button id="signIn" type="button">Se connecter</button>
+      <button id="signUp" class="secondary" type="button">Créer un compte</button>
+    </div>
+    <div id="authMessage" role="status"></div>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://edwqvlibagfllfobazmd.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_8Kf69i7SKAlU0j3QW4ndHA_-micATkn';
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+const backdrop = document.getElementById('authBackdrop');
+const authButton = document.getElementById('authButton');
+const authMessage = document.getElementById('authMessage');
+const userLine = document.getElementById('userLine');
+const signInButton = document.getElementById('signIn');
+const signUpButton = document.getElementById('signUp');
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+
+function showMessage(message) {
+  authMessage.textContent = message;
+}
+function openAuth() {
+  showMessage('');
+  backdrop.classList.add('open');
+}
+function closeAuth() {
+  backdrop.classList.remove('open');
+}
+function setLoading(loading) {
+  signInButton.disabled = loading;
+  signUpButton.disabled = loading;
+}
+function updateUser(session) {
+  if (session && session.user) {
+    userLine.textContent = 'Connecté : ' + session.user.email;
+    authButton.textContent = 'Se déconnecter';
+  } else {
+    userLine.textContent = '';
+    authButton.textContent = 'Se connecter';
+  }
+}
+
+authButton.addEventListener('click', async () => {
+  const { data, error } = await supabaseClient.auth.getSession();
+  if (error) {
+    alert('Erreur : ' + error.message);
+    return;
+  }
+  if (data.session) {
+    const { error: logoutError } = await supabaseClient.auth.signOut();
+    if (logoutError) {
+      alert('Erreur de déconnexion : ' + logoutError.message);
+    } else {
+      updateUser(null);
+      alert('Tu es déconnecté(e). 💜');
+    }
+  } else {
+    openAuth();
+  }
+});
+
+document.getElementById('closeAuth').addEventListener('click', closeAuth);
+backdrop.addEventListener('click', (event) => {
+  if (event.target === backdrop) closeAuth();
+});
+
+signInButton.addEventListener('click', async () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+  if (!email || !password) {
+    showMessage('Entre ton adresse e-mail et ton mot de passe.');
+    return;
+  }
+  setLoading(true);
+  showMessage('Connexion en cours…');
+  try {
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+    if (error) {
+      showMessage('Connexion impossible : ' + error.message);
+      return;
+    }
+    updateUser(data.session);
+    showMessage('Connexion réussie ! Bienvenue sur PIU-PIU 💜');
+    setTimeout(closeAuth, 1200);
+  } catch (error) {
+    showMessage('Une erreur est survenue. Réessaie.');
+  } finally {
+    setLoading(false);
+  }
+});
+
+signUpButton.addEventListener('click', async () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+  if (!email || !password) {
+    showMessage('Entre ton adresse e-mail et choisis un mot de passe.');
+    return;
+  }
+  if (password.length < 6) {
+    showMessage('Ton mot de passe doit contenir au moins 6 caractères.');
+    return;
+  }
+  setLoading(true);
+  showMessage('Création de ton compte en cours…');
+  try {
+    const { data, error } = await supabaseClient.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: 'https://elfehri62-design.github.io/PIU-PIU/'
+      }
+    });
+    if (error) {
+      showMessage('Inscription impossible : ' + error.message);
+      return;
+    }
+    if (data.session) {
+      updateUser(data.session);
+      showMessage('Ton compte est créé et tu es connecté(e). 💜');
+      setTimeout(closeAuth, 1200);
+    } else {
+      showMessage('Compte créé ! Consulte ta boîte e-mail et clique sur le lien de confirmation pour activer ton compte.');
+    }
+  } catch (error) {
+    showMessage('Une erreur est survenue pendant la création du compte.');
+  } finally {
+    setLoading(false);
+  }
+});
+
+supabaseClient.auth.onAuthStateChange((_event, session) => {
+  updateUser(session);
+});
+
+async function checkSession() {
+  const { data, error } = await supabaseClient.auth.getSession();
+  if (!error) updateUser(data.session);
+}
+checkSession();
+</script>
+</body>
+</html>
