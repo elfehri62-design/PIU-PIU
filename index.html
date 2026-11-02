@@ -6,29 +6,45 @@
 <meta name="theme-color" content="#8b45ee">
 <title>PIU-PIU</title>
 <style>
-* { box-sizing: border-box; }
-body { margin: 0; font-family: Arial, sans-serif; background: #f7f5ff; color: #222; }
-header { background: #8b45ee; color: white; padding: 22px; display: flex; justify-content: space-between; align-items: center; }
-.logo { font-size: 27px; font-weight: bold; }
-header button { background: white; color: #8b45ee; border: 0; border-radius: 20px; padding: 10px 15px; }
-h2 { padding: 0 16px; }
-.stories { display: flex; gap: 15px; overflow-x: auto; padding: 12px 16px; }
-.story { min-width: 65px; text-align: center; }
-.circle { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(45deg,#ff65ae,#8b45ee); border: 3px solid white; margin: auto auto 6px; display: grid; place-items: center; font-size: 25px; }
-.live { background: white; margin: 16px; border-radius: 16px; overflow: hidden; box-shadow: 0 3px 12px #ddd; }
-.live-image { background: linear-gradient(135deg,#a54cf2,#fa72bb); height: 190px; display: grid; place-items: center; color: white; font-size: 35px; }
-.live-info { padding: 14px; }
-.tag { color: #e52d63; font-weight: bold; }
-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 14px 4px; box-shadow: 0 -2px 10px #ddd; }
-nav button { border: 0; background: none; font-size: 13px; color: #555; }
-nav button span { display: block; font-size: 23px; margin-bottom: 4px; }
-main { padding-bottom: 85px; }
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f7f5ff;color:#222}
+header{background:#8b45ee;color:white;padding:22px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:27px;font-weight:bold}
+header button{background:white;color:#8b45ee;border:0;border-radius:20px;padding:10px 15px;font-weight:bold}
+h2{padding:0 16px}
+.stories{display:flex;gap:15px;overflow-x:auto;padding:12px 16px}
+.story{min-width:65px;text-align:center}
+.circle{width:60px;height:60px;border-radius:50%;background:linear-gradient(45deg,#ff65ae,#8b45ee);border:3px solid white;margin:auto auto 6px;display:grid;place-items:center;font-size:25px}
+.live{background:white;margin:16px;border-radius:16px;overflow:hidden;box-shadow:0 3px 12px #ddd}
+.live-image{background:linear-gradient(135deg,#a54cf2,#fa72bb);height:190px;display:grid;place-items:center;color:white;font-size:35px}
+.live-info{padding:14px}
+.tag{color:#e52d63;font-weight:bold}
+nav{position:fixed;bottom:0;width:100%;background:white;display:flex;justify-content:space-around;padding:14px 4px;box-shadow:0 -2px 10px #ddd}
+nav button{border:0;background:none;font-size:13px;color:#555}
+nav button span{display:block;font-size:23px;margin-bottom:4px}
+main{padding-bottom:85px}
+.modal-backdrop{display:none;position:fixed;inset:0;background:#1d123dcc;z-index:10;align-items:center;justify-content:center;padding:18px}
+.modal-backdrop.open{display:flex}
+.modal{background:white;width:100%;max-width:420px;border-radius:20px;padding:22px;box-shadow:0 12px 40px #0003}
+.modal h2{padding:0;margin:0 0 8px;color:#7134c5}
+.modal p{color:#555;line-height:1.45}
+.modal label{display:block;font-weight:bold;margin:14px 0 6px}
+.modal input{width:100%;padding:13px;border:1px solid #d8cbea;border-radius:10px;font-size:16px}
+.actions{display:flex;gap:9px;margin-top:18px}
+.actions button{flex:1;padding:12px 8px;border:0;border-radius:12px;background:#8b45ee;color:white;font-weight:bold;font-size:15px}
+.actions button.secondary{background:#f0e8fb;color:#7134c5}
+.close{float:right;background:none;border:0;font-size:24px;color:#777}
+#authMessage{min-height:22px;font-size:14px;color:#7134c5;margin-top:12px}
+#userLine{font-size:12px;color:white;margin-top:5px}
 </style>
 </head>
 <body>
 <header>
-  <div class="logo">💜 PIU-PIU</div>
-  <button onclick="alert('Bienvenue sur PIU-PIU !')">Se connecter</button>
+  <div>
+    <div class="logo">💜 PIU-PIU</div>
+    <div id="userLine"></div>
+  </div>
+  <button id="authButton">Se connecter</button>
 </header>
 <main>
   <h2>Découvrir les amis</h2>
@@ -66,5 +82,100 @@ main { padding-bottom: 85px; }
   <button onclick="alert('Messages bientôt disponibles')"><span>💬</span>Messages</button>
   <button onclick="alert('Profil bientôt disponible')"><span>👤</span>Profil</button>
 </nav>
+
+<div class="modal-backdrop" id="authBackdrop">
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <button class="close" id="closeAuth" aria-label="Fermer">×</button>
+    <h2 id="authTitle">Bienvenue sur PIU-PIU 💜</h2>
+    <p id="authIntro">Connecte-toi ou crée ton compte avec ton adresse e-mail.</p>
+    <label for="email">Adresse e-mail</label>
+    <input id="email" type="email" autocomplete="email" placeholder="exemple@email.com">
+    <label for="password">Mot de passe</label>
+    <input id="password" type="password" autocomplete="current-password" placeholder="Au moins 6 caractères">
+    <div class="actions">
+      <button id="signIn">Se connecter</button>
+      <button id="signUp" class="secondary">Créer un compte</button>
+    </div>
+    <div id="authMessage" role="status"></div>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://edwqvlibagfllfobazmd.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_8Kf69i7SKAlU0j3QW4ndHA_-micATkn';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+const backdrop = document.getElementById('authBackdrop');
+const authButton = document.getElementById('authButton');
+const authMessage = document.getElementById('authMessage');
+const userLine = document.getElementById('userLine');
+
+function showMessage(message) { authMessage.textContent = message; }
+function openAuth() {
+  showMessage('');
+  backdrop.classList.add('open');
+}
+function closeAuth() { backdrop.classList.remove('open'); }
+
+function updateUser(session) {
+  if (session && session.user) {
+    userLine.textContent = 'Connecté : ' + session.user.email;
+    authButton.textContent = 'Se déconnecter';
+  } else {
+    userLine.textContent = '';
+    authButton.textContent = 'Se connecter';
+  }
+}
+
+authButton.addEventListener('click', async () => {
+  const { data } = await supabaseClient.auth.getSession();
+  if (data.session) {
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) alert('Erreur de déconnexion : ' + error.message);
+  } else {
+    openAuth();
+  }
+});
+
+document.getElementById('closeAuth').addEventListener('click', closeAuth);
+backdrop.addEventListener('click', (event) => {
+  if (event.target === backdrop) closeAuth();
+});
+
+document.getElementById('signIn').addEventListener('click', async () => {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  if (!email || !password) return showMessage('Entre ton adresse e-mail et ton mot de passe.');
+  showMessage('Connexion en cours…');
+  const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+  if (error) return showMessage('Connexion impossible : ' + error.message);
+  showMessage('Connexion réussie ! 💜');
+  setTimeout(closeAuth, 900);
+});
+
+document.getElementById('signUp').addEventListener('click', async () => {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  if (!email || !password) return showMessage('Entre ton adresse e-mail et choisis un mot de passe.');
+  if (password.length < 6) return showMessage('Ton mot de passe doit contenir au moins 6 caractères.');
+  showMessage('Création du compte en cours…');
+  const { data, error } = await supabaseClient.auth.signUp({
+    email,
+    password,
+    options: { emailRedirectTo: 'https://elfehri62-design.github.io/PIU-PIU/' }
+  });
+  if (error) return showMessage('Inscription impossible : ' + error.message);
+  if (data.session) {
+    showMessage('Ton compte est créé et tu es connecté(e). 💜');
+    setTimeout(closeAuth, 1200);
+  } else {
+    showMessage('Compte créé ! Consulte ta boîte e-mail et clique sur le lien de confirmation pour activer ton compte.');
+  }
+});
+
+supabaseClient.auth.onAuthStateChange((_event, session) => updateUser(session));
+supabaseClient.auth.getSession().then(({ data }) => updateUser(data.session));
+</script>
 </body>
 </html>
