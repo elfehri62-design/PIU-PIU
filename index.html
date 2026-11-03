@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,29 +5,28 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#14243d">
 <title>PIU-PIU</title>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f5f7fa;color:#222}
-header{background:#14243d;color:#fff;padding:22px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+header{background:#14243d;color:white;padding:20px;display:flex;justify-content:space-between;align-items:center;gap:10px}
 .logo{font-size:27px;font-weight:bold}
-header button{background:#fff;color:#14243d;border:1px solid #d6b45c;border-radius:20px;padding:10px 15px;font-weight:bold}
+header button{background:white;color:#14243d;border:1px solid #d6b45c;border-radius:20px;padding:10px 15px;font-weight:bold}
+#userLine{font-size:12px;margin-top:5px}
 h2{padding:0 16px;color:#14243d}
+main{padding-bottom:100px}
 .stories{display:flex;gap:15px;overflow-x:auto;padding:12px 16px}
 .story{min-width:65px;text-align:center}
-.circle{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#e8edf4,#fff);border:3px solid #d6b45c;margin:auto auto 6px;display:grid;place-items:center;font-size:25px}
-.live{background:white;margin:16px;border-radius:16px;overflow:hidden;box-shadow:0 3px 12px #ddd;border:1px solid #e5e9ef}
-.live-image{background:linear-gradient(135deg,#14243d,#345477);height:190px;display:grid;place-items:center;color:white;font-size:35px}
+.circle{width:60px;height:60px;border-radius:50%;background:white;border:3px solid #d6b45c;margin:auto auto 6px;display:grid;place-items:center;font-size:25px}
+.live,.profile-card,.community-card{background:white;margin:16px;border-radius:16px;overflow:hidden;box-shadow:0 3px 12px #ddd;border:1px solid #e5e9ef}
+.live-image{background:linear-gradient(135deg,#14243d,#345477);height:160px;display:grid;place-items:center;color:white;font-size:35px}
 .live-info{padding:14px}
 .tag{color:#b38b2e;font-weight:bold}
-nav{position:fixed;bottom:0;width:100%;background:white;display:flex;justify-content:space-around;padding:14px 4px;box-shadow:0 -2px 10px #ddd;z-index:5;border-top:1px solid #e5e9ef}
-nav button{border:0;background:none;font-size:13px;color:#14243d}
-nav button span{display:block;font-size:23px;margin-bottom:4px}
-main{padding-bottom:100px}
-.profile-card{display:none;background:white;margin:16px;padding:18px;border-radius:16px;box-shadow:0 3px 12px #ddd;border:1px solid #e5e9ef}
-.profile-card h2{padding:0;margin-top:0;color:#14243d}
-.profile-card label,.modal label{display:block;font-weight:bold;margin:13px 0 6px}
-.profile-card input,.profile-card textarea,.modal input{width:100%;padding:12px;border:1px solid #d6b45c;border-radius:10px;font-size:16px;font-family:Arial,sans-serif}
-.profile-card textarea{min-height:85px;resize:vertical}
+.profile-card{display:none;padding:18px}
+.profile-card h2{padding:0;margin-top:0}
+label{display:block;font-weight:bold;margin:13px 0 6px}
+input,textarea{width:100%;padding:12px;border:1px solid #d6b45c;border-radius:10px;font-size:16px;font-family:Arial,sans-serif}
+textarea{min-height:85px}
 .primary{background:#14243d;color:white;border:1px solid #d6b45c;border-radius:12px;padding:13px 18px;font-weight:bold;font-size:15px;margin-top:14px;width:100%}
 #profileMessage{font-size:14px;color:#345477;min-height:20px;margin-top:10px}
 #profilePreview{width:100px;height:100px;border-radius:50%;object-fit:cover;background:#eee;border:3px solid #d6b45c;display:none;margin:10px auto}
@@ -36,20 +34,34 @@ main{padding-bottom:100px}
 .avatar-area{text-align:center}
 .avatar-button{background:#14243d;color:white;border:1px solid #d6b45c;border-radius:12px;padding:12px 16px;font-weight:bold}
 .small-note{font-size:12px;color:#667085}
+.community-card{padding:15px}
+.search-box{margin:12px 16px}
+.member{display:flex;align-items:center;gap:12px;padding:13px;border-bottom:1px solid #edf0f5}
+.member:last-child{border-bottom:0}
+.member img,.member-avatar{width:58px;height:58px;min-width:58px;border-radius:50%;object-fit:cover;border:2px solid #d6b45c}
+.member-avatar{display:grid;place-items:center;background:#eef1f5;font-size:25px}
+.member-info{min-width:0;flex:1}
+.member-name{font-weight:bold;color:#14243d;overflow-wrap:anywhere}
+.member-username{font-size:13px;color:#987323;margin-top:4px}
+.member-bio{font-size:13px;color:#555;margin-top:5px;overflow-wrap:anywhere}
+.empty{padding:18px;text-align:center;color:#667085}
+nav{position:fixed;bottom:0;width:100%;background:white;display:flex;justify-content:space-around;padding:13px 3px;box-shadow:0 -2px 10px #ddd;z-index:5;border-top:1px solid #e5e9ef}
+nav button{border:0;background:none;font-size:12px;color:#14243d}
+nav button span{display:block;font-size:22px;margin-bottom:4px}
 .modal-backdrop{display:none;position:fixed;inset:0;background:#1d263dcc;z-index:10;align-items:center;justify-content:center;padding:18px}
 .modal-backdrop.open{display:flex}
-.modal{background:white;width:100%;max-width:420px;border-radius:20px;padding:22px;box-shadow:0 12px 40px #0003;border:1px solid #d6b45c}
-.modal h2{padding:0;margin:0 0 8px;color:#14243d}
+.modal{background:white;width:100%;max-width:420px;border-radius:20px;padding:22px;border:1px solid #d6b45c}
+.modal h2{padding:0;margin:0 0 8px}
 .modal p{color:#555;line-height:1.45}
 .actions{display:flex;gap:9px;margin-top:18px}
-.actions button{flex:1;padding:12px 8px;border:0;border-radius:12px;background:#14243d;color:white;font-weight:bold;font-size:15px}
+.actions button{flex:1;padding:12px 8px;border:0;border-radius:12px;background:#14243d;color:white;font-weight:bold}
 .actions button.secondary{background:#edf0f5;color:#14243d;border:1px solid #d6b45c}
 .close{float:right;background:none;border:0;font-size:24px;color:#777}
 #authMessage{min-height:22px;font-size:14px;color:#345477;margin-top:12px}
-#userLine{font-size:12px;color:white;margin-top:5px}
 button:disabled{opacity:.6}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -61,25 +73,24 @@ button:disabled{opacity:.6}
 </header>
 
 <main>
+
 <section class="profile-card" id="profileCard">
 <h2>👤 Mon profil PIU-PIU</h2>
 <p>Personnalise les informations visibles sur ton profil.</p>
 
 <div class="avatar-area">
-<img id="profilePreview" alt="Aperçu de la photo de profil">
+<img id="profilePreview" alt="Ma photo de profil">
 <div id="avatarPlaceholder" class="avatar-placeholder">🐤</div>
-<button class="avatar-button" type="button" id="chooseAvatar">
-📷 Choisir une photo sur mon téléphone
-</button>
+<button class="avatar-button" type="button" id="chooseAvatar">📷 Choisir une photo</button>
 <input id="avatarFile" type="file" accept="image/*" hidden>
-<p class="small-note">Choisis une photo dans ta galerie. Maximum 10 Mo.</p>
+<p class="small-note">Photo de 10 Mo maximum.</p>
 </div>
 
-<label for="username">Pseudo (unique)</label>
-<input id="username" maxlength="30" placeholder="ex. piu_piu_123" autocomplete="username">
+<label for="username">Pseudo unique</label>
+<input id="username" maxlength="30" placeholder="ex. piu_piu_123">
 
 <label for="displayName">Nom affiché</label>
-<input id="displayName" maxlength="60" placeholder="Ton prénom ou nom public">
+<input id="displayName" maxlength="60" placeholder="Ton nom public">
 
 <label for="bio">Biographie</label>
 <textarea id="bio" maxlength="300" placeholder="Présente-toi en quelques mots…"></textarea>
@@ -88,7 +99,8 @@ button:disabled{opacity:.6}
 <div id="profileMessage" role="status"></div>
 </section>
 
-<h2>Découvrir les amis</h2>
+<h2>🌟 Découvrir les amis</h2>
+
 <div class="stories">
 <div class="story"><div class="circle">＋</div>Ajouter</div>
 <div class="story"><div class="circle">😍</div>Emma</div>
@@ -97,14 +109,27 @@ button:disabled{opacity:.6}
 <div class="story"><div class="circle">🔥</div>Alex</div>
 </div>
 
+<h2>👥 Membres PIU-PIU</h2>
+
+<div class="search-box">
+<input id="memberSearch" type="search" placeholder="🔎 Rechercher un membre...">
+</div>
+
+<section class="community-card">
+<div id="membersList">
+<div class="empty">Connecte-toi pour découvrir les membres PIU-PIU. 💙</div>
+</div>
+<button class="primary" id="refreshMembers">Actualiser les membres</button>
+</section>
+
 <h2>🔴 Lives en direct</h2>
 <div class="live">
 <div class="live-image">📹 LIVE</div>
 <div class="live-info">
-<span class="tag">● EN DIRECT</span>
+<span class="tag">● PIU-PIU</span>
 <h3>Bienvenue sur PIU-PIU</h3>
 <p>Découvre les lives de la communauté.</p>
-<button onclick="alert('Les lives seront bientôt disponibles !')">Regarder</button>
+<button onclick="alert('Les vrais lives seront bientôt disponibles !')">Regarder</button>
 </div>
 </div>
 
@@ -117,6 +142,7 @@ button:disabled{opacity:.6}
 ❤️ J'aime
 </div>
 </div>
+
 </main>
 
 <nav>
@@ -148,6 +174,7 @@ button:disabled{opacity:.6}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
 const SUPABASE_URL='https://edwqvlibagfllfobazmd.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_8Kf69i7SKAlU0j3QW4ndHA_-micATkn';
@@ -164,7 +191,7 @@ const profileCard=document.getElementById('profileCard');
 
 let currentUser=null;
 let selectedAvatarFile=null;
-let previewObjectUrl=null;
+let allMembers=[];
 
 function authMsg(t){
 document.getElementById('authMessage').textContent=t;
@@ -194,7 +221,6 @@ placeholder.style.display='grid';
 }
 
 async function loadProfile(user){
-currentUser=user;
 profileCard.style.display='block';
 profileMsg('Chargement du profil…');
 
@@ -205,30 +231,109 @@ const {data,error}=await supabaseClient
 .maybeSingle();
 
 if(error){
-profileMsg('Chargement impossible : '+error.message);
+profileMsg('Erreur : '+error.message);
 return;
 }
 
 document.getElementById('username').value=data?.username||'';
 document.getElementById('displayName').value=data?.display_name||'';
 document.getElementById('bio').value=data?.bio||'';
-
 showAvatar(data?.avatar_url||'');
 profileMsg('Ton profil est prêt à être personnalisé. 💙');
 }
 
-async function updateSession(session){
-currentUser=session?.user||null;
+function createMemberElement(member){
+const article=document.createElement('div');
+article.className='member';
 
-if(currentUser){
-document.getElementById('userLine').textContent='Connecté : '+currentUser.email;
-authButton.textContent='Se déconnecter';
-await loadProfile(currentUser);
+if(member.avatar_url){
+const img=document.createElement('img');
+img.src=member.avatar_url;
+img.alt='Photo de '+(member.display_name||member.username||'membre');
+img.onerror=()=>{
+img.remove();
+const fallback=document.createElement('div');
+fallback.className='member-avatar';
+fallback.textContent='🐤';
+article.prepend(fallback);
+};
+article.appendChild(img);
 }else{
-document.getElementById('userLine').textContent='';
-authButton.textContent='Se connecter';
-profileCard.style.display='none';
+const avatar=document.createElement('div');
+avatar.className='member-avatar';
+avatar.textContent='🐤';
+article.appendChild(avatar);
 }
+
+const info=document.createElement('div');
+info.className='member-info';
+
+const name=document.createElement('div');
+name.className='member-name';
+name.textContent=member.display_name||member.username||'Membre PIU-PIU';
+
+const username=document.createElement('div');
+username.className='member-username';
+username.textContent=member.username?'@'+member.username:'Membre PIU-PIU';
+
+const bio=document.createElement('div');
+bio.className='member-bio';
+bio.textContent=member.bio||'Bienvenue dans la communauté PIU-PIU !';
+
+info.append(name,username,bio);
+article.appendChild(info);
+
+return article;
+}
+
+function displayMembers(search=''){
+const list=document.getElementById('membersList');
+list.replaceChildren();
+
+const term=search.trim().toLowerCase();
+
+const filtered=allMembers.filter(member=>{
+const name=(member.display_name||'').toLowerCase();
+const username=(member.username||'').toLowerCase();
+const bio=(member.bio||'').toLowerCase();
+return name.includes(term)||username.includes(term)||bio.includes(term);
+});
+
+if(!filtered.length){
+const empty=document.createElement('div');
+empty.className='empty';
+empty.textContent=term?'Aucun membre trouvé.':'Aucun membre pour le moment.';
+list.appendChild(empty);
+return;
+}
+
+filtered.forEach(member=>{
+list.appendChild(createMemberElement(member));
+});
+}
+
+async function loadMembers(){
+const list=document.getElementById('membersList');
+
+if(!currentUser){
+list.textContent='Connecte-toi pour découvrir les membres.';
+return;
+}
+
+list.textContent='Chargement des membres…';
+
+const {data,error}=await supabaseClient
+.from('profiles')
+.select('username,display_name,bio,avatar_url,created_at')
+.order('created_at',{ascending:false});
+
+if(error){
+list.textContent='Impossible de charger les membres : '+error.message;
+return;
+}
+
+allMembers=data||[];
+displayMembers(document.getElementById('memberSearch').value);
 }
 
 function openProfile(){
@@ -239,6 +344,29 @@ return;
 }
 profileCard.scrollIntoView({behavior:'smooth'});
 }
+
+async function updateSession(session){
+currentUser=session?.user||null;
+
+if(currentUser){
+document.getElementById('userLine').textContent='Connecté : '+currentUser.email;
+authButton.textContent='Se déconnecter';
+await loadProfile(currentUser);
+await loadMembers();
+}else{
+document.getElementById('userLine').textContent='';
+authButton.textContent='Se connecter';
+profileCard.style.display='none';
+allMembers=[];
+document.getElementById('membersList').textContent='Connecte-toi pour découvrir les membres.';
+}
+}
+
+document.getElementById('memberSearch').addEventListener('input',event=>{
+displayMembers(event.target.value);
+});
+
+document.getElementById('refreshMembers').addEventListener('click',loadMembers);
 
 document.getElementById('chooseAvatar').addEventListener('click',()=>{
 if(!currentUser){
@@ -265,20 +393,12 @@ return;
 }
 
 selectedAvatarFile=file;
-
-if(previewObjectUrl){
-URL.revokeObjectURL(previewObjectUrl);
-}
-
-previewObjectUrl=URL.createObjectURL(file);
-showAvatar(previewObjectUrl);
+showAvatar(URL.createObjectURL(file));
 profileMsg('Photo choisie ! Appuie sur Enregistrer mon profil.');
 });
 
 authButton.addEventListener('click',async()=>{
-const {data}=await supabaseClient.auth.getSession();
-
-if(data.session){
+if(currentUser){
 const {error}=await supabaseClient.auth.signOut();
 if(error)alert(error.message);
 }else{
@@ -291,8 +411,8 @@ document.getElementById('closeAuth').addEventListener('click',()=>{
 backdrop.classList.remove('open');
 });
 
-backdrop.addEventListener('click',e=>{
-if(e.target===backdrop)backdrop.classList.remove('open');
+backdrop.addEventListener('click',event=>{
+if(event.target===backdrop)backdrop.classList.remove('open');
 });
 
 document.getElementById('signIn').addEventListener('click',async()=>{
@@ -303,22 +423,20 @@ if(!email||!password)return authMsg('Entre ton adresse e-mail et ton mot de pass
 
 authMsg('Connexion en cours…');
 
-const {error}=await supabaseClient.auth.signInWithPassword({
-email,password
-});
+const {error}=await supabaseClient.auth.signInWithPassword({email,password});
 
 if(error)return authMsg('Connexion impossible : '+error.message);
 
 authMsg('Connexion réussie ! 💙');
-setTimeout(()=>backdrop.classList.remove('open'),800);
+backdrop.classList.remove('open');
 });
 
 document.getElementById('signUp').addEventListener('click',async()=>{
 const email=document.getElementById('email').value.trim();
 const password=document.getElementById('password').value;
 
-if(!email||!password)return authMsg('Entre ton adresse e-mail et choisis un mot de passe.');
-if(password.length<6)return authMsg('Ton mot de passe doit contenir au moins 6 caractères.');
+if(!email||!password)return authMsg('Entre ton adresse e-mail et ton mot de passe.');
+if(password.length<6)return authMsg('Le mot de passe doit contenir au moins 6 caractères.');
 
 authMsg('Création du compte…');
 
@@ -334,7 +452,7 @@ if(error)return authMsg('Inscription impossible : '+error.message);
 
 if(data.session){
 authMsg('Compte créé ! 💙');
-setTimeout(()=>backdrop.classList.remove('open'),900);
+backdrop.classList.remove('open');
 }else{
 authMsg('Compte créé ! Consulte tes e-mails pour confirmer ton adresse.');
 }
@@ -364,8 +482,7 @@ const extension=selectedAvatarFile.name.split('.').pop().toLowerCase();
 const safeExtension=/^[a-z0-9]+$/.test(extension)?extension:'jpg';
 const path=currentUser.id+'/'+Date.now()+'.'+safeExtension;
 
-const {error:uploadError}=await supabaseClient
-.storage
+const {error:uploadError}=await supabaseClient.storage
 .from(AVATAR_BUCKET)
 .upload(path,selectedAvatarFile,{
 cacheControl:'3600',
@@ -375,12 +492,9 @@ contentType:selectedAvatarFile.type
 
 if(uploadError)throw uploadError;
 
-const {data:publicData}=supabaseClient
-.storage
+avatar_url=supabaseClient.storage
 .from(AVATAR_BUCKET)
-.getPublicUrl(path);
-
-avatar_url=publicData.publicUrl;
+.getPublicUrl(path).data.publicUrl;
 }
 
 const profileData={
@@ -391,9 +505,7 @@ bio,
 updated_at:new Date().toISOString()
 };
 
-if(avatar_url!==undefined){
-profileData.avatar_url=avatar_url;
-}
+if(avatar_url!==undefined)profileData.avatar_url=avatar_url;
 
 const {error:saveError}=await supabaseClient
 .from('profiles')
@@ -404,22 +516,13 @@ if(saveError)throw saveError;
 selectedAvatarFile=null;
 document.getElementById('avatarFile').value='';
 
-if(previewObjectUrl){
-URL.revokeObjectURL(previewObjectUrl);
-previewObjectUrl=null;
-}
-
 profileMsg('Profil enregistré avec succès ! 💙');
 await loadProfile(currentUser);
+await loadMembers();
 
 }catch(error){
 console.error(error);
-
-if(error.code==='23505'){
-profileMsg('Ce pseudo est déjà utilisé. Choisis-en un autre.');
-}else{
-profileMsg('Erreur : '+(error.message||'Impossible d’enregistrer.'));
-}
+profileMsg(error.code==='23505'?'Ce pseudo est déjà utilisé. Choisis-en un autre.':'Erreur : '+error.message);
 }finally{
 button.disabled=false;
 button.textContent='Enregistrer mon profil';
@@ -433,10 +536,13 @@ if(currentUser){
 document.getElementById('userLine').textContent='Connecté : '+currentUser.email;
 authButton.textContent='Se déconnecter';
 loadProfile(currentUser);
+loadMembers();
 }else{
 document.getElementById('userLine').textContent='';
 authButton.textContent='Se connecter';
 profileCard.style.display='none';
+allMembers=[];
+document.getElementById('membersList').textContent='Connecte-toi pour découvrir les membres.';
 }
 });
 
@@ -444,5 +550,6 @@ supabaseClient.auth.getSession().then(({data})=>{
 updateSession(data.session);
 });
 </script>
+
 </body>
 </html>
