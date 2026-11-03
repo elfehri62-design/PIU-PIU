@@ -31,7 +31,11 @@ main{padding-bottom:100px}
 .profile-card textarea{min-height:85px;resize:vertical}
 .primary{background:#14243d;color:white;border:1px solid #d6b45c;border-radius:12px;padding:13px 18px;font-weight:bold;font-size:15px;margin-top:14px;width:100%}
 #profileMessage{font-size:14px;color:#345477;min-height:20px;margin-top:10px}
-#profilePreview{width:76px;height:76px;border-radius:50%;object-fit:cover;background:#eee;border:3px solid #d6b45c;display:none;margin:10px 0}
+#profilePreview{width:100px;height:100px;border-radius:50%;object-fit:cover;background:#eee;border:3px solid #d6b45c;display:none;margin:10px auto}
+.avatar-placeholder{width:100px;height:100px;border-radius:50%;background:#eef1f5;border:3px solid #d6b45c;display:grid;place-items:center;font-size:40px;margin:10px auto}
+.avatar-area{text-align:center}
+.avatar-button{background:#14243d;color:white;border:1px solid #d6b45c;border-radius:12px;padding:12px 16px;font-weight:bold}
+.small-note{font-size:12px;color:#667085}
 .modal-backdrop{display:none;position:fixed;inset:0;background:#1d263dcc;z-index:10;align-items:center;justify-content:center;padding:18px}
 .modal-backdrop.open{display:flex}
 .modal{background:white;width:100%;max-width:420px;border-radius:20px;padding:22px;box-shadow:0 12px 40px #0003;border:1px solid #d6b45c}
@@ -43,6 +47,7 @@ main{padding-bottom:100px}
 .close{float:right;background:none;border:0;font-size:24px;color:#777}
 #authMessage{min-height:22px;font-size:14px;color:#345477;margin-top:12px}
 #userLine{font-size:12px;color:white;margin-top:5px}
+button:disabled{opacity:.6}
 </style>
 </head>
 <body>
@@ -59,7 +64,16 @@ main{padding-bottom:100px}
 <section class="profile-card" id="profileCard">
 <h2>👤 Mon profil PIU-PIU</h2>
 <p>Personnalise les informations visibles sur ton profil.</p>
+
+<div class="avatar-area">
 <img id="profilePreview" alt="Aperçu de la photo de profil">
+<div id="avatarPlaceholder" class="avatar-placeholder">🐤</div>
+<button class="avatar-button" type="button" id="chooseAvatar">
+📷 Choisir une photo sur mon téléphone
+</button>
+<input id="avatarFile" type="file" accept="image/*" hidden>
+<p class="small-note">Choisis une photo dans ta galerie. Maximum 10 Mo.</p>
+</div>
 
 <label for="username">Pseudo (unique)</label>
 <input id="username" maxlength="30" placeholder="ex. piu_piu_123" autocomplete="username">
@@ -69,9 +83,6 @@ main{padding-bottom:100px}
 
 <label for="bio">Biographie</label>
 <textarea id="bio" maxlength="300" placeholder="Présente-toi en quelques mots…"></textarea>
-
-<label for="avatarUrl">Adresse de ta photo (URL)</label>
-<input id="avatarUrl" type="url" placeholder="https://…">
 
 <button class="primary" id="saveProfile">Enregistrer mon profil</button>
 <div id="profileMessage" role="status"></div>
@@ -140,6 +151,7 @@ main{padding-bottom:100px}
 <script>
 const SUPABASE_URL='https://edwqvlibagfllfobazmd.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_8Kf69i7SKAlU0j3QW4ndHA_-micATkn';
+const AVATAR_BUCKET='avatars';
 
 const supabaseClient=window.supabase.createClient(
 SUPABASE_URL,
@@ -149,7 +161,10 @@ SUPABASE_PUBLISHABLE_KEY
 const backdrop=document.getElementById('authBackdrop');
 const authButton=document.getElementById('authButton');
 const profileCard=document.getElementById('profileCard');
+
 let currentUser=null;
+let selectedAvatarFile=null;
+let previewObjectUrl=null;
 
 function authMsg(t){
 document.getElementById('authMessage').textContent=t;
@@ -161,13 +176,20 @@ document.getElementById('profileMessage').textContent=t;
 
 function showAvatar(url){
 const p=document.getElementById('profilePreview');
+const placeholder=document.getElementById('avatarPlaceholder');
+
 if(url){
 p.src=url;
 p.style.display='block';
-p.onerror=()=>p.style.display='none';
+placeholder.style.display='none';
+p.onerror=()=>{
+p.style.display='none';
+placeholder.style.display='grid';
+};
 }else{
 p.removeAttribute('src');
 p.style.display='none';
+placeholder.style.display='grid';
 }
 }
 
@@ -190,7 +212,6 @@ return;
 document.getElementById('username').value=data?.username||'';
 document.getElementById('displayName').value=data?.display_name||'';
 document.getElementById('bio').value=data?.bio||'';
-document.getElementById('avatarUrl').value=data?.avatar_url||'';
 
 showAvatar(data?.avatar_url||'');
 profileMsg('Ton profil est prêt à être personnalisé. 💙');
@@ -219,8 +240,39 @@ return;
 profileCard.scrollIntoView({behavior:'smooth'});
 }
 
-document.getElementById('avatarUrl').addEventListener('input',e=>{
-showAvatar(e.target.value.trim());
+document.getElementById('chooseAvatar').addEventListener('click',()=>{
+if(!currentUser){
+profileMsg('Connecte-toi pour choisir une photo.');
+return;
+}
+document.getElementById('avatarFile').click();
+});
+
+document.getElementById('avatarFile').addEventListener('change',event=>{
+const file=event.target.files[0];
+if(!file)return;
+
+if(!file.type.startsWith('image/')){
+profileMsg('Choisis un fichier image.');
+event.target.value='';
+return;
+}
+
+if(file.size>10*1024*1024){
+profileMsg('La photo doit faire moins de 10 Mo.');
+event.target.value='';
+return;
+}
+
+selectedAvatarFile=file;
+
+if(previewObjectUrl){
+URL.revokeObjectURL(previewObjectUrl);
+}
+
+previewObjectUrl=URL.createObjectURL(file);
+showAvatar(previewObjectUrl);
+profileMsg('Photo choisie ! Appuie sur Enregistrer mon profil.');
 });
 
 authButton.addEventListener('click',async()=>{
@@ -291,45 +343,101 @@ authMsg('Compte créé ! Consulte tes e-mails pour confirmer ton adresse.');
 document.getElementById('saveProfile').addEventListener('click',async()=>{
 if(!currentUser)return profileMsg('Connecte-toi pour modifier ton profil.');
 
+const button=document.getElementById('saveProfile');
 const username=document.getElementById('username').value.trim().toLowerCase();
 const display_name=document.getElementById('displayName').value.trim();
 const bio=document.getElementById('bio').value.trim();
-const avatar_url=document.getElementById('avatarUrl').value.trim();
 
 if(username&&!/^[a-z0-9_]{3,30}$/.test(username)){
 return profileMsg('Le pseudo doit contenir 3 à 30 caractères : lettres, chiffres ou _ uniquement.');
 }
 
-if(avatar_url&&!/^https:\/\/.+/i.test(avatar_url)){
-return profileMsg('L’adresse de la photo doit commencer par https://');
-}
-
+button.disabled=true;
+button.textContent='Enregistrement…';
 profileMsg('Enregistrement en cours…');
 
-const {error}=await supabaseClient
-.from('profiles')
-.update({
+try{
+let avatar_url;
+
+if(selectedAvatarFile){
+const extension=selectedAvatarFile.name.split('.').pop().toLowerCase();
+const safeExtension=/^[a-z0-9]+$/.test(extension)?extension:'jpg';
+const path=currentUser.id+'/'+Date.now()+'.'+safeExtension;
+
+const {error:uploadError}=await supabaseClient
+.storage
+.from(AVATAR_BUCKET)
+.upload(path,selectedAvatarFile,{
+cacheControl:'3600',
+upsert:false,
+contentType:selectedAvatarFile.type
+});
+
+if(uploadError)throw uploadError;
+
+const {data:publicData}=supabaseClient
+.storage
+.from(AVATAR_BUCKET)
+.getPublicUrl(path);
+
+avatar_url=publicData.publicUrl;
+}
+
+const profileData={
+id:currentUser.id,
 username:username||null,
 display_name:display_name||null,
 bio,
-avatar_url:avatar_url||null,
 updated_at:new Date().toISOString()
-})
-.eq('id',currentUser.id);
+};
 
-if(error){
-if(error.code==='23505'){
-return profileMsg('Ce pseudo est déjà utilisé. Choisis-en un autre.');
+if(avatar_url!==undefined){
+profileData.avatar_url=avatar_url;
 }
-return profileMsg('Erreur : '+error.message);
+
+const {error:saveError}=await supabaseClient
+.from('profiles')
+.upsert(profileData,{onConflict:'id'});
+
+if(saveError)throw saveError;
+
+selectedAvatarFile=null;
+document.getElementById('avatarFile').value='';
+
+if(previewObjectUrl){
+URL.revokeObjectURL(previewObjectUrl);
+previewObjectUrl=null;
 }
 
 profileMsg('Profil enregistré avec succès ! 💙');
-showAvatar(avatar_url);
+await loadProfile(currentUser);
+
+}catch(error){
+console.error(error);
+
+if(error.code==='23505'){
+profileMsg('Ce pseudo est déjà utilisé. Choisis-en un autre.');
+}else{
+profileMsg('Erreur : '+(error.message||'Impossible d’enregistrer.'));
+}
+}finally{
+button.disabled=false;
+button.textContent='Enregistrer mon profil';
+}
 });
 
 supabaseClient.auth.onAuthStateChange((_event,session)=>{
-updateSession(session);
+currentUser=session?.user||null;
+
+if(currentUser){
+document.getElementById('userLine').textContent='Connecté : '+currentUser.email;
+authButton.textContent='Se déconnecter';
+loadProfile(currentUser);
+}else{
+document.getElementById('userLine').textContent='';
+authButton.textContent='Se connecter';
+profileCard.style.display='none';
+}
 });
 
 supabaseClient.auth.getSession().then(({data})=>{
