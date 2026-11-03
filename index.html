@@ -1,555 +1,567 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#14243d">
-<title>PIU-PIU</title>
-
+<title>PIU-PIU 💙</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f5f7fa;color:#222}
-header{background:#14243d;color:white;padding:20px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.logo{font-size:27px;font-weight:bold}
-header button{background:white;color:#14243d;border:1px solid #d6b45c;border-radius:20px;padding:10px 15px;font-weight:bold}
-#userLine{font-size:12px;margin-top:5px}
-h2{padding:0 16px;color:#14243d}
+header{background:#14243d;color:white;padding:18px;display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:0;z-index:5}
+.logo{font-size:26px;font-weight:bold}
+#userLine{font-size:11px;margin-top:5px}
+button{cursor:pointer}
+header button,.primary,.avatar-button,.public-close{background:#14243d;color:white;border:1px solid #d6b45c;border-radius:12px;padding:11px 15px;font-weight:bold}
+header button{background:white;color:#14243d;border-radius:20px}
 main{padding-bottom:100px}
-.stories{display:flex;gap:15px;overflow-x:auto;padding:12px 16px}
-.story{min-width:65px;text-align:center}
-.circle{width:60px;height:60px;border-radius:50%;background:white;border:3px solid #d6b45c;margin:auto auto 6px;display:grid;place-items:center;font-size:25px}
-.live,.profile-card,.community-card{background:white;margin:16px;border-radius:16px;overflow:hidden;box-shadow:0 3px 12px #ddd;border:1px solid #e5e9ef}
-.live-image{background:linear-gradient(135deg,#14243d,#345477);height:160px;display:grid;place-items:center;color:white;font-size:35px}
-.live-info{padding:14px}
-.tag{color:#b38b2e;font-weight:bold}
-.profile-card{display:none;padding:18px}
-.profile-card h2{padding:0;margin-top:0}
+h2{color:#14243d;padding:0 16px}
+section.panel,.live,.community-card{background:white;margin:16px;border-radius:16px;padding:16px;box-shadow:0 3px 12px #ddd;border:1px solid #e5e9ef}
+.profile-card{display:none}
 label{display:block;font-weight:bold;margin:13px 0 6px}
-input,textarea{width:100%;padding:12px;border:1px solid #d6b45c;border-radius:10px;font-size:16px;font-family:Arial,sans-serif}
+input,textarea{width:100%;padding:12px;border:1px solid #d6b45c;border-radius:10px;font-size:16px;font-family:Arial}
 textarea{min-height:85px}
-.primary{background:#14243d;color:white;border:1px solid #d6b45c;border-radius:12px;padding:13px 18px;font-weight:bold;font-size:15px;margin-top:14px;width:100%}
-#profileMessage{font-size:14px;color:#345477;min-height:20px;margin-top:10px}
-#profilePreview{width:100px;height:100px;border-radius:50%;object-fit:cover;background:#eee;border:3px solid #d6b45c;display:none;margin:10px auto}
-.avatar-placeholder{width:100px;height:100px;border-radius:50%;background:#eef1f5;border:3px solid #d6b45c;display:grid;place-items:center;font-size:40px;margin:10px auto}
+.primary{width:100%;margin-top:12px}
+#profileMessage,#authMessage{font-size:14px;color:#345477;min-height:20px;margin-top:10px}
 .avatar-area{text-align:center}
-.avatar-button{background:#14243d;color:white;border:1px solid #d6b45c;border-radius:12px;padding:12px 16px;font-weight:bold}
+#profilePreview{width:105px;height:105px;border-radius:50%;object-fit:cover;border:3px solid #d6b45c;display:none;margin:10px auto}
+.avatar-placeholder,.member-avatar{width:60px;height:60px;border-radius:50%;background:#eef1f5;border:2px solid #d6b45c;display:grid;place-items:center;font-size:26px}
+.avatar-placeholder{width:105px;height:105px;font-size:40px;margin:10px auto}
 .small-note{font-size:12px;color:#667085}
-.community-card{padding:15px}
+.stories{display:flex;gap:15px;overflow-x:auto;padding:12px 16px}
+.story{min-width:65px;text-align:center;font-size:13px}
+.circle{width:60px;height:60px;border-radius:50%;background:white;border:3px solid #d6b45c;margin:auto auto 6px;display:grid;place-items:center;font-size:25px}
 .search-box{margin:12px 16px}
-.member{display:flex;align-items:center;gap:12px;padding:13px;border-bottom:1px solid #edf0f5}
-.member:last-child{border-bottom:0}
+.member{display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid #edf0f5;cursor:pointer}
+.member:active{background:#f5f7fa}
 .member img,.member-avatar{width:58px;height:58px;min-width:58px;border-radius:50%;object-fit:cover;border:2px solid #d6b45c}
-.member-avatar{display:grid;place-items:center;background:#eef1f5;font-size:25px}
 .member-info{min-width:0;flex:1}
 .member-name{font-weight:bold;color:#14243d;overflow-wrap:anywhere}
 .member-username{font-size:13px;color:#987323;margin-top:4px}
 .member-bio{font-size:13px;color:#555;margin-top:5px;overflow-wrap:anywhere}
-.empty{padding:18px;text-align:center;color:#667085}
-nav{position:fixed;bottom:0;width:100%;background:white;display:flex;justify-content:space-around;padding:13px 3px;box-shadow:0 -2px 10px #ddd;z-index:5;border-top:1px solid #e5e9ef}
-nav button{border:0;background:none;font-size:12px;color:#14243d}
-nav button span{display:block;font-size:22px;margin-bottom:4px}
-.modal-backdrop{display:none;position:fixed;inset:0;background:#1d263dcc;z-index:10;align-items:center;justify-content:center;padding:18px}
-.modal-backdrop.open{display:flex}
-.modal{background:white;width:100%;max-width:420px;border-radius:20px;padding:22px;border:1px solid #d6b45c}
-.modal h2{padding:0;margin:0 0 8px}
-.modal p{color:#555;line-height:1.45}
+.empty{text-align:center;padding:18px;color:#667085}
+.live-image{background:linear-gradient(135deg,#14243d,#345477);height:150px;display:grid;place-items:center;color:white;font-size:34px;border-radius:12px}
+.tag{color:#b38b2e;font-weight:bold}
+nav{position:fixed;bottom:0;width:100%;background:white;display:flex;justify-content:space-around;padding:10px 2px;box-shadow:0 -2px 10px #ddd;z-index:6;border-top:1px solid #e5e9ef}
+nav button{border:0;background:none;font-size:11px;color:#14243d;padding:3px}
+nav button span{display:block;font-size:21px;margin-bottom:3px}
+.modal-backdrop,.public-profile{display:none;position:fixed;inset:0;background:#14243dcc;z-index:10;align-items:center;justify-content:center;padding:18px}
+.modal-backdrop.open,.public-profile.open{display:flex}
+.modal,.public-profile-card{background:white;width:100%;max-width:420px;border-radius:20px;padding:22px;border:2px solid #d6b45c;max-height:90vh;overflow:auto}
+.modal h2,.public-profile-card h2{padding:0;margin-top:0}
 .actions{display:flex;gap:9px;margin-top:18px}
 .actions button{flex:1;padding:12px 8px;border:0;border-radius:12px;background:#14243d;color:white;font-weight:bold}
-.actions button.secondary{background:#edf0f5;color:#14243d;border:1px solid #d6b45c}
-.close{float:right;background:none;border:0;font-size:24px;color:#777}
-#authMessage{min-height:22px;font-size:14px;color:#345477;margin-top:12px}
+.actions .secondary{background:#edf0f5;color:#14243d;border:1px solid #d6b45c}
+.close{float:right;background:none;border:0;font-size:25px;color:#777}
+.public-profile-card{text-align:center}
+.public-profile-card img{width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid #d6b45c}
+.public-profile-card p{overflow-wrap:anywhere;color:#555}
+.public-close{margin-top:12px}
+.page{display:none}
+.page.active{display:block}
+.notice{background:#f5f7fa;border-radius:12px;padding:14px;color:#526078;font-size:14px;line-height:1.5}
 button:disabled{opacity:.6}
 </style>
 </head>
-
 <body>
 
 <header>
-<div>
-<div class="logo">💙 PIU-PIU</div>
-<div id="userLine"></div>
-</div>
-<button id="authButton">Se connecter</button>
+ <div>
+  <div class="logo">💙 PIU-PIU</div>
+  <div id="userLine">Bienvenue dans la communauté</div>
+ </div>
+ <button id="authButton">Se connecter</button>
 </header>
 
 <main>
+<div id="homePage" class="page active">
+ <h2>🌟 Découvrir les amis</h2>
+ <div class="stories">
+  <div class="story"><div class="circle">＋</div>Ajouter</div>
+  <div class="story"><div class="circle">😍</div>Emma</div>
+  <div class="story"><div class="circle">😎</div>Lucas</div>
+  <div class="story"><div class="circle">🥰</div>Sarah</div>
+  <div class="story"><div class="circle">🔥</div>Alex</div>
+ </div>
 
-<section class="profile-card" id="profileCard">
-<h2>👤 Mon profil PIU-PIU</h2>
-<p>Personnalise les informations visibles sur ton profil.</p>
+ <h2>👥 Membres PIU-PIU</h2>
+ <div class="search-box">
+  <input id="memberSearch" type="search" placeholder="🔎 Rechercher un membre...">
+ </div>
+ <section class="community-card">
+  <div id="membersList" class="empty">Connecte-toi pour découvrir les membres. 💙</div>
+  <button class="primary" id="refreshMembers">Actualiser les membres</button>
+ </section>
 
-<div class="avatar-area">
-<img id="profilePreview" alt="Ma photo de profil">
-<div id="avatarPlaceholder" class="avatar-placeholder">🐤</div>
-<button class="avatar-button" type="button" id="chooseAvatar">📷 Choisir une photo</button>
-<input id="avatarFile" type="file" accept="image/*" hidden>
-<p class="small-note">Photo de 10 Mo maximum.</p>
+ <h2>📸 Publications</h2>
+ <section class="live">
+  <div class="live-image">📷 PIU-PIU</div>
+  <h3>La communauté PIU-PIU</h3>
+  <p>Les publications des membres arriveront ici.</p>
+  <div class="notice">L'espace publications et les likes nécessitent encore la configuration de leurs tables dans Supabase.</div>
+ </section>
 </div>
 
-<label for="username">Pseudo unique</label>
-<input id="username" maxlength="30" placeholder="ex. piu_piu_123">
-
-<label for="displayName">Nom affiché</label>
-<input id="displayName" maxlength="60" placeholder="Ton nom public">
-
-<label for="bio">Biographie</label>
-<textarea id="bio" maxlength="300" placeholder="Présente-toi en quelques mots…"></textarea>
-
-<button class="primary" id="saveProfile">Enregistrer mon profil</button>
-<div id="profileMessage" role="status"></div>
-</section>
-
-<h2>🌟 Découvrir les amis</h2>
-
-<div class="stories">
-<div class="story"><div class="circle">＋</div>Ajouter</div>
-<div class="story"><div class="circle">😍</div>Emma</div>
-<div class="story"><div class="circle">😎</div>Lucas</div>
-<div class="story"><div class="circle">🥰</div>Sarah</div>
-<div class="story"><div class="circle">🔥</div>Alex</div>
+<div id="livePage" class="page">
+ <h2>🔴 Lives en direct</h2>
+ <section class="live">
+  <div class="live-image">📹 LIVE</div>
+  <h3>Bienvenue sur PIU-PIU</h3>
+  <p>Retrouve bientôt les diffusions en direct de la communauté.</p>
+  <div class="notice">La diffusion vidéo nécessite un service spécialisé. Cet espace est pour le moment une présentation.</div>
+ </section>
 </div>
 
-<h2>👥 Membres PIU-PIU</h2>
-
-<div class="search-box">
-<input id="memberSearch" type="search" placeholder="🔎 Rechercher un membre...">
+<div id="photosPage" class="page">
+ <h2>📸 Photos</h2>
+ <section class="panel">
+  <p>Découvre bientôt les photos partagées par les membres.</p>
+  <div class="notice">L'espace photos partagé sera activé avec le système de publications.</div>
+ </section>
 </div>
 
-<section class="community-card">
-<div id="membersList">
-<div class="empty">Connecte-toi pour découvrir les membres PIU-PIU. 💙</div>
-</div>
-<button class="primary" id="refreshMembers">Actualiser les membres</button>
-</section>
-
-<h2>🔴 Lives en direct</h2>
-<div class="live">
-<div class="live-image">📹 LIVE</div>
-<div class="live-info">
-<span class="tag">● PIU-PIU</span>
-<h3>Bienvenue sur PIU-PIU</h3>
-<p>Découvre les lives de la communauté.</p>
-<button onclick="alert('Les vrais lives seront bientôt disponibles !')">Regarder</button>
-</div>
+<div id="messagesPage" class="page">
+ <h2>💬 Messages</h2>
+ <section class="panel">
+  <p>Ton espace de conversations PIU-PIU.</p>
+  <div class="notice">Les messages privés nécessitent une table de conversations, une table de messages et des règles de sécurité Supabase. Ils ne sont pas encore actifs.</div>
+ </section>
 </div>
 
-<h2>📸 Publications</h2>
-<div class="live">
-<div class="live-image">📷</div>
-<div class="live-info">
-<h3>La communauté PIU-PIU</h3>
-<p>Partage tes meilleurs moments !</p>
-❤️ J'aime
+<div id="profilePage" class="page">
+ <section class="panel profile-card" id="profileCard">
+  <h2>👤 Mon profil PIU-PIU</h2>
+  <p>Personnalise les informations visibles sur ton profil.</p>
+  <div class="avatar-area">
+   <img id="profilePreview" alt="Ma photo de profil">
+   <div id="avatarPlaceholder" class="avatar-placeholder">🐤</div>
+   <button class="avatar-button" type="button" id="chooseAvatar">📷 Choisir une photo</button>
+   <input id="avatarFile" type="file" accept="image/*" hidden>
+   <p class="small-note">Photo de 10 Mo maximum.</p>
+  </div>
+  <label for="username">Pseudo unique</label>
+  <input id="username" maxlength="30" placeholder="ex. piu_piu_123">
+  <label for="displayName">Nom affiché</label>
+  <input id="displayName" maxlength="60" placeholder="Ton nom public">
+  <label for="bio">Biographie</label>
+  <textarea id="bio" maxlength="300" placeholder="Présente-toi en quelques mots…"></textarea>
+  <button class="primary" id="saveProfile">Enregistrer mon profil</button>
+  <div id="profileMessage" role="status"></div>
+ </section>
+ <section class="panel" id="profileLoginNotice">
+  <p>Connecte-toi pour voir et modifier ton profil.</p>
+  <button class="primary" onclick="showAuth()">Se connecter</button>
+ </section>
 </div>
-</div>
-
 </main>
 
 <nav>
-<button onclick="window.scrollTo({top:0,behavior:'smooth'})"><span>🏠</span>Accueil</button>
-<button onclick="alert('Lives bientôt disponibles')"><span>📹</span>Live</button>
-<button onclick="alert('Photos bientôt disponibles')"><span>📸</span>Photos</button>
-<button onclick="alert('Messages bientôt disponibles')"><span>💬</span>Messages</button>
-<button onclick="openProfile()"><span>👤</span>Profil</button>
+ <button onclick="showPage('homePage')"><span>🏠</span>Accueil</button>
+ <button onclick="showPage('livePage')"><span>📹</span>Live</button>
+ <button onclick="showPage('photosPage')"><span>📸</span>Photos</button>
+ <button onclick="showPage('messagesPage')"><span>💬</span>Messages</button>
+ <button onclick="showPage('profilePage')"><span>👤</span>Profil</button>
 </nav>
 
 <div class="modal-backdrop" id="authBackdrop">
-<section class="modal" role="dialog" aria-modal="true">
-<button class="close" id="closeAuth" aria-label="Fermer">×</button>
-<h2>Bienvenue sur PIU-PIU 💙</h2>
-<p>Connecte-toi ou crée ton compte avec ton adresse e-mail.</p>
-
-<label for="email">Adresse e-mail</label>
-<input id="email" type="email" autocomplete="email" placeholder="exemple@email.com">
-
-<label for="password">Mot de passe</label>
-<input id="password" type="password" autocomplete="current-password" placeholder="Au moins 6 caractères">
-
-<div class="actions">
-<button id="signIn">Se connecter</button>
-<button id="signUp" class="secondary">Créer un compte</button>
+ <section class="modal" role="dialog" aria-modal="true">
+  <button class="close" id="closeAuth" aria-label="Fermer">×</button>
+  <h2>Bienvenue sur PIU-PIU 💙</h2>
+  <p>Connecte-toi ou crée ton compte avec ton adresse e-mail.</p>
+  <label for="email">Adresse e-mail</label>
+  <input id="email" type="email" autocomplete="email" placeholder="exemple@email.com">
+  <label for="password">Mot de passe</label>
+  <input id="password" type="password" autocomplete="current-password" placeholder="Au moins 6 caractères">
+  <div class="actions">
+   <button id="signIn">Se connecter</button>
+   <button id="signUp" class="secondary">Créer un compte</button>
+  </div>
+  <div id="authMessage" role="status"></div>
+ </section>
 </div>
-<div id="authMessage" role="status"></div>
-</section>
+
+<div class="public-profile" id="publicProfile">
+ <section class="public-profile-card">
+  <div id="publicAvatar"></div>
+  <h2 id="publicName">Membre PIU-PIU</h2>
+  <p id="publicUsername"></p>
+  <p id="publicBio"></p>
+  <button class="public-close" id="closePublicProfile">Fermer</button>
+ </section>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 const SUPABASE_URL='https://edwqvlibagfllfobazmd.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_8Kf69i7SKAlU0j3QW4ndHA_-micATkn';
 const AVATAR_BUCKET='avatars';
 
 const supabaseClient=window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_PUBLISHABLE_KEY
+ SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY
 );
-
-const backdrop=document.getElementById('authBackdrop');
-const authButton=document.getElementById('authButton');
-const profileCard=document.getElementById('profileCard');
 
 let currentUser=null;
 let selectedAvatarFile=null;
 let allMembers=[];
+let profileLoadVersion=0;
 
-function authMsg(t){
-document.getElementById('authMessage').textContent=t;
+const $=id=>document.getElementById(id);
+const backdrop=$('authBackdrop');
+
+function authMsg(message){$('authMessage').textContent=message}
+function profileMsg(message){$('profileMessage').textContent=message}
+
+function showAuth(){
+ authMsg('');
+ backdrop.classList.add('open');
 }
 
-function profileMsg(t){
-document.getElementById('profileMessage').textContent=t;
+function showPage(pageId){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ $(pageId).classList.add('active');
+ window.scrollTo({top:0,behavior:'smooth'});
+ if(pageId==='profilePage'&&!currentUser)showAuth();
 }
 
 function showAvatar(url){
-const p=document.getElementById('profilePreview');
-const placeholder=document.getElementById('avatarPlaceholder');
-
-if(url){
-p.src=url;
-p.style.display='block';
-placeholder.style.display='none';
-p.onerror=()=>{
-p.style.display='none';
-placeholder.style.display='grid';
-};
-}else{
-p.removeAttribute('src');
-p.style.display='none';
-placeholder.style.display='grid';
-}
+ const img=$('profilePreview');
+ const placeholder=$('avatarPlaceholder');
+ if(url){
+  img.src=url;
+  img.style.display='block';
+  placeholder.style.display='none';
+  img.onerror=()=>{
+   img.style.display='none';
+   placeholder.style.display='grid';
+  };
+ }else{
+  img.removeAttribute('src');
+  img.style.display='none';
+  placeholder.style.display='grid';
+ }
 }
 
 async function loadProfile(user){
-profileCard.style.display='block';
-profileMsg('Chargement du profil…');
+ const version=++profileLoadVersion;
+ $('profileCard').style.display='block';
+ $('profileLoginNotice').style.display='none';
+ profileMsg('Chargement du profil…');
 
-const {data,error}=await supabaseClient
-.from('profiles')
-.select('username,display_name,bio,avatar_url')
-.eq('id',user.id)
-.maybeSingle();
+ const {data,error}=await supabaseClient
+  .from('profiles')
+  .select('username,display_name,bio,avatar_url')
+  .eq('id',user.id)
+  .maybeSingle();
 
-if(error){
-profileMsg('Erreur : '+error.message);
-return;
+ if(version!==profileLoadVersion)return;
+ if(error){profileMsg('Erreur : '+error.message);return}
+
+ $('username').value=data?.username||'';
+ $('displayName').value=data?.display_name||'';
+ $('bio').value=data?.bio||'';
+ showAvatar(data?.avatar_url||'');
+ profileMsg('Ton profil est prêt à être personnalisé. 💙');
 }
 
-document.getElementById('username').value=data?.username||'';
-document.getElementById('displayName').value=data?.display_name||'';
-document.getElementById('bio').value=data?.bio||'';
-showAvatar(data?.avatar_url||'');
-profileMsg('Ton profil est prêt à être personnalisé. 💙');
+function openPublicProfile(member){
+ const box=$('publicProfile');
+ const avatar=$('publicAvatar');
+ avatar.replaceChildren();
+
+ if(member.avatar_url){
+  const img=document.createElement('img');
+  img.src=member.avatar_url;
+  img.alt='Photo de profil';
+  avatar.appendChild(img);
+ }else{
+  const placeholder=document.createElement('div');
+  placeholder.className='avatar-placeholder';
+  placeholder.style.margin='auto';
+  placeholder.textContent='🐤';
+  avatar.appendChild(placeholder);
+ }
+
+ $('publicName').textContent=member.display_name||member.username||'Membre PIU-PIU';
+ $('publicUsername').textContent=member.username?'@'+member.username:'';
+ $('publicBio').textContent=member.bio||'Bienvenue dans la communauté PIU-PIU !';
+ box.classList.add('open');
 }
 
 function createMemberElement(member){
-const article=document.createElement('div');
-article.className='member';
+ const article=document.createElement('div');
+ article.className='member';
+ article.setAttribute('role','button');
+ article.tabIndex=0;
 
-if(member.avatar_url){
-const img=document.createElement('img');
-img.src=member.avatar_url;
-img.alt='Photo de '+(member.display_name||member.username||'membre');
-img.onerror=()=>{
-img.remove();
-const fallback=document.createElement('div');
-fallback.className='member-avatar';
-fallback.textContent='🐤';
-article.prepend(fallback);
-};
-article.appendChild(img);
-}else{
-const avatar=document.createElement('div');
-avatar.className='member-avatar';
-avatar.textContent='🐤';
-article.appendChild(avatar);
-}
+ if(member.avatar_url){
+  const img=document.createElement('img');
+  img.src=member.avatar_url;
+  img.alt='Photo de profil';
+  img.onerror=()=>{
+   img.remove();
+   const fallback=document.createElement('div');
+   fallback.className='member-avatar';
+   fallback.textContent='🐤';
+   article.prepend(fallback);
+  };
+  article.appendChild(img);
+ }else{
+  const avatar=document.createElement('div');
+  avatar.className='member-avatar';
+  avatar.textContent='🐤';
+  article.appendChild(avatar);
+ }
 
-const info=document.createElement('div');
-info.className='member-info';
+ const info=document.createElement('div');
+ info.className='member-info';
 
-const name=document.createElement('div');
-name.className='member-name';
-name.textContent=member.display_name||member.username||'Membre PIU-PIU';
+ const name=document.createElement('div');
+ name.className='member-name';
+ name.textContent=member.display_name||member.username||'Membre PIU-PIU';
 
-const username=document.createElement('div');
-username.className='member-username';
-username.textContent=member.username?'@'+member.username:'Membre PIU-PIU';
+ const username=document.createElement('div');
+ username.className='member-username';
+ username.textContent=member.username?'@'+member.username:'Membre PIU-PIU';
 
-const bio=document.createElement('div');
-bio.className='member-bio';
-bio.textContent=member.bio||'Bienvenue dans la communauté PIU-PIU !';
+ const bio=document.createElement('div');
+ bio.className='member-bio';
+ bio.textContent=member.bio||'Bienvenue dans la communauté PIU-PIU !';
 
-info.append(name,username,bio);
-article.appendChild(info);
+ info.append(name,username,bio);
+ article.appendChild(info);
 
-return article;
+ article.addEventListener('click',()=>openPublicProfile(member));
+ article.addEventListener('keydown',event=>{
+  if(event.key==='Enter'||event.key===' '){
+   event.preventDefault();
+   openPublicProfile(member);
+  }
+ });
+ return article;
 }
 
 function displayMembers(search=''){
-const list=document.getElementById('membersList');
-list.replaceChildren();
+ const list=$('membersList');
+ list.replaceChildren();
+ const term=search.trim().toLowerCase();
 
-const term=search.trim().toLowerCase();
+ const filtered=allMembers.filter(member=>
+  (member.display_name||'').toLowerCase().includes(term)||
+  (member.username||'').toLowerCase().includes(term)||
+  (member.bio||'').toLowerCase().includes(term)
+ );
 
-const filtered=allMembers.filter(member=>{
-const name=(member.display_name||'').toLowerCase();
-const username=(member.username||'').toLowerCase();
-const bio=(member.bio||'').toLowerCase();
-return name.includes(term)||username.includes(term)||bio.includes(term);
-});
-
-if(!filtered.length){
-const empty=document.createElement('div');
-empty.className='empty';
-empty.textContent=term?'Aucun membre trouvé.':'Aucun membre pour le moment.';
-list.appendChild(empty);
-return;
-}
-
-filtered.forEach(member=>{
-list.appendChild(createMemberElement(member));
-});
+ if(!filtered.length){
+  const empty=document.createElement('div');
+  empty.className='empty';
+  empty.textContent=term?'Aucun membre trouvé.':'Aucun membre pour le moment.';
+  list.appendChild(empty);
+  return;
+ }
+ filtered.forEach(member=>list.appendChild(createMemberElement(member)));
 }
 
 async function loadMembers(){
-const list=document.getElementById('membersList');
+ const list=$('membersList');
+ if(!currentUser){
+  list.textContent='Connecte-toi pour découvrir les membres.';
+  return;
+ }
+ list.textContent='Chargement des membres…';
 
-if(!currentUser){
-list.textContent='Connecte-toi pour découvrir les membres.';
-return;
-}
+ const {data,error}=await supabaseClient
+  .from('profiles')
+  .select('username,display_name,bio,avatar_url,created_at')
+  .order('created_at',{ascending:false});
 
-list.textContent='Chargement des membres…';
-
-const {data,error}=await supabaseClient
-.from('profiles')
-.select('username,display_name,bio,avatar_url,created_at')
-.order('created_at',{ascending:false});
-
-if(error){
-list.textContent='Impossible de charger les membres : '+error.message;
-return;
-}
-
-allMembers=data||[];
-displayMembers(document.getElementById('memberSearch').value);
-}
-
-function openProfile(){
-if(!currentUser){
-authMsg('Connecte-toi pour accéder à ton profil.');
-backdrop.classList.add('open');
-return;
-}
-profileCard.scrollIntoView({behavior:'smooth'});
+ if(!currentUser)return;
+ if(error){
+  list.textContent='Impossible de charger les membres : '+error.message;
+  return;
+ }
+ allMembers=data||[];
+ displayMembers($('memberSearch').value);
 }
 
 async function updateSession(session){
-currentUser=session?.user||null;
+ currentUser=session?.user||null;
 
-if(currentUser){
-document.getElementById('userLine').textContent='Connecté : '+currentUser.email;
-authButton.textContent='Se déconnecter';
-await loadProfile(currentUser);
-await loadMembers();
-}else{
-document.getElementById('userLine').textContent='';
-authButton.textContent='Se connecter';
-profileCard.style.display='none';
-allMembers=[];
-document.getElementById('membersList').textContent='Connecte-toi pour découvrir les membres.';
-}
+ if(currentUser){
+  $('userLine').textContent='Connecté : '+currentUser.email;
+  $('authButton').textContent='Se déconnecter';
+  await loadProfile(currentUser);
+  await loadMembers();
+ }else{
+  profileLoadVersion++;
+  $('userLine').textContent='Bienvenue dans la communauté';
+  $('authButton').textContent='Se connecter';
+  $('profileCard').style.display='none';
+  $('profileLoginNotice').style.display='block';
+  allMembers=[];
+  $('membersList').textContent='Connecte-toi pour découvrir les membres.';
+ }
 }
 
-document.getElementById('memberSearch').addEventListener('input',event=>{
-displayMembers(event.target.value);
+$('memberSearch').addEventListener('input',event=>{
+ displayMembers(event.target.value);
+});
+$('refreshMembers').addEventListener('click',loadMembers);
+
+$('closePublicProfile').addEventListener('click',()=>{
+ $('publicProfile').classList.remove('open');
+});
+$('publicProfile').addEventListener('click',event=>{
+ if(event.target.id==='publicProfile')event.currentTarget.classList.remove('open');
 });
 
-document.getElementById('refreshMembers').addEventListener('click',loadMembers);
-
-document.getElementById('chooseAvatar').addEventListener('click',()=>{
-if(!currentUser){
-profileMsg('Connecte-toi pour choisir une photo.');
-return;
-}
-document.getElementById('avatarFile').click();
+$('chooseAvatar').addEventListener('click',()=>{
+ if(!currentUser)return profileMsg('Connecte-toi pour choisir une photo.');
+ $('avatarFile').click();
 });
 
-document.getElementById('avatarFile').addEventListener('change',event=>{
-const file=event.target.files[0];
-if(!file)return;
-
-if(!file.type.startsWith('image/')){
-profileMsg('Choisis un fichier image.');
-event.target.value='';
-return;
-}
-
-if(file.size>10*1024*1024){
-profileMsg('La photo doit faire moins de 10 Mo.');
-event.target.value='';
-return;
-}
-
-selectedAvatarFile=file;
-showAvatar(URL.createObjectURL(file));
-profileMsg('Photo choisie ! Appuie sur Enregistrer mon profil.');
+$('avatarFile').addEventListener('change',event=>{
+ const file=event.target.files[0];
+ if(!file)return;
+ if(!file.type.startsWith('image/')){
+  profileMsg('Choisis un fichier image.');
+  event.target.value='';
+  return;
+ }
+ if(file.size>10*1024*1024){
+  profileMsg('La photo doit faire moins de 10 Mo.');
+  event.target.value='';
+  return;
+ }
+ selectedAvatarFile=file;
+ showAvatar(URL.createObjectURL(file));
+ profileMsg('Photo choisie ! Appuie sur Enregistrer mon profil.');
 });
 
-authButton.addEventListener('click',async()=>{
-if(currentUser){
-const {error}=await supabaseClient.auth.signOut();
-if(error)alert(error.message);
-}else{
-authMsg('');
-backdrop.classList.add('open');
-}
+$('saveProfile').addEventListener('click',async()=>{
+ if(!currentUser)return profileMsg('Connecte-toi pour modifier ton profil.');
+
+ const button=$('saveProfile');
+ const username=$('username').value.trim().toLowerCase();
+ const display_name=$('displayName').value.trim();
+ const bio=$('bio').value.trim();
+
+ if(username&&!/^[a-z0-9_]{3,30}$/.test(username)){
+  return profileMsg('Le pseudo doit contenir 3 à 30 caractères : lettres, chiffres ou _ uniquement.');
+ }
+
+ button.disabled=true;
+ button.textContent='Enregistrement…';
+ profileMsg('Enregistrement en cours…');
+
+ try{
+  let avatar_url;
+
+  if(selectedAvatarFile){
+   const extension=selectedAvatarFile.name.split('.').pop().toLowerCase();
+   const safeExtension=/^[a-z0-9]+$/.test(extension)?extension:'jpg';
+   const path=currentUser.id+'/'+Date.now()+'.'+safeExtension;
+
+   const {error:uploadError}=await supabaseClient.storage
+    .from(AVATAR_BUCKET)
+    .upload(path,selectedAvatarFile,{
+     cacheControl:'3600',
+     upsert:false,
+     contentType:selectedAvatarFile.type
+    });
+
+   if(uploadError)throw uploadError;
+
+   avatar_url=supabaseClient.storage
+    .from(AVATAR_BUCKET)
+    .getPublicUrl(path).data.publicUrl;
+  }
+
+  const profileData={
+   id:currentUser.id,
+   username:username||null,
+   display_name:display_name||null,
+   bio,
+   updated_at:new Date().toISOString()
+  };
+  if(avatar_url!==undefined)profileData.avatar_url=avatar_url;
+
+  const {error:saveError}=await supabaseClient
+   .from('profiles')
+   .upsert(profileData,{onConflict:'id'});
+
+  if(saveError)throw saveError;
+
+  selectedAvatarFile=null;
+  $('avatarFile').value='';
+  profileMsg('Profil enregistré avec succès ! 💙');
+  await loadProfile(currentUser);
+  await loadMembers();
+
+ }catch(error){
+  console.error(error);
+  profileMsg(error.code==='23505'?
+   'Ce pseudo est déjà utilisé. Choisis-en un autre.':
+   'Erreur : '+(error.message||'Impossible d’enregistrer.'));
+ }finally{
+  button.disabled=false;
+  button.textContent='Enregistrer mon profil';
+ }
 });
 
-document.getElementById('closeAuth').addEventListener('click',()=>{
-backdrop.classList.remove('open');
+$('authButton').addEventListener('click',async()=>{
+ if(currentUser){
+  const {error}=await supabaseClient.auth.signOut();
+  if(error)alert(error.message);
+ }else showAuth();
 });
 
+$('closeAuth').addEventListener('click',()=>backdrop.classList.remove('open'));
 backdrop.addEventListener('click',event=>{
-if(event.target===backdrop)backdrop.classList.remove('open');
+ if(event.target===backdrop)backdrop.classList.remove('open');
 });
 
-document.getElementById('signIn').addEventListener('click',async()=>{
-const email=document.getElementById('email').value.trim();
-const password=document.getElementById('password').value;
+$('signIn').addEventListener('click',async()=>{
+ const email=$('email').value.trim();
+ const password=$('password').value;
+ if(!email||!password)return authMsg('Entre ton adresse e-mail et ton mot de passe.');
+ authMsg('Connexion en cours…');
 
-if(!email||!password)return authMsg('Entre ton adresse e-mail et ton mot de passe.');
+ const {error}=await supabaseClient.auth.signInWithPassword({email,password});
+ if(error)return authMsg('Connexion impossible : '+error.message);
 
-authMsg('Connexion en cours…');
-
-const {error}=await supabaseClient.auth.signInWithPassword({email,password});
-
-if(error)return authMsg('Connexion impossible : '+error.message);
-
-authMsg('Connexion réussie ! 💙');
-backdrop.classList.remove('open');
+ authMsg('Connexion réussie ! 💙');
+ backdrop.classList.remove('open');
 });
 
-document.getElementById('signUp').addEventListener('click',async()=>{
-const email=document.getElementById('email').value.trim();
-const password=document.getElementById('password').value;
+$('signUp').addEventListener('click',async()=>{
+ const email=$('email').value.trim();
+ const password=$('password').value;
+ if(!email||!password)return authMsg('Entre ton adresse e-mail et ton mot de passe.');
+ if(password.length<6)return authMsg('Le mot de passe doit contenir au moins 6 caractères.');
 
-if(!email||!password)return authMsg('Entre ton adresse e-mail et ton mot de passe.');
-if(password.length<6)return authMsg('Le mot de passe doit contenir au moins 6 caractères.');
+ authMsg('Création du compte…');
+ const {data,error}=await supabaseClient.auth.signUp({
+  email,password,
+  options:{emailRedirectTo:'https://elfehri62-design.github.io/PIU-PIU/'}
+ });
 
-authMsg('Création du compte…');
-
-const {data,error}=await supabaseClient.auth.signUp({
-email,
-password,
-options:{
-emailRedirectTo:'https://elfehri62-design.github.io/PIU-PIU/'
-}
-});
-
-if(error)return authMsg('Inscription impossible : '+error.message);
-
-if(data.session){
-authMsg('Compte créé ! 💙');
-backdrop.classList.remove('open');
-}else{
-authMsg('Compte créé ! Consulte tes e-mails pour confirmer ton adresse.');
-}
-});
-
-document.getElementById('saveProfile').addEventListener('click',async()=>{
-if(!currentUser)return profileMsg('Connecte-toi pour modifier ton profil.');
-
-const button=document.getElementById('saveProfile');
-const username=document.getElementById('username').value.trim().toLowerCase();
-const display_name=document.getElementById('displayName').value.trim();
-const bio=document.getElementById('bio').value.trim();
-
-if(username&&!/^[a-z0-9_]{3,30}$/.test(username)){
-return profileMsg('Le pseudo doit contenir 3 à 30 caractères : lettres, chiffres ou _ uniquement.');
-}
-
-button.disabled=true;
-button.textContent='Enregistrement…';
-profileMsg('Enregistrement en cours…');
-
-try{
-let avatar_url;
-
-if(selectedAvatarFile){
-const extension=selectedAvatarFile.name.split('.').pop().toLowerCase();
-const safeExtension=/^[a-z0-9]+$/.test(extension)?extension:'jpg';
-const path=currentUser.id+'/'+Date.now()+'.'+safeExtension;
-
-const {error:uploadError}=await supabaseClient.storage
-.from(AVATAR_BUCKET)
-.upload(path,selectedAvatarFile,{
-cacheControl:'3600',
-upsert:false,
-contentType:selectedAvatarFile.type
-});
-
-if(uploadError)throw uploadError;
-
-avatar_url=supabaseClient.storage
-.from(AVATAR_BUCKET)
-.getPublicUrl(path).data.publicUrl;
-}
-
-const profileData={
-id:currentUser.id,
-username:username||null,
-display_name:display_name||null,
-bio,
-updated_at:new Date().toISOString()
-};
-
-if(avatar_url!==undefined)profileData.avatar_url=avatar_url;
-
-const {error:saveError}=await supabaseClient
-.from('profiles')
-.upsert(profileData,{onConflict:'id'});
-
-if(saveError)throw saveError;
-
-selectedAvatarFile=null;
-document.getElementById('avatarFile').value='';
-
-profileMsg('Profil enregistré avec succès ! 💙');
-await loadProfile(currentUser);
-await loadMembers();
-
-}catch(error){
-console.error(error);
-profileMsg(error.code==='23505'?'Ce pseudo est déjà utilisé. Choisis-en un autre.':'Erreur : '+error.message);
-}finally{
-button.disabled=false;
-button.textContent='Enregistrer mon profil';
-}
+ if(error)return authMsg('Inscription impossible : '+error.message);
+ if(data.session){
+  authMsg('Compte créé ! 💙');
+  backdrop.classList.remove('open');
+ }else{
+  authMsg('Compte créé ! Consulte tes e-mails pour confirmer ton adresse.');
+ }
 });
 
 supabaseClient.auth.onAuthStateChange((_event,session)=>{
-currentUser=session?.user||null;
-
-if(currentUser){
-document.getElementById('userLine').textContent='Connecté : '+currentUser.email;
-authButton.textContent='Se déconnecter';
-loadProfile(currentUser);
-loadMembers();
-}else{
-document.getElementById('userLine').textContent='';
-authButton.textContent='Se connecter';
-profileCard.style.display='none';
-allMembers=[];
-document.getElementById('membersList').textContent='Connecte-toi pour découvrir les membres.';
-}
+ updateSession(session);
 });
 
 supabaseClient.auth.getSession().then(({data})=>{
-updateSession(data.session);
+ updateSession(data.session);
 });
 </script>
-
 </body>
 </html>
