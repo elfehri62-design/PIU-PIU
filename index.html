@@ -1,47 +1,47 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#8b45ee">
+<meta name="theme-color" content="#14243d">
 <title>PIU-PIU</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f7f5ff;color:#222}
-header{background:#8b45ee;color:#fff;padding:22px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f7fa;color:#222}
+header{background:#14243d;color:#fff;padding:22px;display:flex;justify-content:space-between;align-items:center;gap:10px}
 .logo{font-size:27px;font-weight:bold}
-header button{background:#fff;color:#8b45ee;border:0;border-radius:20px;padding:10px 15px;font-weight:bold}
-h2{padding:0 16px}
+header button{background:#fff;color:#14243d;border:1px solid #d6b45c;border-radius:20px;padding:10px 15px;font-weight:bold}
+h2{padding:0 16px;color:#14243d}
 .stories{display:flex;gap:15px;overflow-x:auto;padding:12px 16px}
 .story{min-width:65px;text-align:center}
-.circle{width:60px;height:60px;border-radius:50%;background:linear-gradient(45deg,#ff65ae,#8b45ee);border:3px solid white;margin:auto auto 6px;display:grid;place-items:center;font-size:25px}
-.live{background:white;margin:16px;border-radius:16px;overflow:hidden;box-shadow:0 3px 12px #ddd}
-.live-image{background:linear-gradient(135deg,#a54cf2,#fa72bb);height:190px;display:grid;place-items:center;color:white;font-size:35px}
+.circle{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#e8edf4,#fff);border:3px solid #d6b45c;margin:auto auto 6px;display:grid;place-items:center;font-size:25px}
+.live{background:white;margin:16px;border-radius:16px;overflow:hidden;box-shadow:0 3px 12px #ddd;border:1px solid #e5e9ef}
+.live-image{background:linear-gradient(135deg,#14243d,#345477);height:190px;display:grid;place-items:center;color:white;font-size:35px}
 .live-info{padding:14px}
-.tag{color:#e52d63;font-weight:bold}
-nav{position:fixed;bottom:0;width:100%;background:white;display:flex;justify-content:space-around;padding:14px 4px;box-shadow:0 -2px 10px #ddd;z-index:5}
-nav button{border:0;background:none;font-size:13px;color:#555}
+.tag{color:#b38b2e;font-weight:bold}
+nav{position:fixed;bottom:0;width:100%;background:white;display:flex;justify-content:space-around;padding:14px 4px;box-shadow:0 -2px 10px #ddd;z-index:5;border-top:1px solid #e5e9ef}
+nav button{border:0;background:none;font-size:13px;color:#14243d}
 nav button span{display:block;font-size:23px;margin-bottom:4px}
 main{padding-bottom:100px}
-.profile-card{display:none;background:white;margin:16px;padding:18px;border-radius:16px;box-shadow:0 3px 12px #ddd}
-.profile-card h2{padding:0;margin-top:0;color:#7134c5}
+.profile-card{display:none;background:white;margin:16px;padding:18px;border-radius:16px;box-shadow:0 3px 12px #ddd;border:1px solid #e5e9ef}
+.profile-card h2{padding:0;margin-top:0;color:#14243d}
 .profile-card label,.modal label{display:block;font-weight:bold;margin:13px 0 6px}
-.profile-card input,.profile-card textarea,.modal input{width:100%;padding:12px;border:1px solid #d8cbea;border-radius:10px;font-size:16px;font-family:Arial,sans-serif}
+.profile-card input,.profile-card textarea,.modal input{width:100%;padding:12px;border:1px solid #d6b45c;border-radius:10px;font-size:16px;font-family:Arial,sans-serif}
 .profile-card textarea{min-height:85px;resize:vertical}
-.primary{background:#8b45ee;color:white;border:0;border-radius:12px;padding:13px 18px;font-weight:bold;font-size:15px;margin-top:14px;width:100%}
-#profileMessage{font-size:14px;color:#7134c5;min-height:20px;margin-top:10px}
-#profilePreview{width:76px;height:76px;border-radius:50%;object-fit:cover;background:#eee;display:none;margin:10px 0}
-.modal-backdrop{display:none;position:fixed;inset:0;background:#1d123dcc;z-index:10;align-items:center;justify-content:center;padding:18px}
+.primary{background:#14243d;color:white;border:1px solid #d6b45c;border-radius:12px;padding:13px 18px;font-weight:bold;font-size:15px;margin-top:14px;width:100%}
+#profileMessage{font-size:14px;color:#345477;min-height:20px;margin-top:10px}
+#profilePreview{width:76px;height:76px;border-radius:50%;object-fit:cover;background:#eee;border:3px solid #d6b45c;display:none;margin:10px 0}
+.modal-backdrop{display:none;position:fixed;inset:0;background:#1d263dcc;z-index:10;align-items:center;justify-content:center;padding:18px}
 .modal-backdrop.open{display:flex}
-.modal{background:white;width:100%;max-width:420px;border-radius:20px;padding:22px;box-shadow:0 12px 40px #0003}
-.modal h2{padding:0;margin:0 0 8px;color:#7134c5}
+.modal{background:white;width:100%;max-width:420px;border-radius:20px;padding:22px;box-shadow:0 12px 40px #0003;border:1px solid #d6b45c}
+.modal h2{padding:0;margin:0 0 8px;color:#14243d}
 .modal p{color:#555;line-height:1.45}
 .actions{display:flex;gap:9px;margin-top:18px}
-.actions button{flex:1;padding:12px 8px;border:0;border-radius:12px;background:#8b45ee;color:white;font-weight:bold;font-size:15px}
-.actions button.secondary{background:#f0e8fb;color:#7134c5}
+.actions button{flex:1;padding:12px 8px;border:0;border-radius:12px;background:#14243d;color:white;font-weight:bold;font-size:15px}
+.actions button.secondary{background:#edf0f5;color:#14243d;border:1px solid #d6b45c}
 .close{float:right;background:none;border:0;font-size:24px;color:#777}
-#authMessage{min-height:22px;font-size:14px;color:#7134c5;margin-top:12px}
+#authMessage{min-height:22px;font-size:14px;color:#345477;margin-top:12px}
 #userLine{font-size:12px;color:white;margin-top:5px}
 </style>
 </head>
@@ -49,7 +49,7 @@ main{padding-bottom:100px}
 
 <header>
 <div>
-<div class="logo">💜 PIU-PIU</div>
+<div class="logo">💙 PIU-PIU</div>
 <div id="userLine"></div>
 </div>
 <button id="authButton">Se connecter</button>
@@ -119,7 +119,7 @@ main{padding-bottom:100px}
 <div class="modal-backdrop" id="authBackdrop">
 <section class="modal" role="dialog" aria-modal="true">
 <button class="close" id="closeAuth" aria-label="Fermer">×</button>
-<h2>Bienvenue sur PIU-PIU 💜</h2>
+<h2>Bienvenue sur PIU-PIU 💙</h2>
 <p>Connecte-toi ou crée ton compte avec ton adresse e-mail.</p>
 
 <label for="email">Adresse e-mail</label>
@@ -193,7 +193,7 @@ document.getElementById('bio').value=data?.bio||'';
 document.getElementById('avatarUrl').value=data?.avatar_url||'';
 
 showAvatar(data?.avatar_url||'');
-profileMsg('Ton profil est prêt à être personnalisé. 💜');
+profileMsg('Ton profil est prêt à être personnalisé. 💙');
 }
 
 async function updateSession(session){
@@ -257,7 +257,7 @@ email,password
 
 if(error)return authMsg('Connexion impossible : '+error.message);
 
-authMsg('Connexion réussie ! 💜');
+authMsg('Connexion réussie ! 💙');
 setTimeout(()=>backdrop.classList.remove('open'),800);
 });
 
@@ -281,7 +281,7 @@ emailRedirectTo:'https://elfehri62-design.github.io/PIU-PIU/'
 if(error)return authMsg('Inscription impossible : '+error.message);
 
 if(data.session){
-authMsg('Compte créé ! 💜');
+authMsg('Compte créé ! 💙');
 setTimeout(()=>backdrop.classList.remove('open'),900);
 }else{
 authMsg('Compte créé ! Consulte tes e-mails pour confirmer ton adresse.');
@@ -324,7 +324,7 @@ return profileMsg('Ce pseudo est déjà utilisé. Choisis-en un autre.');
 return profileMsg('Erreur : '+error.message);
 }
 
-profileMsg('Profil enregistré avec succès ! 💜');
+profileMsg('Profil enregistré avec succès ! 💙');
 showAvatar(avatar_url);
 });
 
