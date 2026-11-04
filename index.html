@@ -3,406 +3,437 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>PIU-PIU</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--navy:#071321;--panel:#101f30;--gold:#d6b45c;--white:#f7f8fa;--muted:#9eacbb}
+:root{--navy:#08172e;--navy2:#102746;--gold:#d6b45b;--white:#fff;--muted:#aebbd0}
 *{box-sizing:border-box}
-body{margin:0;background:var(--navy);color:var(--white);font-family:Arial,sans-serif}
-header{padding:17px 18px;background:#0b1929;border-bottom:1px solid #26394c;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
-.logo{font-size:25px;font-weight:900;letter-spacing:2px;color:var(--gold)}
-button{border:1px solid var(--gold);background:var(--gold);color:#101820;border-radius:9px;padding:11px 15px;font-weight:bold;cursor:pointer}
-button.secondary{background:transparent;color:var(--gold)}
-button:disabled{opacity:.5}
-nav{display:flex;gap:7px;overflow:auto;padding:12px;background:#0b1929}
-nav button{white-space:nowrap;padding:10px 12px}
-main{max-width:850px;margin:auto;padding:16px}
-.panel{background:var(--panel);border:1px solid #26394c;border-radius:15px;padding:17px;margin-bottom:15px}
+body{margin:0;background:var(--navy);color:white;font-family:Arial,sans-serif}
+header{padding:18px;text-align:center;background:#061226;border-bottom:1px solid var(--gold)}
+header h1{margin:0;color:var(--gold);letter-spacing:4px}
+nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:12px;background:#0b1e38;position:sticky;top:0;z-index:5}
+button{border:1px solid var(--gold);background:var(--navy2);color:white;padding:10px 14px;border-radius:22px;cursor:pointer}
+button:hover{background:#19385e}
+button.gold{background:var(--gold);color:#08172e;font-weight:bold}
+main{max-width:850px;margin:20px auto;padding:12px}
+.card{background:#102746;border:1px solid #b89545;border-radius:16px;padding:16px;margin:12px 0}
+input,textarea,select{width:100%;padding:12px;margin:7px 0;border-radius:9px;border:1px solid #71839d;background:#f7f8fa;color:#10203a;font-size:16px}
+textarea{min-height:85px}
 h2,h3{color:var(--gold)}
-input,textarea,select{width:100%;padding:12px;margin:6px 0 13px;background:#071321;border:1px solid #34475a;border-radius:8px;color:white}
-textarea{min-height:85px;resize:vertical}
-label{font-size:13px;color:var(--muted)}
-.small{font-size:13px;color:var(--muted)}
-.gold{color:var(--gold)}
+small,.muted{color:var(--muted)}
 .hidden{display:none!important}
-.member{display:flex;gap:13px;align-items:center;padding:13px 0;border-bottom:1px solid #26394c;cursor:pointer}
-.avatar{width:58px;height:58px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);background:#20334a}
-.banner{height:155px;border-radius:12px;background:linear-gradient(120deg,#09182a,#203c58,#b18b3f);margin-bottom:-43px}
-.profilehead{display:flex;align-items:end;gap:15px;padding:0 10px 15px}
-.bigavatar{width:100px;height:100px;border-radius:50%;object-fit:cover;border:4px solid var(--panel);background:#20334a}
-.stats{display:flex;gap:22px;flex-wrap:wrap;padding:12px 0}
-.stat strong{display:block;color:var(--gold);font-size:20px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
-.message{padding:10px 12px;margin:8px 0;border-radius:12px;max-width:85%;background:#20344a}
-.mine{margin-left:auto;background:#765f2c}
-footer{text-align:center;padding:25px;color:var(--muted);font-size:12px}
+.avatar{width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);background:#203653}
+.member{display:flex;align-items:center;gap:14px}
+.member .avatar{width:65px;height:65px}
+.member-info{flex:1;min-width:0}
+.member-info p{margin:5px 0}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.row>*{flex:1}
+.gold-text{color:var(--gold)}
+hr{border:0;border-top:1px solid #40516a;margin:15px 0}
+.message{padding:10px;margin:8px 0;border-radius:12px;background:#1a3658}
+.mine{border:1px solid var(--gold);margin-left:12%}
+.theirs{margin-right:12%}
+.gift{font-size:27px;min-width:65px}
+.badge{display:inline-block;background:#243e60;border-radius:20px;padding:5px 10px;margin:3px}
+.notice{border-left:3px solid var(--gold);padding:10px;margin:8px 0;background:#1a3658}
+footer{text-align:center;color:var(--muted);padding:25px}
 </style>
 </head>
 <body>
 <header>
-  <div class="logo">PIU-PIU</div>
-  <button id="authButton" onclick="showAuth()">Connexion</button>
+<h1>PIU-PIU</h1>
+<p class="muted">Le réseau qui nous rapproche</p>
 </header>
 
 <nav>
-  <button onclick="showPage('home')">Accueil</button>
-  <button onclick="showPage('members')">Membres</button>
-  <button onclick="showPage('profile')">Mon profil</button>
-  <button onclick="showPage('inbox')">Messages</button>
+<button onclick="showPage('home')">Accueil</button>
+<button onclick="showPage('members')">Membres</button>
+<button onclick="showPage('profile')">Mon profil</button>
+<button onclick="showPage('messages')">Messages</button>
+<button onclick="showPage('gifts')">Cadeaux</button>
+<button onclick="showPage('notifications')">Notifications</button>
+<button id="authButton" onclick="authAction()">Connexion</button>
 </nav>
 
 <main>
 <section id="home" class="page">
-  <div class="panel">
-    <h2>Bienvenue sur PIU-PIU</h2>
-    <p>Un réseau pour découvrir, partager et échanger.</p>
-    <button onclick="showPage('members')">Découvrir les membres</button>
-  </div>
-  <div class="panel">
-    <h3>Ton espace PIU-PIU</h3>
-    <p class="small">Crée ton profil, suis des membres et échange avec eux en privé.</p>
-  </div>
+<div class="card">
+<h2>Bienvenue sur PIU-PIU ✨</h2>
+<p>Découvre les membres, crée ton profil, échange des messages et envoie des cadeaux virtuels.</p>
+<p class="muted">Connecte-toi pour accéder aux fonctionnalités du réseau.</p>
+</div>
+<div id="homeStatus" class="card">Chargement...</div>
 </section>
 
 <section id="members" class="page hidden">
-  <div class="panel">
-    <h2>Membres PIU-PIU</h2>
-    <input id="search" placeholder="Rechercher un nom ou un pseudo..." oninput="renderMembers()">
-    <div id="memberList">Chargement des membres...</div>
-  </div>
+<div class="card">
+<h2>Les membres</h2>
+<input id="memberSearch" placeholder="Rechercher un pseudo ou un nom..." oninput="renderMembers()">
+<button class="gold" onclick="loadMembers()">Actualiser</button>
+<div id="membersList"></div>
+</div>
 </section>
 
 <section id="profile" class="page hidden">
-  <div class="panel">
-    <h2>Mon profil</h2>
-    <div id="myProfileInfo">Connecte-toi pour voir ton profil.</div>
-    <hr>
-    <h3>Modifier mes informations</h3>
-    <label>Nom affiché</label>
-    <input id="displayName" maxlength="60" placeholder="Ton nom">
-    <label>Pseudo</label>
-    <input id="username" maxlength="30" placeholder="Ton pseudo">
-    <label>Biographie</label>
-    <textarea id="bio" maxlength="300" placeholder="Parle de toi..."></textarea>
-    <label>Pays</label>
-    <select id="country">
-      <option value="">Choisir ton pays</option>
-      <option>Suisse</option><option>France</option><option>Belgique</option>
-      <option>Luxembourg</option><option>Canada</option><option>Maroc</option>
-      <option>Algérie</option><option>Tunisie</option><option>Sénégal</option>
-      <option>Côte d’Ivoire</option><option>Allemagne</option><option>Italie</option>
-      <option>Espagne</option><option>Portugal</option><option>Royaume-Uni</option>
-      <option>États-Unis</option><option>Autre</option>
-    </select>
-    <label>Date de naissance</label>
-    <input id="birthDate" type="date">
-    <label>Photo de profil</label>
-    <input id="avatarFile" type="file" accept="image/*">
-    <button onclick="saveProfile()">Enregistrer mon profil</button>
-    <button class="secondary" onclick="logout()">Déconnexion</button>
-    <p id="profileStatus" class="small"></p>
-  </div>
+<div class="card">
+<h2>Mon profil</h2>
+<div id="myProfile"></div>
+</div>
 </section>
 
 <section id="publicProfile" class="page hidden">
-  <div class="panel">
-    <div class="banner"></div>
-    <div class="profilehead">
-      <img id="publicAvatar" class="bigavatar" alt="Photo de profil">
-      <div>
-        <h2 id="publicName">Membre</h2>
-        <div id="publicUsername" class="small"></div>
-      </div>
-    </div>
-    <div id="publicId" class="gold"></div>
-    <p id="publicBio"></p>
-    <div class="stats">
-      <div class="stat"><strong id="followersCount">0</strong>Abonnés</div>
-      <div class="stat"><strong id="followingCount">0</strong>Abonnements</div>
-    </div>
-    <p id="publicCountry"></p>
-    <p id="publicAge"></p>
-    <div class="actions">
-      <button id="followButton" onclick="toggleFollow()">Suivre</button>
-      <button class="secondary" onclick="openConversation()">Envoyer un message</button>
-    </div>
-    <button class="secondary" onclick="showPage('members')">Retour aux membres</button>
-  </div>
+<div class="card">
+<button onclick="showPage('members')">← Retour aux membres</button>
+<div id="publicProfileContent"></div>
+</div>
 </section>
 
-<section id="inbox" class="page hidden">
-  <div class="panel">
-    <h2>Messages privés</h2>
-    <div id="conversationList">Choisis un membre pour commencer une conversation.</div>
-    <div id="chatArea" class="hidden">
-      <h3 id="chatTitle">Conversation</h3>
-      <div id="chatMessages"></div>
-      <textarea id="messageText" maxlength="2000" placeholder="Écris ton message..."></textarea>
-      <button onclick="sendMessage()">Envoyer</button>
-    </div>
-  </div>
+<section id="messages" class="page hidden">
+<div class="card">
+<h2>Mes messages</h2>
+<div id="conversationList"></div>
+<hr>
+<div id="chatArea">
+<p class="muted">Choisis un membre dans la liste pour ouvrir une conversation.</p>
+</div>
+</div>
+</section>
+
+<section id="gifts" class="page hidden">
+<div class="card">
+<h2>Envoyer un cadeau 🎁</h2>
+<p>Choisis un membre puis offre-lui un cadeau virtuel.</p>
+<div id="giftRecipient">Aucun destinataire sélectionné.</div>
+<div class="row">
+<button class="gift" onclick="chooseGift('rose')">🌹<small>Rose</small></button>
+<button class="gift" onclick="chooseGift('coeur')">❤️<small>Cœur</small></button>
+<button class="gift" onclick="chooseGift('diamant')">💎<small>Diamant</small></button>
+</div>
+<div class="row">
+<button class="gift" onclick="chooseGift('ourson')">🧸<small>Ourson</small></button>
+<button class="gift" onclick="chooseGift('couronne')">👑<small>Couronne</small></button>
+<button class="gift" onclick="chooseGift('trophee')">🏆<small>Trophée</small></button>
+</div>
+<textarea id="giftMessage" placeholder="Ajouter un petit message (facultatif)"></textarea>
+<div id="giftStatus" class="muted"></div>
+</div>
+<div class="card">
+<h3>Cadeaux reçus et envoyés</h3>
+<div id="giftHistory"></div>
+</div>
+</section>
+
+<section id="notifications" class="page hidden">
+<div class="card">
+<h2>Mes notifications 🔔</h2>
+<button onclick="loadNotifications()">Actualiser</button>
+<div id="notificationList"></div>
+</div>
 </section>
 </main>
 
-<footer>PIU-PIU · Connecte-toi, partage et découvre.</footer>
+<footer>PIU-PIU © 2026</footer>
 
 <script>
-const SUPABASE_URL = "https://edwqvlibagfllfobazmd.supabase.co";
-const SUPABASE_KEY = "sb_publishable_8Kf69i7SKAlU0j3QW4ndHA_-micATkn";
-const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const SUPABASE_URL="https://edwqvlibagfllfobazmd.supabase.co";
+const SUPABASE_KEY="sb_publishable_8Kf69i7SKAlU0j3QW4ndHA_-micATkn";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-let currentUser = null;
-let myProfile = null;
-let members = [];
-let selectedMember = null;
-let followed = false;
-let currentConversation = null;
+let currentUser=null;
+let myProfileData=null;
+let members=[];
+let selectedMember=null;
+let selectedGift=null;
+let activeConversation=null;
 
-function el(id){return document.getElementById(id)}
+const $=id=>document.getElementById(id);
+const giftEmojis={rose:"🌹",coeur:"❤️",diamant:"💎",ourson:"🧸",couronne:"👑",trophee:"🏆"};
+
 function escapeHTML(value){
-  return String(value ?? "").replace(/[&<>"']/g,c=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  })[c]);
+ return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
-function showPage(id){
-  document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
-  el(id).classList.remove("hidden");
-  if(id==="members") loadMembers();
-  if(id==="profile") loadMyProfile();
-  if(id==="inbox") loadConversations();
+function showPage(name){
+ document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
+ $(name)?.classList.remove("hidden");
+ if(name==="members")loadMembers();
+ if(name==="profile")loadMyProfile();
+ if(name==="messages")loadConversations();
+ if(name==="notifications")loadNotifications();
+ if(name==="gifts")loadGiftHistory();
+}
+function requireLogin(){
+ if(!currentUser){alert("Connecte-toi d'abord pour utiliser cette fonction.");return false;}
+ return true;
 }
 function ageFromDate(date){
-  if(!date)return null;
-  const birth=new Date(date+"T00:00:00");
-  if(Number.isNaN(birth.getTime())||birth>new Date())return null;
-  const today=new Date();
-  let age=today.getFullYear()-birth.getFullYear();
-  if(today.getMonth()<birth.getMonth()||
-    (today.getMonth()===birth.getMonth()&&today.getDate()<birth.getDate())) age--;
-  return age;
+ if(!date)return "";
+ const birth=new Date(date+"T00:00:00");
+ if(isNaN(birth))return "";
+ let age=new Date().getFullYear()-birth.getFullYear();
+ const m=new Date().getMonth()-birth.getMonth();
+ if(m<0||(m===0&&new Date().getDate()<birth.getDate()))age--;
+ return age>=0?age+" ans":"";
 }
-function publicId(number){
-  return number ? "PIU-"+String(number).padStart(6,"0") : "En attente";
+function avatarHTML(url){
+ return `<img class="avatar" src="${escapeHTML(url||"")}" onerror="this.style.display='none'" alt="Photo de profil">`;
+}
+async function authAction(){
+ if(currentUser){
+  await db.auth.signOut();
+  currentUser=null;myProfileData=null;
+  updateAuthButton();
+  showPage("home");
+  $("homeStatus").textContent="Tu es déconnecté.";
+  return;
+ }
+ const email=prompt("Ton adresse e-mail :");
+ if(!email)return;
+ const password=prompt("Ton mot de passe :");
+ if(!password)return;
+ let result=await db.auth.signInWithPassword({email,password});
+ if(result.error){
+  const create=confirm("Connexion impossible. Veux-tu créer un compte avec cette adresse ?");
+  if(!create){alert(result.error.message);return;}
+  result=await db.auth.signUp({email,password});
+ }
+ if(result.error){alert(result.error.message);return;}
+ if(!result.data.session){
+  alert("Compte créé. Vérifie ta boîte e-mail pour confirmer ton inscription, puis connecte-toi.");
+ }
+ await refreshSession();
+}
+function updateAuthButton(){
+ $("authButton").textContent=currentUser?"Déconnexion":"Connexion";
 }
 async function refreshSession(){
-  const {data}=await db.auth.getSession();
-  currentUser=data.session?.user||null;
-  el("authButton").textContent=currentUser?"Connecté":"Connexion";
-  if(currentUser) await loadMyProfile();
-}
-function showAuth(){
-  if(currentUser){showPage("profile");return;}
-  const email=prompt("Ton adresse e-mail :");
-  if(!email)return;
-  const password=prompt("Ton mot de passe :");
-  if(!password)return;
-  const choice=confirm("Créer un compte ? (Annuler pour se connecter)");
-  (choice?db.auth.signUp({email,password}):db.auth.signInWithPassword({email,password}))
-    .then(async ({error,data})=>{
-      if(error){alert(error.message);return;}
-      if(choice&&!data.session){
-        alert("Compte créé ! Vérifie ta boîte e-mail pour confirmer ton inscription.");
-      }else{
-        await refreshSession();
-        showPage("profile");
-      }
-    });
-}
-async function logout(){
-  await db.auth.signOut();
-  currentUser=null;myProfile=null;
-  el("authButton").textContent="Connexion";
-  showPage("home");
+ const {data}=await db.auth.getSession();
+ currentUser=data.session?.user||null;
+ updateAuthButton();
+ if(currentUser){
+  await loadMyProfile();
+  $("homeStatus").textContent="Bienvenue sur PIU-PIU ! Tu es connecté.";
+ }else{
+  $("homeStatus").textContent="Connecte-toi pour découvrir les membres de PIU-PIU.";
+ }
 }
 async function loadMyProfile(){
-  if(!currentUser){el("myProfileInfo").textContent="Connecte-toi pour accéder à ton profil.";return;}
-  const {data,error}=await db.from("profiles").select("*").eq("id",currentUser.id).maybeSingle();
-  if(error){el("myProfileInfo").textContent=error.message;return;}
-  myProfile=data;
-  if(!data){el("myProfileInfo").textContent="Profil en cours de création. Réessaie dans un instant.";return;}
-  el("displayName").value=data.display_name||"";
-  el("username").value=data.username||"";
-  el("bio").value=data.bio||"";
-  el("country").value=data.country||"";
-  el("birthDate").value=data.birth_date||"";
-  const age=ageFromDate(data.birth_date);
-  el("myProfileInfo").innerHTML=
-    `<p class="gold">${escapeHTML(publicId(data.profile_number))}</p>
-     <p>${escapeHTML(data.display_name||"")}</p>
-     <p>@${escapeHTML(data.username||"")}</p>
-     <p>${escapeHTML(data.country||"Pays non renseigné")} · ${age===null?"Âge non renseigné":age+" ans"}</p>
-     ${data.avatar_url?`<img class="avatar" src="${escapeHTML(data.avatar_url)}" alt="Photo">`:""}`;
+ if(!requireLogin())return;
+ const {data,error}=await db.from("profiles").select("*").eq("id",currentUser.id).maybeSingle();
+ if(error){$("myProfile").textContent=error.message;return;}
+ myProfileData=data;
+ if(!data){$("myProfile").textContent="Ton profil est en cours de création. Actualise la page.";return;}
+ const number=data.profile_number?String(data.profile_number).padStart(6,"0"):"En attente";
+ $("myProfile").innerHTML=`
+ <div style="text-align:center">
+ ${avatarHTML(data.avatar_url)}
+ <h3>${escapeHTML(data.display_name||"Mon profil")}</h3>
+ <p class="gold-text">@${escapeHTML(data.username||"sans_pseudo")}</p>
+ <span class="badge">PIU-${number}</span>
+ </div>
+ <label>Photo de profil</label>
+ <input type="file" id="avatarFile" accept="image/*">
+ <label>Nom affiché</label><input id="displayName" value="${escapeHTML(data.display_name||"")}" maxlength="50">
+ <label>Pseudo (sans @)</label><input id="username" value="${escapeHTML(data.username||"")}" maxlength="30">
+ <label>Présentation</label><textarea id="bio">${escapeHTML(data.bio||"")}</textarea>
+ <label>Pays</label><input id="country" value="${escapeHTML(data.country||"")}" maxlength="60">
+ <label>Date de naissance</label><input id="birthDate" type="date" value="${escapeHTML(data.birth_date||"")}">
+ <button class="gold" onclick="saveProfile()">Enregistrer mon profil</button>
+ <p id="profileStatus" class="muted"></p>`;
 }
 async function saveProfile(){
-  if(!currentUser){alert("Connecte-toi d'abord.");return;}
-  const status=el("profileStatus");
-  status.textContent="Enregistrement...";
-  let avatarUrl=myProfile?.avatar_url||null;
-  const file=el("avatarFile").files[0];
-  if(file){
-    if(file.size>5*1024*1024){status.textContent="Photo trop grande : maximum 5 Mo.";return;}
-    const ext=(file.name.split(".").pop()||"jpg").replace(/[^a-zA-Z0-9]/g,"");
-    const path=currentUser.id+"/"+Date.now()+"."+ext;
-    const {error:uploadError}=await db.storage.from("avatars").upload(path,file,{upsert:true});
-    if(uploadError){status.textContent="Erreur photo : "+uploadError.message;return;}
-    const {data}=db.storage.from("avatars").getPublicUrl(path);
-    avatarUrl=data.publicUrl;
-  }
-  const username=el("username").value.trim().replace(/^@/,"");
-  if(username&&!/^[a-zA-Z0-9_.-]{3,30}$/.test(username)){
-    status.textContent="Le pseudo doit contenir 3 à 30 caractères (lettres, chiffres, point, tiret ou underscore).";return;
-  }
-  const birth=el("birthDate").value;
-  if(birth&&ageFromDate(birth)===null){status.textContent="Vérifie ta date de naissance.";return;}
-  const payload={
-    id:currentUser.id,
-    display_name:el("displayName").value.trim(),
-    username:username||null,
-    bio:el("bio").value.trim(),
-    country:el("country").value,
-    birth_date:birth||null,
-    avatar_url:avatarUrl,
-    updated_at:new Date().toISOString()
-  };
-  const {error}=await db.from("profiles").upsert(payload,{onConflict:"id"});
-  if(error){status.textContent="Erreur : "+error.message;return;}
-  status.textContent="Profil enregistré !";
-  el("avatarFile").value="";
-  await loadMyProfile();
+ if(!requireLogin())return;
+ const status=$("profileStatus");status.textContent="Enregistrement...";
+ let avatarUrl=myProfileData?.avatar_url||null;
+ const file=$("avatarFile").files[0];
+ if(file){
+  if(file.size>5*1024*1024){status.textContent="La photo doit faire moins de 5 Mo.";return;}
+  const ext=(file.name.split(".").pop()||"jpg").replace(/[^a-z0-9]/gi,"");
+  const path=currentUser.id+"/"+Date.now()+"."+ext;
+  const {error:uploadError}=await db.storage.from("avatars").upload(path,file,{upsert:true,contentType:file.type});
+  if(uploadError){status.textContent="Erreur photo : "+uploadError.message;return;}
+  avatarUrl=db.storage.from("avatars").getPublicUrl(path).data.publicUrl;
+ }
+ const username=$("username").value.trim().replace(/^@/,"");
+ const payload={
+  id:currentUser.id,
+  username:username||null,
+  display_name:$("displayName").value.trim(),
+  bio:$("bio").value.trim(),
+  country:$("country").value.trim(),
+  birth_date:$("birthDate").value||null,
+  avatar_url:avatarUrl,
+  updated_at:new Date().toISOString()
+ };
+ const {error}=await db.from("profiles").upsert(payload,{onConflict:"id"});
+ if(error){status.textContent="Erreur : "+error.message;return;}
+ status.textContent="Profil enregistré !";
+ await loadMyProfile();
 }
 async function loadMembers(){
-  const {data,error}=await db.from("profiles")
-    .select("id,profile_number,username,display_name,bio,avatar_url,country,birth_date")
-    .order("profile_number",{ascending:true});
-  if(error){el("memberList").textContent="Erreur : "+error.message;return;}
-  members=data||[];
-  renderMembers();
+ if(!requireLogin())return;
+ $("membersList").textContent="Chargement des membres...";
+ const {data,error}=await db.from("profiles").select("*").order("created_at",{ascending:false}).limit(100);
+ if(error){$("membersList").textContent="Erreur : "+error.message;return;}
+ members=data||[];
+ renderMembers();
 }
 function renderMembers(){
-  const term=(el("search").value||"").toLowerCase();
-  const filtered=members.filter(m=>
-    [m.username,m.display_name,m.country].join(" ").toLowerCase().includes(term)
-  );
-  el("memberList").innerHTML=filtered.length?filtered.map(m=>`
-    <div class="member" onclick="openPublicProfile('${m.id}')">
-      <img class="avatar" src="${escapeHTML(m.avatar_url||"")}" alt="">
-      <div>
-        <strong>${escapeHTML(m.display_name||m.username||"Membre")}</strong>
-        <div class="small">@${escapeHTML(m.username||"membre")}</div>
-        <div class="small gold">${escapeHTML(publicId(m.profile_number))}</div>
-        <div class="small">${escapeHTML(m.country||"")}</div>
-      </div>
-    </div>`).join(""):"Aucun membre trouvé.";
+ const q=($("memberSearch").value||"").toLowerCase();
+ const list=members.filter(m=>(m.username||"").toLowerCase().includes(q)||(m.display_name||"").toLowerCase().includes(q));
+ $("membersList").innerHTML=list.map(m=>`
+ <div class="card member">
+ ${avatarHTML(m.avatar_url)}
+ <div class="member-info">
+ <strong>${escapeHTML(m.display_name||"Membre PIU-PIU")}</strong>
+ <p class="gold-text">@${escapeHTML(m.username||"sans_pseudo")}</p>
+ <small>${escapeHTML(m.bio||"")}</small>
+ </div>
+ <button onclick="openPublicProfile('${m.id}')">Voir</button>
+ </div>`).join("")||"<p>Aucun membre trouvé.</p>";
 }
 async function openPublicProfile(id){
-  if(!currentUser){alert("Connecte-toi pour consulter les profils.");return;}
-  if(id===currentUser.id){showPage("profile");return;}
-  const {data,error}=await db.from("profiles").select("*").eq("id",id).maybeSingle();
-  if(error||!data){alert("Profil introuvable.");return;}
-  selectedMember=data;
-  el("publicAvatar").src=data.avatar_url||"";
-  el("publicName").textContent=data.display_name||"Membre";
-  el("publicUsername").textContent="@"+(data.username||"membre");
-  el("publicId").textContent=publicId(data.profile_number);
-  el("publicBio").textContent=data.bio||"";
-  el("publicCountry").textContent="Pays : "+(data.country||"Non renseigné");
-  const age=ageFromDate(data.birth_date);
-  el("publicAge").textContent="Âge : "+(age===null?"Non renseigné":age+" ans");
-  await updateFollowCounts();
-  const {data:follow}=await db.from("follows").select("follower_id")
-    .eq("follower_id",currentUser.id).eq("following_id",id).maybeSingle();
-  followed=!!follow;
-  el("followButton").textContent=followed?"Ne plus suivre":"Suivre";
-  showPage("publicProfile");
+ if(!requireLogin())return;
+ const {data,error}=await db.from("profiles").select("*").eq("id",id).single();
+ if(error){alert(error.message);return;}
+ selectedMember=data;
+ const [{count:followers},{count:following},{data:followData}] = await Promise.all([
+  db.from("follows").select("*",{count:"exact",head:true}).eq("following_id",id),
+  db.from("follows").select("*",{count:"exact",head:true}).eq("follower_id",id),
+  db.from("follows").select("id").eq("follower_id",currentUser.id).eq("following_id",id).maybeSingle()
+ ]);
+ const isFollowing=!!followData;
+ const num=data.profile_number?String(data.profile_number).padStart(6,"0"):"En attente";
+ $("publicProfileContent").innerHTML=`
+ <div style="text-align:center">
+ ${avatarHTML(data.avatar_url)}
+ <h2>${escapeHTML(data.display_name||"Membre PIU-PIU")}</h2>
+ <p class="gold-text">@${escapeHTML(data.username||"sans_pseudo")}</p>
+ <span class="badge">PIU-${num}</span>
+ <p>${escapeHTML(data.bio||"")}</p>
+ <p>${escapeHTML(data.country||"")}${data.birth_date?" · "+ageFromDate(data.birth_date):""}</p>
+ <p><span class="badge">${followers||0} abonnés</span><span class="badge">${following||0} abonnements</span></p>
+ ${id!==currentUser.id?`<button class="gold" onclick="toggleFollow('${id}')">${isFollowing?"Ne plus suivre":"Suivre"}</button>
+ <button onclick="startMessage('${id}')">Envoyer un message</button>
+ <button onclick="selectGiftRecipient('${id}')">Offrir un cadeau 🎁</button>`:"<p class='muted'>C'est ton profil.</p>"}
+ </div>`;
+ showPage("publicProfile");
 }
-async function updateFollowCounts(){
-  if(!selectedMember)return;
-  const [followers,following]=await Promise.all([
-    db.from("follows").select("*",{count:"exact",head:true}).eq("following_id",selectedMember.id),
-    db.from("follows").select("*",{count:"exact",head:true}).eq("follower_id",selectedMember.id)
-  ]);
-  el("followersCount").textContent=followers.count??0;
-  el("followingCount").textContent=following.count??0;
-}
-async function toggleFollow(){
-  if(!currentUser||!selectedMember)return;
-  if(followed){
-    const {error}=await db.from("follows").delete()
-      .eq("follower_id",currentUser.id).eq("following_id",selectedMember.id);
-    if(error){alert(error.message);return;}
-    followed=false;
-  }else{
-    const {error}=await db.from("follows").insert({
-      follower_id:currentUser.id,following_id:selectedMember.id
-    });
-    if(error){alert(error.message);return;}
-    followed=true;
-  }
-  el("followButton").textContent=followed?"Ne plus suivre":"Suivre";
-  await updateFollowCounts();
-}
-async function openConversation(){
-  if(!currentUser||!selectedMember)return;
-  currentConversation=selectedMember.id;
-  el("chatTitle").textContent=selectedMember.display_name||selectedMember.username||"Conversation";
-  showPage("inbox");
-  el("chatArea").classList.remove("hidden");
-  await loadMessages();
+async function toggleFollow(id){
+ if(!requireLogin())return;
+ const {data}=await db.from("follows").select("id").eq("follower_id",currentUser.id).eq("following_id",id).maybeSingle();
+ let result;
+ if(data)result=await db.from("follows").delete().eq("id",data.id);
+ else result=await db.from("follows").insert({follower_id:currentUser.id,following_id:id});
+ if(result.error){alert("Impossible de modifier l'abonnement : "+result.error.message);return;}
+ await openPublicProfile(id);
 }
 async function loadConversations(){
-  if(!currentUser){el("conversationList").textContent="Connecte-toi pour voir tes messages.";return;}
-  const {data,error}=await db.from("messages")
-    .select("sender_id,receiver_id,content,created_at")
-    .or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`)
-    .order("created_at",{ascending:false}).limit(100);
-  if(error){el("conversationList").textContent="Erreur : "+error.message;return;}
-  const ids=[...new Set((data||[]).map(m=>m.sender_id===currentUser.id?m.receiver_id:m.sender_id))];
-  if(!ids.length){el("conversationList").textContent="Aucune conversation pour le moment.";return;}
-  const {data:people}=await db.from("profiles").select("id,username,display_name").in("id",ids);
-  el("conversationList").innerHTML=(people||[]).map(p=>`
-    <div class="member" onclick="startChat('${p.id}')">
-      <strong>${escapeHTML(p.display_name||p.username||"Membre")}</strong>
-      <span class="small">@${escapeHTML(p.username||"membre")}</span>
-    </div>`).join("");
+ if(!requireLogin())return;
+ const {data,error}=await db.from("messages").select("sender_id,receiver_id,content,created_at").or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`).order("created_at",{ascending:false}).limit(100);
+ if(error){$("conversationList").textContent="Erreur : "+error.message;return;}
+ const ids=[...new Set((data||[]).map(m=>m.sender_id===currentUser.id?m.receiver_id:m.sender_id))];
+ if(!ids.length){$("conversationList").innerHTML="<p class='muted'>Pas encore de conversation.</p>";return;}
+ const {data:people}=await db.from("profiles").select("id,username,display_name,avatar_url").in("id",ids);
+ $("conversationList").innerHTML=(people||[]).map(p=>`<button onclick="startMessage('${p.id}')">@${escapeHTML(p.username||p.display_name||"membre")}</button>`).join(" ");
 }
-async function startChat(id){
-  const {data}=await db.from("profiles").select("*").eq("id",id).maybeSingle();
-  if(!data)return;
-  selectedMember=data;
-  currentConversation=id;
-  el("chatTitle").textContent=data.display_name||data.username||"Conversation";
-  el("chatArea").classList.remove("hidden");
-  await loadMessages();
+async function startMessage(id){
+ if(!requireLogin())return;
+ const {data,error}=await db.from("profiles").select("*").eq("id",id).single();
+ if(error){alert(error.message);return;}
+ selectedMember=data;activeConversation=id;
+ showPage("messages");
+ await loadChat();
 }
-async function loadMessages(){
-  if(!currentUser||!currentConversation)return;
-  const other=currentConversation;
-  const {data,error}=await db.from("messages").select("*")
-    .or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${other}),and(sender_id.eq.${other},receiver_id.eq.${currentUser.id})`)
-    .order("created_at",{ascending:true}).limit(200);
-  if(error){el("chatMessages").textContent="Erreur : "+error.message;return;}
-  el("chatMessages").innerHTML=(data||[]).map(m=>`
-    <div class="message ${m.sender_id===currentUser.id?"mine":""}">
-      ${escapeHTML(m.content)}
-      <div class="small">${new Date(m.created_at).toLocaleString("fr-FR")}</div>
-    </div>`).join("");
-  el("chatMessages").scrollTop=el("chatMessages").scrollHeight;
+async function loadChat(){
+ if(!activeConversation)return;
+ const other=activeConversation;
+ const filter=`and(sender_id.eq.${currentUser.id},receiver_id.eq.${other}),and(sender_id.eq.${other},receiver_id.eq.${currentUser.id})`;
+ const {data,error}=await db.from("messages").select("*").or(filter).order("created_at",{ascending:true}).limit(200);
+ if(error){$("chatArea").textContent="Erreur messages : "+error.message;return;}
+ $("chatArea").innerHTML=`
+ <h3>Conversation avec @${escapeHTML(selectedMember?.username||"membre")}</h3>
+ <div id="chatMessages">${(data||[]).map(m=>`<div class="message ${m.sender_id===currentUser.id?"mine":"theirs"}">${escapeHTML(m.content||"")}<br><small>${new Date(m.created_at).toLocaleString("fr-FR")}</small></div>`).join("")}</div>
+ <textarea id="messageText" placeholder="Écris ton message..."></textarea>
+ <button class="gold" onclick="sendMessage()">Envoyer</button>
+ <button onclick="selectGiftRecipient('${other}')">Offrir un cadeau 🎁</button>`;
 }
 async function sendMessage(){
-  if(!currentUser||!currentConversation)return;
-  const content=el("messageText").value.trim();
-  if(!content)return;
-  const {error}=await db.from("messages").insert({
-    sender_id:currentUser.id,receiver_id:currentConversation,content
-  });
-  if(error){alert("Impossible d'envoyer : "+error.message);return;}
-  el("messageText").value="";
-  await loadMessages();
+ if(!requireLogin()||!activeConversation)return;
+ const content=$("messageText").value.trim();
+ if(!content)return;
+ const {error}=await db.from("messages").insert({sender_id:currentUser.id,receiver_id:activeConversation,content});
+ if(error){alert("Erreur : "+error.message);return;}
+ await loadChat();
+}
+async function selectGiftRecipient(id){
+ const {data,error}=await db.from("profiles").select("*").eq("id",id).single();
+ if(error){alert(error.message);return;}
+ selectedMember=data;selectedGift=null;
+ $("giftRecipient").innerHTML="Destinataire : <strong>"+escapeHTML(data.display_name||data.username||"membre")+"</strong>";
+ $("giftStatus").textContent="Choisis un cadeau.";
+ $("giftMessage").value="";
+ showPage("gifts");
+}
+function chooseGift(type){
+ if(!requireLogin())return;
+ if(!selectedMember){alert("Choisis d'abord un destinataire dans Membres.");return;}
+ selectedGift=type;
+ $("giftStatus").textContent="Cadeau choisi : "+giftEmojis[type]+" "+type+". Clique encore ici pour confirmer l'envoi.";
+ $("giftStatus").onclick=sendGift;
+ $("giftStatus").style.cursor="pointer";
+}
+async function sendGift(){
+ if(!requireLogin()||!selectedMember||!selectedGift)return;
+ const status=$("giftStatus");
+ status.onclick=null;status.textContent="Envoi...";
+ const {error}=await db.from("gifts").insert({
+  sender_id:currentUser.id,
+  receiver_id:selectedMember.id,
+  gift_type:selectedGift,
+  message:$("giftMessage").value.trim()
+ });
+ if(error){status.textContent="Erreur : "+error.message;return;}
+ status.textContent="Cadeau envoyé ! 🎁";
+ selectedGift=null;
+ await loadGiftHistory();
+}
+async function loadGiftHistory(){
+ if(!requireLogin())return;
+ const {data,error}=await db.from("gifts").select("*").or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`).order("created_at",{ascending:false}).limit(100);
+ if(error){$("giftHistory").textContent="Erreur : "+error.message;return;}
+ if(!data?.length){$("giftHistory").textContent="Aucun cadeau pour le moment.";return;}
+ const ids=[...new Set(data.flatMap(g=>[g.sender_id,g.receiver_id]))];
+ const {data:people}=await db.from("profiles").select("id,username,display_name").in("id",ids);
+ const names=Object.fromEntries((people||[]).map(p=>[p.id,p.username||p.display_name||"membre"]));
+ $("giftHistory").innerHTML=data.map(g=>`
+ <div class="notice">${giftEmojis[g.gift_type]||"🎁"} <strong>${escapeHTML(g.gift_type)}</strong>
+ <p>${g.sender_id===currentUser.id?"Envoyé à":"Reçu de"} @${escapeHTML(names[g.sender_id===currentUser.id?g.receiver_id:g.sender_id]||"membre")}</p>
+ <small>${escapeHTML(g.message||"")} · ${new Date(g.created_at).toLocaleString("fr-FR")}</small></div>`).join("");
+}
+async function loadNotifications(){
+ if(!requireLogin())return;
+ $("notificationList").textContent="Chargement...";
+ const {data,error}=await db.from("notifications").select("*").order("created_at",{ascending:false}).limit(100);
+ if(error){$("notificationList").textContent="Erreur notifications : "+error.message;return;}
+ if(!data?.length){$("notificationList").textContent="Aucune notification pour le moment.";return;}
+ $("notificationList").innerHTML=data.map(n=>`
+ <div class="notice">
+ <strong>${escapeHTML(n.title||"Notification")}</strong>
+ <p>${escapeHTML(n.body||n.message||"")}</p>
+ <small>${n.created_at?new Date(n.created_at).toLocaleString("fr-FR"):""}</small>
+ ${n.is_read===false?`<button onclick="markNotificationRead(${n.id})">Marquer comme lue</button>`:"<span class='badge'>Lue</span>"}
+ </div>`).join("");
+}
+async function markNotificationRead(id){
+ const {error}=await db.from("notifications").update({is_read:true}).eq("id",id);
+ if(error){alert("Erreur : "+error.message);return;}
+ loadNotifications();
 }
 db.auth.onAuthStateChange((_event,session)=>{
-  currentUser=session?.user||null;
-  el("authButton").textContent=currentUser?"Connecté":"Connexion";
+ currentUser=session?.user||null;
+ updateAuthButton();
 });
 refreshSession();
 </script>
