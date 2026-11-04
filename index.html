@@ -3,69 +3,83 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#14243d">
-<title>PIU-PIU 💙</title>
-
+<title>PIU-PIU</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f5f7fa;color:#222}
-header{background:#14243d;color:white;padding:18px;display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:0;z-index:5}
-.logo{font-size:26px;font-weight:bold}
-#userLine{font-size:11px;margin-top:5px}
-button{cursor:pointer}
-header button,.primary,.avatar-button,.public-close{background:#14243d;color:white;border:1px solid #d6b45c;border-radius:12px;padding:11px 15px;font-weight:bold}
-header button{background:white;color:#14243d;border-radius:20px}
-main{padding-bottom:100px}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f7fa;color:#202633}
+button{cursor:pointer;font-family:inherit}
+header{background:#14243d;color:white;padding:16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
+.logo{font-size:25px;font-weight:bold}
+#userLine{font-size:11px;margin-top:4px}
+.header-btn{background:white;color:#14243d;border:1px solid #d6b45c;border-radius:20px;padding:10px 14px;font-weight:bold}
+main{padding-bottom:90px}
 h2{color:#14243d;padding:0 16px}
-section.panel,.live,.community-card{background:white;margin:16px;border-radius:16px;padding:16px;box-shadow:0 3px 12px #ddd;border:1px solid #e5e9ef}
-.profile-card{display:none}
-label{display:block;font-weight:bold;margin:13px 0 6px}
+.panel{background:white;margin:15px;padding:16px;border-radius:17px;box-shadow:0 3px 12px #ddd;border:1px solid #e5e9ef}
 input,textarea{width:100%;padding:12px;border:1px solid #d6b45c;border-radius:10px;font-size:16px;font-family:Arial}
-textarea{min-height:85px}
-.primary{width:100%;margin-top:12px}
-#profileMessage,#authMessage{font-size:14px;color:#345477;min-height:20px;margin-top:10px}
-.avatar-area{text-align:center}
-#profilePreview{width:105px;height:105px;border-radius:50%;object-fit:cover;border:3px solid #d6b45c;display:none;margin:10px auto}
-.avatar-placeholder,.member-avatar{width:60px;height:60px;border-radius:50%;background:#eef1f5;border:2px solid #d6b45c;display:grid;place-items:center;font-size:26px}
-.avatar-placeholder{width:105px;height:105px;font-size:40px;margin:10px auto}
-.small-note{font-size:12px;color:#667085}
+label{display:block;font-weight:bold;margin:13px 0 6px}
+textarea{min-height:80px}
+.primary{background:#14243d;color:white;border:1px solid #d6b45c;padding:13px;border-radius:12px;font-weight:bold;width:100%;margin-top:12px}
 .stories{display:flex;gap:15px;overflow-x:auto;padding:12px 16px}
 .story{min-width:65px;text-align:center;font-size:13px}
-.circle{width:60px;height:60px;border-radius:50%;background:white;border:3px solid #d6b45c;margin:auto auto 6px;display:grid;place-items:center;font-size:25px}
-.search-box{margin:12px 16px}
-.member{display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid #edf0f5;cursor:pointer}
-.member:active{background:#f5f7fa}
+.circle{width:60px;height:60px;border-radius:50%;border:3px solid #d6b45c;background:white;display:grid;place-items:center;font-size:25px;margin:auto auto 6px}
+.member{display:flex;gap:12px;align-items:center;padding:12px 4px;border-bottom:1px solid #eee;cursor:pointer}
 .member img,.member-avatar{width:58px;height:58px;min-width:58px;border-radius:50%;object-fit:cover;border:2px solid #d6b45c}
-.member-info{min-width:0;flex:1}
-.member-name{font-weight:bold;color:#14243d;overflow-wrap:anywhere}
+.member-avatar{display:grid;place-items:center;background:#eef1f5;font-size:25px}
+.member-info{flex:1;min-width:0}
+.member-name{font-weight:bold;color:#14243d}
 .member-username{font-size:13px;color:#987323;margin-top:4px}
-.member-bio{font-size:13px;color:#555;margin-top:5px;overflow-wrap:anywhere}
+.member-bio{font-size:13px;color:#555;margin-top:4px;overflow-wrap:anywhere}
 .empty{text-align:center;padding:18px;color:#667085}
-.live-image{background:linear-gradient(135deg,#14243d,#345477);height:150px;display:grid;place-items:center;color:white;font-size:34px;border-radius:12px}
-.tag{color:#b38b2e;font-weight:bold}
-nav{position:fixed;bottom:0;width:100%;background:white;display:flex;justify-content:space-around;padding:10px 2px;box-shadow:0 -2px 10px #ddd;z-index:6;border-top:1px solid #e5e9ef}
-nav button{border:0;background:none;font-size:11px;color:#14243d;padding:3px}
-nav button span{display:block;font-size:21px;margin-bottom:3px}
-.modal-backdrop,.public-profile{display:none;position:fixed;inset:0;background:#14243dcc;z-index:10;align-items:center;justify-content:center;padding:18px}
-.modal-backdrop.open,.public-profile.open{display:flex}
-.modal,.public-profile-card{background:white;width:100%;max-width:420px;border-radius:20px;padding:22px;border:2px solid #d6b45c;max-height:90vh;overflow:auto}
-.modal h2,.public-profile-card h2{padding:0;margin-top:0}
-.actions{display:flex;gap:9px;margin-top:18px}
-.actions button{flex:1;padding:12px 8px;border:0;border-radius:12px;background:#14243d;color:white;font-weight:bold}
-.actions .secondary{background:#edf0f5;color:#14243d;border:1px solid #d6b45c}
-.close{float:right;background:none;border:0;font-size:25px;color:#777}
-.public-profile-card{text-align:center}
-.public-profile-card img{width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid #d6b45c}
-.public-profile-card p{overflow-wrap:anywhere;color:#555}
-.public-close{margin-top:12px}
 .page{display:none}
 .page.active{display:block}
-.notice{background:#f5f7fa;border-radius:12px;padding:14px;color:#526078;font-size:14px;line-height:1.5}
-button:disabled{opacity:.6}
+.profile-card{display:none}
+.avatar-area{text-align:center}
+#profilePreview{width:105px;height:105px;border-radius:50%;object-fit:cover;border:3px solid #d6b45c;display:none;margin:10px auto}
+.avatar-placeholder{width:105px;height:105px;border-radius:50%;background:#eef1f5;border:3px solid #d6b45c;display:grid;place-items:center;font-size:40px;margin:10px auto}
+#profileMessage{font-size:13px;color:#345477;margin-top:10px;min-height:18px}
+
+/* PROFIL PUBLIC */
+#publicPage{display:none;position:fixed;inset:0;background:#fff;z-index:20;overflow-y:auto;padding-bottom:95px}
+#publicPage.open{display:block}
+.profile-cover{height:245px;background:linear-gradient(135deg,#0b1729,#14243d 55%,#49617c);position:relative;color:white}
+.cover-decoration{position:absolute;inset:0;display:grid;place-items:center;font-size:52px;color:#d6b45c;opacity:.4}
+.profile-top-actions{position:absolute;top:18px;left:15px;right:15px;display:flex;justify-content:space-between;z-index:2}
+.profile-top-actions button{background:#0006;color:white;border:1px solid #d6b45c;border-radius:50%;width:42px;height:42px;font-size:22px}
+.profile-identity{position:relative;background:white;padding:0 20px 20px;margin-top:0}
+.profile-avatar-wrap{height:0;position:relative}
+#publicAvatar{width:142px;height:142px;border-radius:50%;object-fit:cover;border:5px solid white;box-shadow:0 2px 10px #0003;position:absolute;top:-75px;left:0;background:#eef1f5}
+#publicAvatarFallback{width:142px;height:142px;border-radius:50%;border:5px solid white;position:absolute;top:-75px;left:0;background:#eef1f5;display:grid;place-items:center;font-size:55px;box-shadow:0 2px 10px #0003}
+.identity-text{padding-top:78px}
+.identity-text h1{font-size:25px;color:#14243d;margin:0 0 6px}
+.identity-text .handle{color:#987323;font-size:14px}
+.identity-text .bio{color:#4b5563;line-height:1.5;margin-top:12px;overflow-wrap:anywhere}
+.profile-stats{display:flex;gap:25px;margin-top:17px;color:#596273}
+.profile-stats strong{color:#14243d;font-size:18px}
+.profile-tabs{display:flex;justify-content:space-around;background:white;border-top:1px solid #eee;border-bottom:1px solid #eee;padding:13px 4px;position:sticky;top:0;z-index:2}
+.profile-tabs button{background:none;border:0;color:#87909d;font-size:22px;padding:5px 12px}
+.profile-tabs button.selected{color:#14243d;border-bottom:3px solid #d6b45c}
+.profile-content{padding:20px;min-height:180px;text-align:center;color:#667085}
+.profile-bottom-actions{position:fixed;bottom:0;left:0;right:0;background:white;padding:12px 18px calc(12px + env(safe-area-inset-bottom));display:flex;gap:12px;border-top:1px solid #eee;z-index:3}
+.profile-bottom-actions button{flex:1;border-radius:35px;padding:15px 8px;font-size:16px;font-weight:bold;border:1px solid #d6b45c}
+.message-btn{background:#f2f0df;color:#14243d}
+.follow-btn{background:#14243d;color:white}
+.close-profile{background:#14243d;color:white;border:1px solid #d6b45c;border-radius:20px;padding:9px 14px}
+.modal-backdrop{display:none;position:fixed;inset:0;background:#14243dcc;z-index:30;align-items:center;justify-content:center;padding:18px}
+.modal-backdrop.open{display:flex}
+.modal{background:white;width:100%;max-width:420px;border-radius:20px;padding:22px;border:2px solid #d6b45c}
+.modal h2{padding:0}
+.modal .actions{display:flex;gap:10px;margin-top:15px}
+.modal .actions button{flex:1;padding:12px;border:0;border-radius:10px;background:#14243d;color:white;font-weight:bold}
+.modal .actions .secondary{background:#eee;color:#14243d;border:1px solid #d6b45c}
+.close-auth{float:right;border:0;background:none;font-size:25px}
+nav{position:fixed;bottom:0;width:100%;background:white;display:flex;justify-content:space-around;padding:10px 2px calc(10px + env(safe-area-inset-bottom));box-shadow:0 -2px 10px #ddd;z-index:6;border-top:1px solid #e5e9ef}
+nav button{border:0;background:none;color:#14243d;font-size:11px;padding:3px}
+nav span{display:block;font-size:22px;margin-bottom:3px}
+.notice{background:#f5f7fa;padding:14px;border-radius:12px;color:#596273;font-size:14px;line-height:1.5}
 </style>
 </head>
-
 <body>
 
 <header>
@@ -73,15 +87,12 @@ button:disabled{opacity:.6}
   <div class="logo">💙 PIU-PIU</div>
   <div id="userLine">Bienvenue dans la communauté</div>
  </div>
- <button id="authButton">Se connecter</button>
+ <button class="header-btn" id="authButton">Se connecter</button>
 </header>
 
 <main>
-
 <div id="homePage" class="page active">
-
  <h2>🌟 Découvrir les amis</h2>
-
  <div class="stories">
   <div class="story"><div class="circle">＋</div>Ajouter</div>
   <div class="story"><div class="circle">😍</div>Emma</div>
@@ -91,91 +102,70 @@ button:disabled{opacity:.6}
  </div>
 
  <h2>👥 Membres PIU-PIU</h2>
-
- <div class="search-box">
+ <div style="margin:12px 16px">
   <input id="memberSearch" type="search" placeholder="🔎 Rechercher un membre...">
  </div>
-
- <section class="community-card">
+ <section class="panel">
   <div id="membersList" class="empty">Connecte-toi pour découvrir les membres. 💙</div>
   <button class="primary" id="refreshMembers">Actualiser les membres</button>
  </section>
 
  <h2>📸 Publications</h2>
-
- <section class="live">
-  <div class="live-image">📷 PIU-PIU</div>
-  <h3>La communauté PIU-PIU</h3>
-  <p>Les publications des membres arriveront ici.</p>
-  <div class="notice">L'espace publications et les likes nécessitent encore la configuration de leurs tables dans Supabase.</div>
+ <section class="panel">
+  <div class="notice">L'espace publications et les likes seront activés lors de la configuration de Supabase.</div>
  </section>
-
 </div>
 
 <div id="livePage" class="page">
  <h2>🔴 Lives en direct</h2>
- <section class="live">
-  <div class="live-image">📹 LIVE</div>
+ <section class="panel">
+  <div class="profile-cover" style="height:170px;border-radius:12px">
+   <div class="cover-decoration">📹 LIVE</div>
+  </div>
   <h3>Bienvenue sur PIU-PIU</h3>
-  <p>Retrouve bientôt les diffusions en direct de la communauté.</p>
-  <div class="notice">La diffusion vidéo nécessite un service spécialisé.</div>
+  <div class="notice">Les diffusions vidéo nécessitent un service spécialisé. Cet espace sera activé ultérieurement.</div>
  </section>
 </div>
 
 <div id="photosPage" class="page">
  <h2>📸 Photos</h2>
  <section class="panel">
-  <p>Découvre bientôt les photos partagées par les membres.</p>
-  <div class="notice">L'espace photos partagé sera activé avec le système de publications.</div>
+  <div class="notice">Les photos partagées par les membres seront affichées ici après la configuration des publications.</div>
  </section>
 </div>
 
 <div id="messagesPage" class="page">
  <h2>💬 Messages</h2>
  <section class="panel">
-  <p>Ton espace de conversations PIU-PIU.</p>
-  <div class="notice">Les messages privés nécessitent une table de conversations et une table de messages dans Supabase.</div>
+  <div class="notice">Les conversations privées seront activées après la configuration sécurisée des tables de messages dans Supabase.</div>
  </section>
 </div>
 
 <div id="profilePage" class="page">
-
  <section class="panel profile-card" id="profileCard">
-
-  <h2>👤 Mon profil PIU-PIU</h2>
-  <p>Personnalise les informations visibles sur ton profil.</p>
-
+  <h2>👤 Modifier mon profil</h2>
   <div class="avatar-area">
    <img id="profilePreview" alt="Ma photo de profil">
    <div id="avatarPlaceholder" class="avatar-placeholder">🐤</div>
-
-   <button class="avatar-button" type="button" id="chooseAvatar">📷 Choisir une photo</button>
-
+   <button class="primary" type="button" id="chooseAvatar">📷 Choisir une photo</button>
    <input id="avatarFile" type="file" accept="image/*" hidden>
    <p class="small-note">Photo de 10 Mo maximum.</p>
   </div>
-
   <label for="username">Pseudo unique</label>
   <input id="username" maxlength="30" placeholder="ex. piu_piu_123">
-
   <label for="displayName">Nom affiché</label>
   <input id="displayName" maxlength="60" placeholder="Ton nom public">
-
   <label for="bio">Biographie</label>
-  <textarea id="bio" maxlength="300" placeholder="Présente-toi en quelques mots…"></textarea>
-
+  <textarea id="bio" maxlength="300" placeholder="Présente-toi…"></textarea>
   <button class="primary" id="saveProfile">Enregistrer mon profil</button>
-  <div id="profileMessage" role="status"></div>
-
+  <div id="profileMessage"></div>
+  <button class="primary" id="previewMyProfile">Voir mon profil public</button>
  </section>
-
  <section class="panel" id="profileLoginNotice">
-  <p>Connecte-toi pour voir et modifier ton profil.</p>
+  <p>Connecte-toi pour modifier ton profil.</p>
   <button class="primary" onclick="showAuth()">Se connecter</button>
  </section>
-
 </div>
-
 </main>
 
 <nav>
@@ -186,819 +176,374 @@ button:disabled{opacity:.6}
  <button onclick="showPage('profilePage')"><span>👤</span>Profil</button>
 </nav>
 
+<!-- PROFIL PUBLIC -->
+<div id="publicPage">
+ <div class="profile-cover">
+  <div class="cover-decoration">✦ PIU-PIU ✦</div>
+  <div class="profile-top-actions">
+   <button id="closePublic" aria-label="Retour">‹</button>
+   <button id="profileMore" aria-label="Plus">•••</button>
+  </div>
+ </div>
+
+ <div class="profile-identity">
+  <div class="profile-avatar-wrap">
+   <img id="publicAvatar" alt="Photo de profil" style="display:none">
+   <div id="publicAvatarFallback">🐤</div>
+  </div>
+  <div class="identity-text">
+   <h1 id="publicName">Membre PIU-PIU</h1>
+   <div class="handle" id="publicUsername"></div>
+   <div class="bio" id="publicBio"></div>
+   <div class="profile-stats">
+    <div><strong id="followingCount">0</strong><br>Suivis</div>
+    <div><strong id="followersCount">0</strong><br>Abonnés</div>
+   </div>
+  </div>
+ </div>
+
+ <div class="profile-tabs">
+  <button class="selected" data-tab="posts" aria-label="Publications">▦</button>
+  <button data-tab="likes" aria-label="J'aime">♡</button>
+  <button data-tab="profile" aria-label="Profil">♙</button>
+  <button data-tab="favorites" aria-label="Favoris">☆</button>
+ </div>
+ <div class="profile-content" id="publicContent">
+  Bienvenue sur le profil PIU-PIU 💙
+ </div>
+
+ <div class="profile-bottom-actions">
+  <button class="message-btn" id="messageMember">● Message</button>
+  <button class="follow-btn" id="followMember">＋ Suivre</button>
+ </div>
+</div>
+
 <!-- CONNEXION -->
-
 <div class="modal-backdrop" id="authBackdrop">
- <section class="modal" role="dialog" aria-modal="true">
-
-  <button class="close" id="closeAuth" aria-label="Fermer">×</button>
-
+ <section class="modal">
+  <button class="close-auth" id="closeAuth">×</button>
   <h2>Bienvenue sur PIU-PIU 💙</h2>
-  <p>Connecte-toi ou crée ton compte avec ton adresse e-mail.</p>
-
+  <p>Connecte-toi ou crée ton compte.</p>
   <label for="email">Adresse e-mail</label>
-  <input id="email" type="email" autocomplete="email" placeholder="exemple@email.com">
-
+  <input id="email" type="email" placeholder="exemple@email.com">
   <label for="password">Mot de passe</label>
-  <input id="password" type="password" autocomplete="current-password" placeholder="Au moins 6 caractères">
-
+  <input id="password" type="password" placeholder="Au moins 6 caractères">
   <div class="actions">
    <button id="signIn">Se connecter</button>
    <button id="signUp" class="secondary">Créer un compte</button>
   </div>
-
-  <div id="authMessage" role="status"></div>
-
- </section>
-</div>
-
-<!-- FICHE PUBLIQUE DE CHAQUE MEMBRE -->
-
-<div class="public-profile" id="publicProfile">
- <section class="public-profile-card">
-
-  <div id="publicAvatar"></div>
-
-  <h2 id="publicName">Membre PIU-PIU</h2>
-
-  <p id="publicUsername"></p>
-
-  <p id="publicBio"></p>
-
-  <button class="public-close" id="closePublicProfile">Fermer</button>
-
+  <div id="authMessage"></div>
  </section>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-
-// ======================================
-// CONFIGURATION SUPABASE
-// ======================================
-
 const SUPABASE_URL='https://edwqvlibagfllfobazmd.supabase.co';
-
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_8Kf69i7SKAlU0j3QW4ndHA_-micATkn';
-
 const AVATAR_BUCKET='avatars';
 
 const supabaseClient=window.supabase.createClient(
- SUPABASE_URL,
- SUPABASE_PUBLISHABLE_KEY
+ SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY
 );
 
-let currentUser=null;
-let selectedAvatarFile=null;
-let allMembers=[];
-let profileLoadVersion=0;
-let membersLoadVersion=0;
-
 const $=id=>document.getElementById(id);
+let currentUser=null;
+let allMembers=[];
+let selectedAvatarFile=null;
+let viewedMember=null;
 
-const backdrop=$('authBackdrop');
-
-function authMsg(message){
- $('authMessage').textContent=message;
+function showAuth(){
+ $('authMessage').textContent='';
+ $('authBackdrop').classList.add('open');
 }
 
-function profileMsg(message){
+function showPage(id){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ $(id).classList.add('active');
+ window.scrollTo({top:0,behavior:'smooth'});
+ if(id==='profilePage'&&!currentUser)showAuth();
+}
+
+function profileMessage(message){
  $('profileMessage').textContent=message;
 }
 
-// ======================================
-// NAVIGATION
-// ======================================
-
-function showAuth(){
- authMsg('');
- backdrop.classList.add('open');
-}
-
-function showPage(pageId){
-
- document.querySelectorAll('.page').forEach(p=>{
-  p.classList.remove('active');
- });
-
- $(pageId).classList.add('active');
-
- window.scrollTo({top:0,behavior:'smooth'});
-
- if(pageId==='profilePage'&&!currentUser){
-  showAuth();
- }
-}
-
-// ======================================
-// PHOTO DE PROFIL
-// ======================================
-
 function showAvatar(url){
-
- const img=$('profilePreview');
- const placeholder=$('avatarPlaceholder');
-
  if(url){
-
-  img.src=url;
-  img.style.display='block';
-  placeholder.style.display='none';
-
-  img.onerror=()=>{
-   img.style.display='none';
-   placeholder.style.display='grid';
-  };
-
+  $('profilePreview').src=url;
+  $('profilePreview').style.display='block';
+  $('avatarPlaceholder').style.display='none';
  }else{
-
-  img.removeAttribute('src');
-  img.style.display='none';
-  placeholder.style.display='grid';
-
+  $('profilePreview').removeAttribute('src');
+  $('profilePreview').style.display='none';
+  $('avatarPlaceholder').style.display='grid';
  }
 }
-
-// ======================================
-// CHARGER MON PROFIL
-// ======================================
 
 async function loadProfile(user){
-
- const version=++profileLoadVersion;
-
  $('profileCard').style.display='block';
  $('profileLoginNotice').style.display='none';
+ profileMessage('Chargement…');
 
- profileMsg('Chargement du profil…');
+ const {data,error}=await supabaseClient.from('profiles')
+  .select('username,display_name,bio,avatar_url')
+  .eq('id',user.id).maybeSingle();
 
- const {data,error}=await supabaseClient
-  .from('profiles')
-  .select('id,username,display_name,bio,avatar_url')
-  .eq('id',user.id)
-  .maybeSingle();
-
- if(version!==profileLoadVersion)return;
-
- if(error){
-  profileMsg('Erreur : '+error.message);
-  return;
- }
-
+ if(error){profileMessage(error.message);return}
  $('username').value=data?.username||'';
  $('displayName').value=data?.display_name||'';
  $('bio').value=data?.bio||'';
-
- selectedAvatarFile=null;
- $('avatarFile').value='';
-
  showAvatar(data?.avatar_url||'');
-
- profileMsg('Ton profil est prêt à être personnalisé. 💙');
+ profileMessage('Profil chargé 💙');
 }
-
-// ======================================
-// OUVRIR LE PROFIL DU MEMBRE CLIQUE
-// ======================================
 
 function openPublicProfile(member){
-
- const box=$('publicProfile');
- const avatar=$('publicAvatar');
-
- avatar.replaceChildren();
+ viewedMember=member;
+ $('publicName').textContent=member.display_name||member.username||'Membre PIU-PIU';
+ $('publicUsername').textContent=member.username?'@'+member.username:'';
+ $('publicBio').textContent=member.bio||'Bienvenue dans la communauté PIU-PIU !';
 
  if(member.avatar_url){
-
-  const img=document.createElement('img');
-
-  img.src=member.avatar_url;
-  img.alt='Photo de profil';
-
-  img.onerror=()=>{
-   img.remove();
-   const fallback=document.createElement('div');
-   fallback.className='avatar-placeholder';
-   fallback.style.margin='auto';
-   fallback.textContent='🐤';
-   avatar.appendChild(fallback);
+  $('publicAvatar').src=member.avatar_url;
+  $('publicAvatar').style.display='block';
+  $('publicAvatarFallback').style.display='none';
+  $('publicAvatar').onerror=()=>{
+   $('publicAvatar').style.display='none';
+   $('publicAvatarFallback').style.display='grid';
   };
-
-  avatar.appendChild(img);
-
  }else{
-
-  const placeholder=document.createElement('div');
-
-  placeholder.className='avatar-placeholder';
-  placeholder.style.margin='auto';
-  placeholder.textContent='🐤';
-
-  avatar.appendChild(placeholder);
+  $('publicAvatar').style.display='none';
+  $('publicAvatarFallback').style.display='grid';
  }
 
- $('publicName').textContent=
-  member.display_name||
-  member.username||
-  'Membre PIU-PIU';
-
- $('publicUsername').textContent=
-  member.username?'@'+member.username:'';
-
- $('publicBio').textContent=
-  member.bio||'Bienvenue dans la communauté PIU-PIU !';
-
- box.classList.add('open');
+ $('followingCount').textContent='0';
+ $('followersCount').textContent='0';
+ $('publicContent').textContent='Bienvenue sur le profil PIU-PIU 💙';
+ $('followMember').style.display=(currentUser&&member.id===currentUser.id)?'none':'block';
+ $('messageMember').style.display=(currentUser&&member.id===currentUser.id)?'none':'block';
+ $('publicPage').classList.add('open');
 }
 
-// ======================================
-// CREER UNE CARTE MEMBRE
-// ======================================
-
-function createMemberElement(member){
-
- const article=document.createElement('div');
-
- article.className='member';
- article.setAttribute('role','button');
- article.tabIndex=0;
-
+function makeMember(member){
+ const row=document.createElement('div');
+ row.className='member';
  if(member.avatar_url){
-
   const img=document.createElement('img');
-
   img.src=member.avatar_url;
   img.alt='Photo de profil';
-
   img.onerror=()=>{
    img.remove();
-
    const fallback=document.createElement('div');
    fallback.className='member-avatar';
    fallback.textContent='🐤';
-
-   article.prepend(fallback);
+   row.prepend(fallback);
   };
-
-  article.appendChild(img);
-
+  row.appendChild(img);
  }else{
-
   const avatar=document.createElement('div');
-
   avatar.className='member-avatar';
   avatar.textContent='🐤';
-
-  article.appendChild(avatar);
+  row.appendChild(avatar);
  }
-
  const info=document.createElement('div');
  info.className='member-info';
-
  const name=document.createElement('div');
  name.className='member-name';
-
- name.textContent=
-  member.display_name||
-  member.username||
-  'Membre PIU-PIU';
-
+ name.textContent=member.display_name||member.username||'Membre PIU-PIU';
  const username=document.createElement('div');
  username.className='member-username';
-
- username.textContent=
-  member.username?'@'+member.username:'Membre PIU-PIU';
-
+ username.textContent=member.username?'@'+member.username:'';
  const bio=document.createElement('div');
  bio.className='member-bio';
-
- bio.textContent=
-  member.bio||'Bienvenue dans la communauté PIU-PIU !';
-
+ bio.textContent=member.bio||'Bienvenue sur PIU-PIU !';
  info.append(name,username,bio);
-
- article.appendChild(info);
-
- // Chaque carte ouvre SON propre profil
- article.addEventListener('click',()=>{
-  openPublicProfile(member);
- });
-
- article.addEventListener('keydown',event=>{
-
-  if(event.key==='Enter'||event.key===' '){
-
-   event.preventDefault();
-   openPublicProfile(member);
-
-  }
-
- });
-
- return article;
+ row.appendChild(info);
+ row.addEventListener('click',()=>openPublicProfile(member));
+ return row;
 }
 
-// ======================================
-// RECHERCHE DES MEMBRES
-// ======================================
-
-function displayMembers(search=''){
-
+function displayMembers(term=''){
  const list=$('membersList');
-
  list.replaceChildren();
-
- const term=search.trim().toLowerCase();
-
- const filtered=allMembers.filter(member=>
-
-  (member.display_name||'').toLowerCase().includes(term)||
-  (member.username||'').toLowerCase().includes(term)||
-  (member.bio||'').toLowerCase().includes(term)
-
+ term=term.trim().toLowerCase();
+ const filtered=allMembers.filter(m=>
+  (m.display_name||'').toLowerCase().includes(term)||
+  (m.username||'').toLowerCase().includes(term)||
+  (m.bio||'').toLowerCase().includes(term)
  );
-
  if(!filtered.length){
-
   const empty=document.createElement('div');
-
   empty.className='empty';
-
-  empty.textContent=term?
-   'Aucun membre trouvé.':
-   'Aucun membre pour le moment.';
-
+  empty.textContent=term?'Aucun membre trouvé.':'Aucun membre pour le moment.';
   list.appendChild(empty);
-
   return;
  }
-
- filtered.forEach(member=>{
-
-  list.appendChild(createMemberElement(member));
-
- });
-
+ filtered.forEach(m=>list.appendChild(makeMember(m)));
 }
-
-// ======================================
-// CHARGER TOUS LES MEMBRES SUPABASE
-// ======================================
 
 async function loadMembers(){
-
- const list=$('membersList');
-
- const version=++membersLoadVersion;
-
- if(!currentUser){
-
-  list.textContent='Connecte-toi pour découvrir les membres.';
-  return;
-
- }
-
- list.textContent='Chargement des membres…';
-
- const {data,error}=await supabaseClient
-  .from('profiles')
-
-  // ID ajouté pour identifier chaque membre
+ if(!currentUser){$('membersList').textContent='Connecte-toi pour découvrir les membres.';return}
+ $('membersList').textContent='Chargement des membres…';
+ const {data,error}=await supabaseClient.from('profiles')
   .select('id,username,display_name,bio,avatar_url,created_at')
-
   .order('created_at',{ascending:false});
-
- if(version!==membersLoadVersion)return;
-
- if(error){
-
-  list.textContent=
-   'Impossible de charger les membres : '+error.message;
-
-  return;
- }
-
+ if(error){$('membersList').textContent='Erreur : '+error.message;return}
  allMembers=data||[];
-
  displayMembers($('memberSearch').value);
-
 }
-
-// ======================================
-// SESSION UTILISATEUR
-// ======================================
 
 async function updateSession(session){
-
- const newUser=session?.user||null;
-
- const previousUserId=currentUser?.id||null;
- const newUserId=newUser?.id||null;
-
- currentUser=newUser;
-
+ currentUser=session?.user||null;
  if(currentUser){
-
-  $('userLine').textContent=
-   'Connecté : '+currentUser.email;
-
+  $('userLine').textContent='Connecté : '+currentUser.email;
   $('authButton').textContent='Se déconnecter';
-
-  if(previousUserId!==newUserId){
-
-   await loadProfile(currentUser);
-   await loadMembers();
-
-  }
-
+  await loadProfile(currentUser);
+  await loadMembers();
  }else{
-
-  profileLoadVersion++;
-  membersLoadVersion++;
-
-  $('userLine').textContent=
-   'Bienvenue dans la communauté';
-
+  $('userLine').textContent='Bienvenue dans la communauté';
   $('authButton').textContent='Se connecter';
-
   $('profileCard').style.display='none';
   $('profileLoginNotice').style.display='block';
-
   allMembers=[];
-
-  $('membersList').textContent=
-   'Connecte-toi pour découvrir les membres.';
-
-  $('publicProfile').classList.remove('open');
-
+  $('membersList').textContent='Connecte-toi pour découvrir les membres.';
  }
-
 }
 
-// ======================================
-// RECHERCHE ET ACTUALISATION
-// ======================================
-
-$('memberSearch').addEventListener('input',event=>{
-
- displayMembers(event.target.value);
-
-});
-
+$('memberSearch').addEventListener('input',e=>displayMembers(e.target.value));
 $('refreshMembers').addEventListener('click',loadMembers);
 
-// ======================================
-// FERMER LES FICHES PUBLIQUES
-// ======================================
+$('closePublic').addEventListener('click',()=>$('publicPage').classList.remove('open'));
+$('profileMore').addEventListener('click',()=>alert('Autres options bientôt disponibles.'));
+$('followMember').addEventListener('click',()=>alert('La fonction Suivre sera activée après la configuration des abonnements dans Supabase.'));
+$('messageMember').addEventListener('click',()=>alert('Les messages privés seront activés après la configuration de Supabase.'));
 
-$('closePublicProfile').addEventListener('click',()=>{
-
- $('publicProfile').classList.remove('open');
-
+document.querySelectorAll('.profile-tabs button').forEach(button=>{
+ button.addEventListener('click',()=>{
+  document.querySelectorAll('.profile-tabs button').forEach(b=>b.classList.remove('selected'));
+  button.classList.add('selected');
+  const messages={
+   posts:'Les publications de ce membre apparaîtront ici.',
+   likes:'Les publications aimées apparaîtront ici.',
+   profile:'Informations du profil PIU-PIU.',
+   favorites:'Les favoris apparaîtront ici.'
+  };
+  $('publicContent').textContent=messages[button.dataset.tab];
+ });
 });
 
-$('publicProfile').addEventListener('click',event=>{
-
- if(event.target.id==='publicProfile'){
-
-  event.currentTarget.classList.remove('open');
-
- }
-
+$('previewMyProfile').addEventListener('click',()=>{
+ if(!currentUser)return showAuth();
+ const own=allMembers.find(m=>m.id===currentUser.id);
+ if(own)openPublicProfile(own);
+ else alert('Enregistre ton profil puis actualise les membres.');
 });
-
-// ======================================
-// CHOISIR UNE PHOTO
-// ======================================
 
 $('chooseAvatar').addEventListener('click',()=>{
-
- if(!currentUser){
-
-  return profileMsg('Connecte-toi pour choisir une photo.');
-
- }
-
+ if(!currentUser)return profileMessage('Connecte-toi d’abord.');
  $('avatarFile').click();
-
 });
 
-$('avatarFile').addEventListener('change',event=>{
-
- const file=event.target.files[0];
-
+$('avatarFile').addEventListener('change',e=>{
+ const file=e.target.files[0];
  if(!file)return;
-
- if(!file.type.startsWith('image/')){
-
-  profileMsg('Choisis un fichier image.');
-
-  event.target.value='';
-
+ if(!file.type.startsWith('image/')||file.size>10*1024*1024){
+  profileMessage('Choisis une image de moins de 10 Mo.');
+  e.target.value='';
   return;
  }
-
- if(file.size>10*1024*1024){
-
-  profileMsg('La photo doit faire moins de 10 Mo.');
-
-  event.target.value='';
-
-  return;
- }
-
  selectedAvatarFile=file;
-
  showAvatar(URL.createObjectURL(file));
-
- profileMsg('Photo choisie ! Appuie sur Enregistrer mon profil.');
-
+ profileMessage('Photo choisie. Enregistre ton profil.');
 });
-
-// ======================================
-// ENREGISTRER MON PROFIL
-// ======================================
 
 $('saveProfile').addEventListener('click',async()=>{
-
- if(!currentUser){
-
-  return profileMsg('Connecte-toi pour modifier ton profil.');
-
- }
-
+ if(!currentUser)return profileMessage('Connecte-toi d’abord.');
  const button=$('saveProfile');
-
  const username=$('username').value.trim().toLowerCase();
-
  const display_name=$('displayName').value.trim();
-
  const bio=$('bio').value.trim();
 
- if(username&&!/^[a-z0-9_]{3,30}$/.test(username)){
-
-  return profileMsg(
-   'Le pseudo doit contenir 3 à 30 caractères : lettres, chiffres ou _ uniquement.'
-  );
-
- }
+ if(username&&!/^[a-z0-9_]{3,30}$/.test(username))
+  return profileMessage('Pseudo : 3 à 30 caractères, lettres, chiffres ou _.');
 
  button.disabled=true;
  button.textContent='Enregistrement…';
-
- profileMsg('Enregistrement en cours…');
-
  try{
-
   let avatar_url;
-
-  // ENVOYER LA PHOTO DANS SUPABASE
-
   if(selectedAvatarFile){
-
-   const extension=
-    selectedAvatarFile.name.split('.').pop().toLowerCase();
-
-   const safeExtension=
-    /^[a-z0-9]+$/.test(extension)?extension:'jpg';
-
-   const path=
-    currentUser.id+'/'+Date.now()+'.'+safeExtension;
-
-   const {error:uploadError}=await supabaseClient.storage
-    .from(AVATAR_BUCKET)
+   const ext=selectedAvatarFile.name.split('.').pop().toLowerCase();
+   const safeExt=/^[a-z0-9]+$/.test(ext)?ext:'jpg';
+   const path=currentUser.id+'/'+Date.now()+'.'+safeExt;
+   const {error}=await supabaseClient.storage.from(AVATAR_BUCKET)
     .upload(path,selectedAvatarFile,{
-
-     cacheControl:'3600',
-     upsert:false,
-     contentType:selectedAvatarFile.type
-
+     cacheControl:'3600',upsert:false,contentType:selectedAvatarFile.type
     });
-
-   if(uploadError)throw uploadError;
-
-   avatar_url=supabaseClient.storage
-    .from(AVATAR_BUCKET)
-    .getPublicUrl(path).data.publicUrl;
-
+   if(error)throw error;
+   avatar_url=supabaseClient.storage.from(AVATAR_BUCKET).getPublicUrl(path).data.publicUrl;
   }
 
-  // ENREGISTRER LES INFORMATIONS DU PROFIL
-
-  const profileData={
-
+  const record={
    id:currentUser.id,
    username:username||null,
    display_name:display_name||null,
-   bio:bio,
+   bio,
    updated_at:new Date().toISOString()
-
   };
+  if(avatar_url!==undefined)record.avatar_url=avatar_url;
 
-  if(avatar_url!==undefined){
-
-   profileData.avatar_url=avatar_url;
-
-  }
-
-  const {error:saveError}=await supabaseClient
-   .from('profiles')
-   .upsert(profileData,{onConflict:'id'});
-
-  if(saveError)throw saveError;
+  const {error}=await supabaseClient.from('profiles')
+   .upsert(record,{onConflict:'id'});
+  if(error)throw error;
 
   selectedAvatarFile=null;
-
   $('avatarFile').value='';
-
-  profileMsg('Profil enregistré avec succès ! 💙');
-
-  // ACTUALISER MON PROFIL ET LES AUTRES MEMBRES
-
+  profileMessage('Profil enregistré avec succès ! 💙');
   await loadProfile(currentUser);
-
   await loadMembers();
-
-  profileMsg('Profil enregistré avec succès ! 💙');
-
  }catch(error){
-
-  console.error(error);
-
-  profileMsg(
-   error.code==='23505'?
-   'Ce pseudo est déjà utilisé. Choisis-en un autre.':
-   'Erreur : '+(error.message||'Impossible d’enregistrer.')
-  );
-
+  profileMessage(error.code==='23505'?'Ce pseudo est déjà utilisé.':'Erreur : '+error.message);
  }finally{
-
   button.disabled=false;
-
   button.textContent='Enregistrer mon profil';
-
  }
-
 });
-
-// ======================================
-// CONNEXION / DÉCONNEXION
-// ======================================
 
 $('authButton').addEventListener('click',async()=>{
-
  if(currentUser){
-
   const {error}=await supabaseClient.auth.signOut();
-
   if(error)alert(error.message);
-
- }else{
-
-  showAuth();
-
- }
-
+ }else showAuth();
 });
-
-$('closeAuth').addEventListener('click',()=>{
-
- backdrop.classList.remove('open');
-
-});
-
-backdrop.addEventListener('click',event=>{
-
- if(event.target===backdrop){
-
-  backdrop.classList.remove('open');
-
- }
-
-});
-
-// ======================================
-// SE CONNECTER
-// ======================================
+$('closeAuth').addEventListener('click',()=>$('authBackdrop').classList.remove('open'));
 
 $('signIn').addEventListener('click',async()=>{
-
  const email=$('email').value.trim();
-
  const password=$('password').value;
-
- if(!email||!password){
-
-  return authMsg('Entre ton adresse e-mail et ton mot de passe.');
-
- }
-
- authMsg('Connexion en cours…');
-
- const {error}=await supabaseClient.auth.signInWithPassword({
-
-  email,
-  password
-
- });
-
- if(error){
-
-  return authMsg('Connexion impossible : '+error.message);
-
- }
-
- authMsg('Connexion réussie ! 💙');
-
- backdrop.classList.remove('open');
-
+ if(!email||!password){$('authMessage').textContent='Entre ton e-mail et ton mot de passe.';return}
+ $('authMessage').textContent='Connexion…';
+ const {error}=await supabaseClient.auth.signInWithPassword({email,password});
+ if(error){$('authMessage').textContent='Erreur : '+error.message;return}
+ $('authBackdrop').classList.remove('open');
 });
-
-// ======================================
-// CRÉER UN COMPTE
-// ======================================
 
 $('signUp').addEventListener('click',async()=>{
-
  const email=$('email').value.trim();
-
  const password=$('password').value;
-
- if(!email||!password){
-
-  return authMsg('Entre ton adresse e-mail et ton mot de passe.');
-
- }
-
- if(password.length<6){
-
-  return authMsg('Le mot de passe doit contenir au moins 6 caractères.');
-
- }
-
- authMsg('Création du compte…');
-
+ if(!email||!password){$('authMessage').textContent='Entre ton e-mail et ton mot de passe.';return}
+ if(password.length<6){$('authMessage').textContent='6 caractères minimum.';return}
+ $('authMessage').textContent='Création du compte…';
  const {data,error}=await supabaseClient.auth.signUp({
-
-  email,
-  password,
-
-  options:{
-
-   emailRedirectTo:
-    'https://elfehri62-design.github.io/PIU-PIU/'
-
-  }
-
+  email,password,
+  options:{emailRedirectTo:'https://elfehri62-design.github.io/PIU-PIU/'}
  });
-
- if(error){
-
-  return authMsg('Inscription impossible : '+error.message);
-
- }
-
- if(data.session){
-
-  authMsg('Compte créé ! 💙');
-
-  backdrop.classList.remove('open');
-
- }else{
-
-  authMsg(
-   'Compte créé ! Consulte tes e-mails pour confirmer ton adresse.'
-  );
-
- }
-
+ if(error){$('authMessage').textContent='Erreur : '+error.message;return}
+ $('authMessage').textContent=data.session?'Compte créé !':'Compte créé ! Vérifie tes e-mails.';
 });
-
-// ======================================
-// INITIALISATION SUPABASE
-// ======================================
 
 supabaseClient.auth.onAuthStateChange((_event,session)=>{
-
  updateSession(session);
-
 });
-
-supabaseClient.auth.getSession().then(({data,error})=>{
-
- if(error){
-
-  console.error(error);
-  return;
-
- }
-
- updateSession(data.session);
-
-});
-
+supabaseClient.auth.getSession().then(({data})=>updateSession(data.session));
 </script>
-
 </body>
 </html>
