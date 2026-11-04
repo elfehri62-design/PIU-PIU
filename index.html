@@ -4,40 +4,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PIU-PIU</title>
+<title>PIU-PIU — Le réseau qui nous rapproche</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--bg:#081329;--panel:#142847;--gold:#e0bd61;--muted:#b5c1d4}
+:root{
+ --bg:#081329;--panel:#142847;--panel2:#1c3558;
+ --gold:#e0bd61;--white:#fff;--muted:#b5c1d4;
+ --line:#354c6d;--green:#55d69e
+}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:white;font-family:Arial,sans-serif}
 header{text-align:center;padding:20px;background:#050e20;border-bottom:2px solid var(--gold)}
-.logo{width:180px;height:180px;max-width:65vw;object-fit:contain;border-radius:50%;border:2px solid var(--gold)}
+.logo{width:140px;height:140px;max-width:55vw;object-fit:contain;border-radius:50%;border:2px solid var(--gold)}
 header h1{color:var(--gold);letter-spacing:5px;margin:10px}
 nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:12px;background:#10213b;position:sticky;top:0;z-index:5}
-button{background:#193454;color:white;border:1px solid var(--gold);padding:11px 15px;border-radius:22px;cursor:pointer;font-size:15px}
+button{background:#193454;color:white;border:1px solid var(--gold);padding:11px 14px;border-radius:22px;cursor:pointer;font-size:14px}
 button.gold{background:var(--gold);color:#081329;font-weight:bold}
-main{max-width:850px;margin:18px auto;padding:12px}
+button:disabled{opacity:.5;cursor:not-allowed}
+main{max-width:900px;margin:18px auto;padding:12px}
 .card{background:var(--panel);border:1px solid var(--gold);border-radius:17px;padding:18px;margin:12px 0}
 h2,h3{color:var(--gold)}
-input,textarea{width:100%;padding:13px;margin:7px 0;border:1px solid #8292a8;border-radius:9px;background:white;color:#10203a;font-size:16px}
+input,textarea,select{width:100%;padding:13px;margin:7px 0;border:1px solid #8292a8;border-radius:9px;background:white;color:#10203a;font-size:16px}
 textarea{min-height:85px}
 label{display:block;margin-top:12px;color:var(--muted)}
 .hidden{display:none!important}
 .muted,small{color:var(--muted)}
 .status{color:var(--gold);padding:8px}
 .center{text-align:center}
-.avatar{width:85px;height:85px;border:3px solid var(--gold);border-radius:50%;object-fit:cover;background:#203653}
+.avatar{width:75px;height:75px;border:3px solid var(--gold);border-radius:50%;object-fit:cover;background:#203653}
 .member{display:flex;align-items:center;gap:12px}
 .member-info{flex:1;min-width:0}
 .row{display:flex;flex-wrap:wrap;gap:8px}
 .row>*{flex:1}
 .badge{display:inline-block;background:#294365;padding:6px 10px;border-radius:20px;margin:3px}
-.notice{padding:12px;background:#203a5b;border-left:4px solid var(--gold);margin:10px 0}
+.notice{padding:12px;background:#203a5b;border-left:4px solid var(--gold);margin:10px 0;border-radius:8px}
 .message{padding:12px;margin:8px 0;background:#203a5b;border-radius:12px}
 .mine{margin-left:12%;border:1px solid var(--gold)}
 .theirs{margin-right:12%}
-.gift{font-size:22px;min-height:65px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}
+.tile{background:#1c3558;border:1px solid #526887;border-radius:14px;padding:15px;text-align:center}
+.tile .symbol{font-size:34px;margin-bottom:8px}
+.price{color:var(--gold);font-weight:bold}
+.progress{height:13px;background:#304563;border-radius:20px;overflow:hidden}
+.progress>span{display:block;height:100%;background:var(--gold)}
 footer{text-align:center;padding:25px;color:var(--muted)}
+hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+a{color:var(--gold)}
 </style>
 </head>
 <body>
@@ -55,6 +67,12 @@ footer{text-align:center;padding:25px;color:var(--muted)}
 <button onclick="showPage('profile')">Mon profil</button>
 <button onclick="showPage('messages')">Messages</button>
 <button onclick="showPage('gifts')">Cadeaux</button>
+<button onclick="showPage('vip')">VIP</button>
+<button onclick="showPage('wallet')">Portefeuille</button>
+<button onclick="showPage('clubs')">Fan Clubs</button>
+<button onclick="showPage('games')">Jeux</button>
+<button onclick="showPage('lives')">Lives</button>
+<button onclick="showPage('rankings')">Classements</button>
 <button onclick="showPage('notifications')">Notifications</button>
 <button id="authButton" onclick="authAction()">Connexion</button>
 </nav>
@@ -65,20 +83,25 @@ footer{text-align:center;padding:25px;color:var(--muted)}
 <div class="card center">
 <img class="logo" src="AB3A6E9D-2421-4105-8C3A-8EE46DD38966.png" alt="Mascotte PIU-PIU">
 <h2>Bienvenue sur PIU-PIU ✨</h2>
-<p>Rencontre des membres, partage des messages et envoie des cadeaux virtuels.</p>
+<p>Le réseau qui nous rapproche.</p>
 <div id="homeStatus" class="status">Chargement...</div>
 <button class="gold" onclick="showPage('members')">Découvrir les membres</button>
+</div>
+<div class="grid">
+<div class="tile"><div class="symbol">👑</div><b>VIP</b><p>Découvre les niveaux VIP.</p></div>
+<div class="tile"><div class="symbol">🎁</div><b>Cadeaux</b><p>Offre des cadeaux aux membres.</p></div>
+<div class="tile"><div class="symbol">🎮</div><b>Jeux</b><p>Découvre les jeux PIU-PIU.</p></div>
+<div class="tile"><div class="symbol">🌍</div><b>Communauté</b><p>Rencontre des membres du monde entier.</p></div>
 </div>
 </section>
 
 <section id="auth" class="page hidden">
 <div class="card center">
-<img class="logo" src="AB3A6E9D-2421-4105-8C3A-8EE46DD38966.png" alt="PIU-PIU">
 <h2>Connexion à PIU-PIU</h2>
 <label>Adresse e-mail</label>
-<input id="authEmail" type="email" autocomplete="email" placeholder="tonadresse@exemple.com">
+<input id="authEmail" type="email" autocomplete="email">
 <label>Mot de passe</label>
-<input id="authPassword" type="password" autocomplete="current-password" placeholder="Ton mot de passe">
+<input id="authPassword" type="password" autocomplete="current-password">
 <div class="row">
 <button class="gold" onclick="login()">Se connecter</button>
 <button onclick="register()">Créer un compte</button>
@@ -98,10 +121,9 @@ footer{text-align:center;padding:25px;color:var(--muted)}
 </section>
 
 <section id="profile" class="page hidden">
-<div class="card">
-<h2>Mon profil</h2>
-<div id="myProfile"></div>
-</div>
+<div class="card"><h2>Mon profil</h2><div id="myProfile"></div></div>
+<div class="card"><h3>Ma progression</h3><div id="myProgress">Chargement...</div></div>
+<div class="card"><h3>Mon statut VIP</h3><div id="myVip">Chargement...</div></div>
 </section>
 
 <section id="publicProfile" class="page hidden">
@@ -115,32 +137,101 @@ footer{text-align:center;padding:25px;color:var(--muted)}
 <div class="card">
 <h2>Messages privés</h2>
 <div id="conversationList"></div>
-<hr>
-<div id="chatArea">Choisis un membre pour commencer une conversation.</div>
+<hr><div id="chatArea">Choisis un membre pour commencer.</div>
 </div>
 </section>
 
 <section id="gifts" class="page hidden">
 <div class="card">
-<h2>Cadeaux virtuels 🎁</h2>
+<h2>Cadeaux PIU-PIU 🎁</h2>
 <p id="giftRecipient">Choisis d'abord un membre.</p>
-<div class="row">
-<button class="gift" onclick="chooseGift('rose')">🌹 Rose</button>
-<button class="gift" onclick="chooseGift('coeur')">❤️ Cœur</button>
-<button class="gift" onclick="chooseGift('diamant')">💎 Diamant</button>
+<h3>Cadeaux classiques</h3>
+<div class="grid" id="classicGifts">
+<div class="tile"><div class="symbol">🌹</div>Rose</div>
+<div class="tile"><div class="symbol">❤️</div>Cœur</div>
+<div class="tile"><div class="symbol">💎</div>Diamant</div>
+<div class="tile"><div class="symbol">🧸</div>Ourson</div>
+<div class="tile"><div class="symbol">👑</div>Couronne</div>
+<div class="tile"><div class="symbol">🏆</div>Trophée</div>
 </div>
-<div class="row">
-<button class="gift" onclick="chooseGift('ourson')">🧸 Ourson</button>
-<button class="gift" onclick="chooseGift('couronne')">👑 Couronne</button>
-<button class="gift" onclick="chooseGift('trophee')">🏆 Trophée</button>
-</div>
-<textarea id="giftMessage" placeholder="Ajouter un petit message (facultatif)"></textarea>
-<button class="gold" onclick="sendGift()">Envoyer le cadeau</button>
+<h3>Boutique premium</h3>
+<div id="giftCatalog" class="grid">Chargement du catalogue...</div>
+<p class="muted">Les prix affichés sont des prix en pièces virtuelles. L'achat sécurisé n'est pas encore activé.</p>
+<textarea id="giftMessage" placeholder="Ajouter un petit message"></textarea>
+<button class="gold" onclick="sendGift()">Envoyer le cadeau classique sélectionné</button>
 <p id="giftStatus" class="status"></p>
 </div>
+<div class="card"><h3>Historique des cadeaux</h3><div id="giftHistory"></div></div>
+</section>
+
+<section id="vip" class="page hidden">
 <div class="card">
-<h3>Cadeaux reçus et envoyés</h3>
-<div id="giftHistory"></div>
+<h2>Club VIP PIU-PIU 👑</h2>
+<p>Le statut VIP est indépendant du niveau de progression.</p>
+<div class="grid">
+<div class="tile"><div class="symbol">🥉</div><b>Bronze</b></div>
+<div class="tile"><div class="symbol">🥈</div><b>Argent</b></div>
+<div class="tile"><div class="symbol">🥇</div><b>Or</b></div>
+<div class="tile"><div class="symbol">💎</div><b>Diamant</b></div>
+<div class="tile"><div class="symbol">👑</div><b>Royal</b></div>
+</div>
+<div id="vipStatus" class="notice">Connecte-toi pour consulter ton statut VIP.</div>
+<p class="muted">L'attribution et le paiement des statuts VIP doivent être validés par le serveur. Aucun achat n'est activé ici.</p>
+</div>
+</section>
+
+<section id="wallet" class="page hidden">
+<div class="card">
+<h2>Mon portefeuille</h2>
+<div id="walletInfo">Connecte-toi pour consulter ton portefeuille.</div>
+<div class="notice">Les pièces PIU-PIU et les montants USD sont affichés à titre de portefeuille. Les recharges et transferts réels ne sont pas activés tant que le système de paiement sécurisé n'est pas installé.</div>
+</div>
+<div class="card">
+<h3>Historique des transactions</h3>
+<div id="transactions">Aucune transaction chargée.</div>
+</div>
+</section>
+
+<section id="clubs" class="page hidden">
+<div class="card">
+<h2>Fan Clubs ⭐</h2>
+<p>Découvre les clubs des créateurs PIU-PIU.</p>
+<div id="clubList">Chargement...</div>
+<p class="muted">La création de clubs et les adhésions payantes nécessitent des règles serveur supplémentaires.</p>
+</div>
+</section>
+
+<section id="games" class="page hidden">
+<div class="card">
+<h2>Jeux PIU-PIU 🎮</h2>
+<div id="gameList">Chargement des jeux...</div>
+<hr>
+<h3>Mini quiz</h3>
+<p>Quelle est la couleur principale de PIU-PIU ?</p>
+<button onclick="answerQuiz('bleu')">Bleu nuit</button>
+<button onclick="answerQuiz('rose')">Rose</button>
+<button onclick="answerQuiz('vert')">Vert</button>
+<p id="quizResult" class="status"></p>
+<p class="muted">Ce mini quiz est une démonstration locale. Il ne crédite pas de pièces ni de points.</p>
+</div>
+<div class="card"><h3>Classement des jeux</h3><div id="gameScores">Chargement...</div></div>
+</section>
+
+<section id="lives" class="page hidden">
+<div class="card">
+<h2>Lives audio et vidéo 🔴</h2>
+<p>Découvre les directs PIU-PIU.</p>
+<div id="liveList">Chargement des directs...</div>
+<p class="muted">Les salles, commentaires et listes de directs peuvent être consultés si les permissions le permettent. La diffusion vidéo/audio réelle nécessite un fournisseur WebRTC ou streaming et des jetons sécurisés côté serveur.</p>
+</div>
+</section>
+
+<section id="rankings" class="page hidden">
+<div class="card">
+<h2>Classements PIU-PIU 🌍</h2>
+<p>Classements des membres par progression.</p>
+<div id="rankingList">Chargement...</div>
+<p class="muted">Les classements nationaux nécessitent que les pays soient renseignés sur les profils.</p>
 </div>
 </section>
 
@@ -153,7 +244,7 @@ footer{text-align:center;padding:25px;color:var(--muted)}
 </section>
 
 </main>
-<footer>PIU-PIU © 2026</footer>
+<footer>PIU-PIU © 2026 — Le réseau qui nous rapproche</footer>
 
 <script>
 const SUPABASE_URL="https://edwqvlibagfllfobazmd.supabase.co";
@@ -173,10 +264,16 @@ function showPage(name){
  document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
  $(name)?.classList.remove("hidden");
  if(name==="members")loadMembers();
- if(name==="profile")loadMyProfile();
+ if(name==="profile"){loadMyProfile();loadProgress();loadVip();}
  if(name==="messages")loadConversations();
  if(name==="notifications")loadNotifications();
- if(name==="gifts")loadGiftHistory();
+ if(name==="gifts"){loadGiftHistory();loadGiftCatalog();}
+ if(name==="wallet")loadWallet();
+ if(name==="clubs")loadClubs();
+ if(name==="games"){loadGames();loadScores();}
+ if(name==="lives")loadLives();
+ if(name==="rankings")loadRankings();
+ if(name==="vip")loadVip();
 }
 function updateAuthButton(){
  $("authButton").textContent=currentUser?"Déconnexion":"Connexion";
@@ -185,62 +282,44 @@ function requireLogin(){
  if(!currentUser){alert("Connecte-toi pour utiliser cette fonction.");showPage("auth");return false;}
  return true;
 }
-function authAction(){
- if(currentUser)logout();
- else showPage("auth");
-}
+function authAction(){if(currentUser)logout();else showPage("auth");}
 
 async function login(){
- const email=$("authEmail").value.trim().toLowerCase();
- const password=$("authPassword").value;
+ const email=$("authEmail").value.trim().toLowerCase(),password=$("authPassword").value;
  const status=$("authStatus");
  if(!email||!$("authEmail").checkValidity()){status.textContent="Entre une adresse e-mail valide.";return;}
  if(!password){status.textContent="Entre ton mot de passe.";return;}
  status.textContent="Connexion en cours...";
  const {data,error}=await db.auth.signInWithPassword({email,password});
  if(error){status.textContent="Connexion impossible : "+error.message;return;}
- currentUser=data.user;
- updateAuthButton();
- await refreshSession();
- showPage("home");
+ currentUser=data.user;updateAuthButton();await refreshSession();showPage("home");
 }
 async function register(){
- const email=$("authEmail").value.trim().toLowerCase();
- const password=$("authPassword").value;
- const status=$("authStatus");
+ const email=$("authEmail").value.trim().toLowerCase(),password=$("authPassword").value,status=$("authStatus");
  if(!email||!$("authEmail").checkValidity()){status.textContent="Entre une adresse e-mail valide.";return;}
  if(password.length<6){status.textContent="Le mot de passe doit contenir au moins 6 caractères.";return;}
  status.textContent="Création du compte...";
- const {data,error}=await db.auth.signUp({
-  email,password,
-  options:{emailRedirectTo:"https://elfehri62-design.github.io/PIU-PIU/"}
- });
+ const {data,error}=await db.auth.signUp({email,password,options:{emailRedirectTo:"https://elfehri62-design.github.io/PIU-PIU/"}});
  if(error){status.textContent="Erreur : "+error.message;return;}
- if(!data.session){status.textContent="Compte créé. Consulte tes e-mails pour confirmer ton adresse.";}
+ if(!data.session)status.textContent="Compte créé. Consulte tes e-mails pour confirmer ton adresse.";
  else{currentUser=data.user;updateAuthButton();await refreshSession();showPage("home");}
 }
 async function resetPassword(){
- const email=$("authEmail").value.trim().toLowerCase();
- const status=$("authStatus");
+ const email=$("authEmail").value.trim().toLowerCase(),status=$("authStatus");
  if(!email||!$("authEmail").checkValidity()){status.textContent="Entre d'abord ton adresse e-mail.";return;}
- status.textContent="Envoi du lien...";
- const {error}=await db.auth.resetPasswordForEmail(email,{
-  redirectTo:"https://elfehri62-design.github.io/PIU-PIU/"
- });
+ const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:"https://elfehri62-design.github.io/PIU-PIU/"});
  status.textContent=error?"Erreur : "+error.message:"Si cette adresse correspond à un compte, un e-mail de réinitialisation va être envoyé.";
 }
 async function logout(){
  const {error}=await db.auth.signOut();
  if(error){alert(error.message);return;}
  currentUser=null;myProfileData=null;updateAuthButton();
- $("homeStatus").textContent="Tu es déconnecté.";
- showPage("home");
+ $("homeStatus").textContent="Tu es déconnecté.";showPage("home");
 }
 async function refreshSession(){
  const {data,error}=await db.auth.getSession();
  if(error){$("homeStatus").textContent="Erreur : "+error.message;return;}
- currentUser=data.session?.user||null;
- updateAuthButton();
+ currentUser=data.session?.user||null;updateAuthButton();
  $("homeStatus").textContent=currentUser?"Bienvenue sur PIU-PIU ! Tu es connecté.":"Connecte-toi pour découvrir PIU-PIU.";
  if(currentUser)await loadMyProfile();
 }
@@ -249,10 +328,8 @@ function avatar(url){
 }
 function age(date){
  if(!date)return "";
- const d=new Date(date+"T00:00:00");
- if(isNaN(d))return "";
- let a=new Date().getFullYear()-d.getFullYear();
- const m=new Date().getMonth()-d.getMonth();
+ const d=new Date(date+"T00:00:00");if(isNaN(d))return "";
+ let a=new Date().getFullYear()-d.getFullYear(),m=new Date().getMonth()-d.getMonth();
  if(m<0||(m===0&&new Date().getDate()<d.getDate()))a--;
  return a>=0?a+" ans":"";
 }
@@ -266,8 +343,7 @@ async function loadMyProfile(){
  const number=data.profile_number?String(data.profile_number).padStart(6,"0"):"En attente";
  $("myProfile").innerHTML=`
  <div class="center">${avatar(data.avatar_url)}
- <h3>${esc(data.display_name||"Mon profil")}</h3>
- <p>@${esc(data.username||"sans_pseudo")}</p>
+ <h3>${esc(data.display_name||"Mon profil")}</h3><p>@${esc(data.username||"sans_pseudo")}</p>
  <span class="badge">PIU-${number}</span></div>
  <label>Photo de profil</label><input type="file" id="avatarFile" accept="image/*">
  <label>Nom affiché</label><input id="displayName" maxlength="50" value="${esc(data.display_name)}">
@@ -281,8 +357,7 @@ async function loadMyProfile(){
 async function saveProfile(){
  if(!requireLogin())return;
  const status=$("profileStatus");status.textContent="Enregistrement...";
- let avatarUrl=myProfileData?.avatar_url||null;
- const file=$("avatarFile").files[0];
+ let avatarUrl=myProfileData?.avatar_url||null,file=$("avatarFile").files[0];
  if(file){
   if(file.size>5*1024*1024){status.textContent="La photo doit faire moins de 5 Mo.";return;}
   const ext=(file.name.split(".").pop()||"jpg").replace(/[^a-z0-9]/gi,"");
@@ -291,16 +366,9 @@ async function saveProfile(){
   if(error){status.textContent="Erreur photo : "+error.message;return;}
   avatarUrl=db.storage.from("avatars").getPublicUrl(path).data.publicUrl;
  }
- const payload={
-  id:currentUser.id,
-  username:$("username").value.trim().replace(/^@/,"")||null,
-  display_name:$("displayName").value.trim(),
-  bio:$("bio").value.trim(),
-  country:$("country").value.trim(),
-  birth_date:$("birthDate").value||null,
-  avatar_url:avatarUrl,
-  updated_at:new Date().toISOString()
- };
+ const payload={id:currentUser.id,username:$("username").value.trim().replace(/^@/,"")||null,
+ display_name:$("displayName").value.trim(),bio:$("bio").value.trim(),country:$("country").value.trim(),
+ birth_date:$("birthDate").value||null,avatar_url:avatarUrl,updated_at:new Date().toISOString()};
  const {error}=await db.from("profiles").upsert(payload,{onConflict:"id"});
  if(error){status.textContent="Erreur : "+error.message;return;}
  status.textContent="Profil enregistré !";await loadMyProfile();
@@ -318,14 +386,13 @@ function renderMembers(){
  $("membersList").innerHTML=list.map(m=>`
  <div class="card member">${avatar(m.avatar_url)}
  <div class="member-info"><strong>${esc(m.display_name||"Membre PIU-PIU")}</strong>
- <p class="gold-text">@${esc(m.username||"sans_pseudo")}</p><small>${esc(m.bio||"")}</small></div>
+ <p>@${esc(m.username||"sans_pseudo")}</p><small>${esc(m.bio||"")}</small></div>
  <button onclick="openPublicProfile('${m.id}')">Voir</button></div>`).join("")||"<p>Aucun membre trouvé.</p>";
 }
 async function openPublicProfile(id){
  if(!requireLogin())return;
  const {data,error}=await db.from("profiles").select("*").eq("id",id).single();
- if(error){alert(error.message);return;}
- selectedMember=data;
+ if(error){alert(error.message);return;}selectedMember=data;
  const [a,b,f]=await Promise.all([
   db.from("follows").select("*",{count:"exact",head:true}).eq("following_id",id),
   db.from("follows").select("*",{count:"exact",head:true}).eq("follower_id",id),
@@ -333,29 +400,24 @@ async function openPublicProfile(id){
  ]);
  const number=data.profile_number?String(data.profile_number).padStart(6,"0"):"En attente";
  $("publicProfileContent").innerHTML=`
- <div class="center">${avatar(data.avatar_url)}
- <h2>${esc(data.display_name||"Membre PIU-PIU")}</h2>
- <p class="gold-text">@${esc(data.username||"sans_pseudo")}</p>
- <span class="badge">PIU-${number}</span>
- <p>${esc(data.bio||"")}</p>
- <p>${esc(data.country||"")}${data.birth_date?" · "+age(data.birth_date):""}</p>
+ <div class="center">${avatar(data.avatar_url)}<h2>${esc(data.display_name||"Membre PIU-PIU")}</h2>
+ <p>@${esc(data.username||"sans_pseudo")}</p><span class="badge">PIU-${number}</span>
+ <p>${esc(data.bio||"")}</p><p>${esc(data.country||"")}${data.birth_date?" · "+age(data.birth_date):""}</p>
  <p><span class="badge">${a.count||0} abonnés</span><span class="badge">${b.count||0} abonnements</span></p>
- ${id!==currentUser.id?`
- <button class="gold" onclick="toggleFollow('${id}')">${f.data?"Ne plus suivre":"Suivre"}</button>
- <button onclick="startMessage('${id}')">Message</button>
- <button onclick="selectGiftRecipient('${id}')">Cadeau 🎁</button>`:"<p>Ton profil</p>"}</div>`;
+ ${id!==currentUser.id?`<button class="gold" onclick="toggleFollow('${id}')">${f.data?"Ne plus suivre":"Suivre"}</button>
+ <button onclick="startMessage('${id}')">Message</button><button onclick="selectGiftRecipient('${id}')">Cadeau 🎁</button>`:"<p>Ton profil</p>"}</div>`;
  showPage("publicProfile");
 }
 async function toggleFollow(id){
  if(!requireLogin())return;
  const {data}=await db.from("follows").select("id").eq("follower_id",currentUser.id).eq("following_id",id).maybeSingle();
  const result=data?await db.from("follows").delete().eq("id",data.id):await db.from("follows").insert({follower_id:currentUser.id,following_id:id});
- if(result.error){alert(result.error.message);return;}
- await openPublicProfile(id);
+ if(result.error){alert(result.error.message);return;}await openPublicProfile(id);
 }
 async function loadConversations(){
  if(!requireLogin())return;
- const {data,error}=await db.from("messages").select("sender_id,receiver_id,content,created_at").or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`).order("created_at",{ascending:false}).limit(100);
+ const {data,error}=await db.from("messages").select("sender_id,receiver_id,content,created_at")
+ .or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`).order("created_at",{ascending:false}).limit(100);
  if(error){$("conversationList").textContent=error.message;return;}
  const ids=[...new Set((data||[]).map(m=>m.sender_id===currentUser.id?m.receiver_id:m.sender_id))];
  if(!ids.length){$("conversationList").textContent="Pas encore de conversation.";return;}
@@ -370,13 +432,11 @@ async function startMessage(id){
 }
 async function loadChat(){
  if(!activeConversation)return;
- const other=activeConversation;
- const filter=`and(sender_id.eq.${currentUser.id},receiver_id.eq.${other}),and(sender_id.eq.${other},receiver_id.eq.${currentUser.id})`;
+ const other=activeConversation,filter=`and(sender_id.eq.${currentUser.id},receiver_id.eq.${other}),and(sender_id.eq.${other},receiver_id.eq.${currentUser.id})`;
  const {data,error}=await db.from("messages").select("*").or(filter).order("created_at",{ascending:true}).limit(200);
  if(error){$("chatArea").textContent=error.message;return;}
- $("chatArea").innerHTML=`
- <h3>Conversation avec @${esc(selectedMember?.username||"membre")}</h3>
- <div>${(data||[]).map(m=>`<div class="message ${m.sender_id===currentUser.id?"mine":"theirs"}">${esc(m.content||"")}<br><small>${new Date(m.created_at).toLocaleString("fr-FR")}</small></div>`).join("")}</div>
+ $("chatArea").innerHTML=`<h3>Conversation avec @${esc(selectedMember?.username||"membre")}</h3>
+ ${(data||[]).map(m=>`<div class="message ${m.sender_id===currentUser.id?"mine":"theirs"}">${esc(m.content||"")}<br><small>${new Date(m.created_at).toLocaleString("fr-FR")}</small></div>`).join("")}
  <textarea id="messageText" placeholder="Écris ton message..."></textarea>
  <button class="gold" onclick="sendMessage()">Envoyer</button>
  <button onclick="selectGiftRecipient('${other}')">Offrir un cadeau 🎁</button>`;
@@ -392,8 +452,7 @@ async function selectGiftRecipient(id){
  if(error){alert(error.message);return;}
  selectedMember=data;selectedGift=null;
  $("giftRecipient").textContent="Destinataire : "+(data.display_name||data.username);
- $("giftStatus").textContent="Choisis ton cadeau.";
- $("giftMessage").value="";showPage("gifts");
+ $("giftStatus").textContent="Choisis ton cadeau.";showPage("gifts");
 }
 function chooseGift(type){
  if(!requireLogin())return;
@@ -402,10 +461,7 @@ function chooseGift(type){
 }
 async function sendGift(){
  if(!requireLogin()||!selectedMember||!selectedGift){alert("Choisis un destinataire et un cadeau.");return;}
- const {error}=await db.from("gifts").insert({
-  sender_id:currentUser.id,receiver_id:selectedMember.id,
-  gift_type:selectedGift,message:$("giftMessage").value.trim()
- });
+ const {error}=await db.from("gifts").insert({sender_id:currentUser.id,receiver_id:selectedMember.id,gift_type:selectedGift,message:$("giftMessage").value.trim()});
  if(error){$("giftStatus").textContent="Erreur : "+error.message;return;}
  $("giftStatus").textContent="Cadeau envoyé ! 🎁";selectedGift=null;await loadGiftHistory();
 }
@@ -417,23 +473,117 @@ async function loadGiftHistory(){
  const ids=[...new Set(data.flatMap(g=>[g.sender_id,g.receiver_id]))];
  const {data:people}=await db.from("profiles").select("id,username,display_name").in("id",ids);
  const names=Object.fromEntries((people||[]).map(p=>[p.id,p.username||p.display_name||"membre"]));
- $("giftHistory").innerHTML=data.map(g=>`
- <div class="notice">${emojis[g.gift_type]||"🎁"} <strong>${esc(g.gift_type)}</strong>
+ $("giftHistory").innerHTML=data.map(g=>`<div class="notice">${emojis[g.gift_type]||"🎁"} <b>${esc(g.gift_type)}</b>
  <p>${g.sender_id===currentUser.id?"Envoyé à":"Reçu de"} @${esc(names[g.sender_id===currentUser.id?g.receiver_id:g.sender_id]||"membre")}</p>
  <small>${esc(g.message||"")} · ${new Date(g.created_at).toLocaleString("fr-FR")}</small></div>`).join("");
 }
+
+async function loadGiftCatalog(){
+ const box=$("giftCatalog");
+ const {data,error}=await db.from("piu_gift_catalog").select("*").eq("is_active",true).order("price_coins");
+ if(error){box.textContent="Catalogue indisponible : "+error.message;return;}
+ if(!data?.length){box.textContent="Le catalogue premium sera bientôt disponible.";return;}
+ box.innerHTML=data.map(g=>`<div class="tile"><div class="symbol">🎁</div><b>${esc(g.gift_name)}</b>
+ <p>${esc(g.collection)}</p><div class="price">${Number(g.price_coins).toLocaleString("fr-FR")} pièces</div></div>`).join("");
+}
+
+async function loadProgress(){
+ if(!currentUser)return;
+ const {data,error}=await db.from("piu_member_progress").select("*").eq("user_id",currentUser.id).maybeSingle();
+ if(error){$("myProgress").textContent="Progression indisponible : "+error.message;return;}
+ if(!data){$("myProgress").innerHTML="Ton niveau sera affiché après son initialisation sécurisée.";return;}
+ const level=Math.max(1,Math.min(200,Number(data.level_number)||1));
+ $("myProgress").innerHTML=`<h3>Niveau ${level} / 200</h3><div class="progress"><span style="width:${level/2}%"></span></div>
+ <p>${Number(data.level_points||0).toLocaleString("fr-FR")} points</p><p>${level===200?"Légende PIU-PIU":"Progression vers le niveau suivant"}</p>`;
+}
+async function loadVip(){
+ const box=$("myVip")||$("vipStatus");if(!box)return;
+ if(!currentUser){box.textContent="Connecte-toi pour consulter ton statut VIP.";return;}
+ const {data,error}=await db.from("piu_vip_memberships").select("*").eq("user_id",currentUser.id).maybeSingle();
+ if(error){box.textContent="Statut VIP indisponible : "+error.message;return;}
+ const tier=data?.vip_tier||"none";
+ box.textContent=tier==="none"?"Tu n'as pas encore de statut VIP.":"Ton statut VIP : "+tier.toUpperCase();
+}
+
+async function loadWallet(){
+ if(!requireLogin())return;
+ $("walletInfo").textContent="Chargement...";
+ const {data,error}=await db.from("piu_wallets").select("*").eq("user_id",currentUser.id).maybeSingle();
+ if(error){$("walletInfo").textContent="Portefeuille indisponible : "+error.message;return;}
+ if(!data){$("walletInfo").textContent="Ton portefeuille sera initialisé par le système sécurisé.";return;}
+ $("walletInfo").innerHTML=`<div class="grid"><div class="tile"><div class="symbol">🪙</div><b>${Number(data.coin_balance||0).toLocaleString("fr-FR")}</b><p>Pièces PIU-PIU</p></div>
+ <div class="tile"><div class="symbol">💵</div><b>${Number(data.usd_balance||0).toFixed(2)} $</b><p>Solde USD</p></div></div>`;
+ const {data:tx,error:txError}=await db.from("piu_coin_transactions").select("*").eq("user_id",currentUser.id).order("created_at",{ascending:false}).limit(30);
+ if(txError){$("transactions").textContent="Historique indisponible : "+txError.message;return;}
+ $("transactions").innerHTML=(tx||[]).map(t=>`<div class="notice">${esc(t.transaction_type)} · ${Number(t.amount).toLocaleString("fr-FR")} pièces<br><small>${esc(t.description||"")} · ${new Date(t.created_at).toLocaleString("fr-FR")}</small></div>`).join("")||"Aucune transaction.";
+}
+
+async function loadClubs(){
+ if(!requireLogin())return;
+ const box=$("clubList");box.textContent="Chargement...";
+ const {data,error}=await db.from("piu_fan_clubs").select("*").order("created_at",{ascending:false}).limit(100);
+ if(error){box.textContent="Fan Clubs indisponibles : "+error.message;return;}
+ if(!data?.length){box.textContent="Aucun Fan Club créé pour le moment.";return;}
+ const ids=[...new Set(data.map(c=>c.creator_id))];
+ const {data:people}=await db.from("profiles").select("id,username,display_name").in("id",ids);
+ const names=Object.fromEntries((people||[]).map(p=>[p.id,p.display_name||p.username||"Créateur"]));
+ box.innerHTML=data.map(c=>`<div class="notice"><h3>${esc(c.club_name)}</h3><p>${esc(c.description||"")}</p><small>Créateur : ${esc(names[c.creator_id]||"Membre PIU-PIU")}</small></div>`).join("");
+}
+
+async function loadGames(){
+ const box=$("gameList");
+ const {data,error}=await db.from("piu_games").select("*").eq("is_active",true);
+ if(error){box.textContent="Jeux indisponibles : "+error.message;return;}
+ box.innerHTML=data?.length?data.map(g=>`<div class="notice"><b>${esc(g.game_name)}</b><br><small>${esc(g.game_code)}</small></div>`).join(""):"Les jeux PIU-PIU arrivent bientôt.";
+}
+async function loadScores(){
+ const box=$("gameScores");
+ const {data,error}=await db.from("piu_game_scores").select("game_id,user_id,score").order("score",{ascending:false}).limit(20);
+ if(error){box.textContent="Classement indisponible : "+error.message;return;}
+ if(!data?.length){box.textContent="Aucun score enregistré.";return;}
+ const ids=[...new Set(data.map(x=>x.user_id))];
+ const {data:people}=await db.from("profiles").select("id,username,display_name").in("id",ids);
+ const names=Object.fromEntries((people||[]).map(p=>[p.id,p.username||p.display_name||"Membre"]));
+ box.innerHTML=data.map((s,i)=>`<div class="notice">#${i+1} @${esc(names[s.user_id]||"Membre")} — ${Number(s.score)} points</div>`).join("");
+}
+function answerQuiz(answer){
+ $("quizResult").textContent=answer==="bleu"?"Bonne réponse ! 🎉":"Essaie encore !";
+}
+
+async function loadLives(){
+ if(!requireLogin())return;
+ const box=$("liveList");box.textContent="Chargement...";
+ const {data,error}=await db.from("piu_live_rooms").select("*").eq("status","live").order("created_at",{ascending:false}).limit(50);
+ if(error){box.textContent="Lives indisponibles : "+error.message;return;}
+ if(!data?.length){box.textContent="Aucun direct en cours. Reviens bientôt !";return;}
+ const ids=[...new Set(data.map(x=>x.host_id))];
+ const {data:people}=await db.from("profiles").select("id,username,display_name").in("id",ids);
+ const names=Object.fromEntries((people||[]).map(p=>[p.id,p.display_name||p.username||"Créateur"]));
+ box.innerHTML=data.map(l=>`<div class="notice"><b>🔴 ${esc(l.title)}</b><p>${l.live_type==="audio"?"🎙️ Direct audio":"📹 Direct vidéo"}</p><small>Présenté par ${esc(names[l.host_id]||"Membre PIU-PIU")}</small></div>`).join("");
+}
+
+async function loadRankings(){
+ if(!requireLogin())return;
+ const box=$("rankingList");box.textContent="Chargement...";
+ const {data,error}=await db.from("piu_member_progress").select("user_id,level_number,level_points").order("level_number",{ascending:false}).order("level_points",{ascending:false}).limit(50);
+ if(error){box.textContent="Classement indisponible : "+error.message;return;}
+ if(!data?.length){box.textContent="Le classement sera disponible lorsque les progressions seront initialisées.";return;}
+ const ids=data.map(x=>x.user_id);
+ const {data:people}=await db.from("profiles").select("id,username,display_name,country").in("id",ids);
+ const names=Object.fromEntries((people||[]).map(p=>[p.id,p]));
+ box.innerHTML=data.map((p,i)=>{const person=names[p.user_id]||{};return `<div class="notice">#${i+1} ${esc(person.display_name||person.username||"Membre")} — Niveau ${p.level_number}<br><small>${esc(person.country||"Pays non renseigné")}</small></div>`}).join("");
+}
+
 async function loadNotifications(){
  if(!requireLogin())return;
  $("notificationList").textContent="Chargement...";
  const {data,error}=await db.from("notifications").select("*").order("created_at",{ascending:false}).limit(100);
  if(error){$("notificationList").textContent="Erreur : "+error.message;return;}
  if(!data?.length){$("notificationList").textContent="Aucune notification.";return;}
- $("notificationList").innerHTML=data.map(n=>`
- <div class="notice"><strong>${esc(n.title||n.type||"Notification")}</strong>
+ $("notificationList").innerHTML=data.map(n=>`<div class="notice"><strong>${esc(n.title||n.type||"Notification")}</strong>
  <p>${esc(n.body||n.message||n.content||"")}</p>
  <small>${n.created_at?new Date(n.created_at).toLocaleString("fr-FR"):""}</small>
- ${n.is_read===false?`<button onclick="markNotificationRead('${n.id}')">Marquer comme lue</button>`:""}
- </div>`).join("");
+ ${n.is_read===false?`<button onclick="markNotificationRead('${n.id}')">Marquer comme lue</button>`:""}</div>`).join("");
 }
 async function markNotificationRead(id){
  const {error}=await db.from("notifications").update({is_read:true}).eq("id",id);
@@ -441,8 +591,7 @@ async function markNotificationRead(id){
 }
 
 db.auth.onAuthStateChange((_event,session)=>{
- currentUser=session?.user||null;
- updateAuthButton();
+ currentUser=session?.user||null;updateAuthButton();
 });
 refreshSession();
 </script>
