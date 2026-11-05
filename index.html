@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -13,8 +14,8 @@
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:white;font-family:Arial,sans-serif}
-header{text-align:center;padding:20px;background:#050e20;border-bottom:2px solid var(--gold)}
-.logo{width:140px;height:140px;max-width:55vw;object-fit:contain;border-radius:50%;border:2px solid var(--gold)}
+header{text-align:center;padding:16px;background:#050e20;border-bottom:2px solid var(--gold)}
+.logo{width:120px;height:120px;max-width:55vw;object-fit:contain;border-radius:50%;border:2px solid var(--gold)}
 header h1{color:var(--gold);letter-spacing:5px;margin:10px}
 nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:12px;background:#10213b;position:sticky;top:0;z-index:5}
 button{background:#193454;color:white;border:1px solid var(--gold);padding:11px 14px;border-radius:22px;cursor:pointer;font-size:14px}
@@ -50,42 +51,51 @@ footer{text-align:center;padding:25px;color:var(--muted)}
 hr{border:0;border-top:1px solid var(--line);margin:18px 0}
 a{color:var(--gold)}
 
-/* NOUVEAU DESIGN DES PROFILS */
-.profile-hero{
- background:linear-gradient(145deg,#1d3b61,#10213b);
- border:1px solid var(--gold);
- border-radius:20px;
- padding:22px;
- text-align:center
+/* PROFIL PIU-PIU */
+.profile-page{
+ background:linear-gradient(160deg,#07152f,#102b55);
+ border:1px solid #d8b94e;border-radius:25px;padding:16px;
 }
-.profile-hero .avatar{width:112px;height:112px}
-.profile-name{font-size:25px;margin:12px 0 4px}
-.profile-id{
- display:inline-block;
- border:1px solid var(--gold);
- border-radius:20px;
- padding:6px 13px;
- color:var(--gold);
- margin:8px
-}
-.profile-stats{margin:18px 0}
-.profile-stats .tile{padding:13px 7px}
-.profile-stats strong{
- display:block;
- font-size:23px;
- color:var(--gold)
-}
-.private-balance{
- border:1px solid var(--gold);
- background:#172f50
-}
-.private-balance .symbol{font-size:32px}
-.profile-shortcuts .tile{min-height:95px}
-.profile-shortcuts .symbol{font-size:28px}
+.profile-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 4px 20px}
+.profile-top .avatar{width:112px;height:112px;border:4px solid #e6c45c;box-shadow:0 0 15px #d8b94e66}
+.profile-identity{flex:1;min-width:160px}
+.profile-name{font-size:24px;color:white;margin:5px 0}
+.profile-id{color:#f4d36b;font-weight:bold}
+.profile-flags{font-size:23px;margin:8px 0}
+.online-pill{display:inline-block;background:#20a85b;color:white;border-radius:20px;padding:6px 12px;font-size:13px}
+.vip-pill{display:inline-block;background:#f4cf54;color:#171b2c;border-radius:20px;padding:6px 12px;font-weight:bold}
+.profile-stats{display:grid;grid-template-columns:repeat(4,1fr);background:#f7f8ff;color:#101b35;border-radius:18px;padding:14px 5px;margin:12px 0;gap:3px}
+.profile-stat{text-align:center;border-right:1px solid #dce1ed}
+.profile-stat:last-child{border:0}
+.profile-stat strong{display:block;font-size:23px;color:#111b35}
+.profile-stat span{font-size:12px;font-weight:bold}
+.profile-stat .symbol{font-size:25px}
+.profile-private-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.profile-private-card{border-radius:18px;padding:16px 10px;color:#17213b;text-align:center;background:#fff2b8}
+.profile-private-card.pink{background:#f9dff0}
+.profile-private-card .symbol{font-size:30px}
+.profile-vip-bar{background:linear-gradient(90deg,#ffe98c,#eab72e);color:#19172a;border-radius:16px;padding:16px;font-weight:bold;margin:14px 0;cursor:pointer}
+.profile-shortcuts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;background:#fff;border-radius:18px;padding:15px 8px}
+.profile-shortcut{color:#15213c;text-align:center;padding:9px 2px;cursor:pointer;font-size:12px;font-weight:bold}
+.profile-shortcut .symbol{font-size:29px;display:block;margin-bottom:6px}
+.profile-banner{background:linear-gradient(110deg,#092b65,#1264c7,#09204a);border-radius:18px;padding:22px 12px;margin:16px 0;text-align:center;color:#fff}
+.profile-banner strong{font-size:25px;color:#ffdf65}
+.profile-center-links{background:white;color:#14213d;border-radius:18px;padding:8px 16px;margin:14px 0}
+.profile-center-links button{display:block;width:100%;text-align:left;background:transparent;color:#14213d;border:0;border-bottom:1px solid #e3e6ef;border-radius:0;padding:15px 5px;font-weight:bold}
+.profile-actions{display:flex;gap:10px;margin-top:18px}
+.profile-actions button{flex:1;background:#1264d8;border:0;border-radius:28px;padding:15px 8px;font-weight:bold}
+.profile-edit{background:#142847;border-radius:16px;padding:14px;margin-top:16px}
+.profile-section-title{color:#f4d36b;margin:18px 0 10px}
 @media(max-width:520px){
  nav button{font-size:12px;padding:9px 10px}
  .card{padding:14px}
- .profile-name{font-size:22px}
+ .profile-stats{grid-template-columns:repeat(4,1fr)}
+ .profile-stat strong{font-size:19px}
+ .profile-stat span{font-size:10px}
+ .profile-shortcuts{grid-template-columns:repeat(4,1fr)}
+ .profile-top .avatar{width:95px;height:95px}
+ .profile-name{font-size:21px}
+ .profile-actions button{font-size:12px;padding:13px 4px}
 }
 </style>
 </head>
@@ -115,192 +125,165 @@ a{color:var(--gold)}
 </nav>
 
 <main>
-
 <section id="home" class="page">
-<div class="card center">
-<img class="logo" src="AB3A6E9D-2421-4105-8C3A-8EE46DD38966.png" alt="Mascotte PIU-PIU">
-<h2>Bienvenue sur PIU-PIU ✨</h2>
-<p>Le réseau qui nous rapproche.</p>
-<div id="homeStatus" class="status">Chargement...</div>
-<button class="gold" onclick="showPage('members')">Découvrir les membres</button>
-</div>
-<div class="grid">
-<div class="tile"><div class="symbol">👑</div><b>VIP</b><p>Découvre les niveaux VIP.</p></div>
-<div class="tile"><div class="symbol">🎁</div><b>Cadeaux</b><p>Offre des cadeaux aux membres.</p></div>
-<div class="tile"><div class="symbol">🎮</div><b>Jeux</b><p>Découvre les jeux PIU-PIU.</p></div>
-<div class="tile"><div class="symbol">🌍</div><b>Communauté</b><p>Rencontre des membres du monde entier.</p></div>
-</div>
+ <div class="card center">
+  <img class="logo" src="AB3A6E9D-2421-4105-8C3A-8EE46DD38966.png" alt="Mascotte PIU-PIU">
+  <h2>Bienvenue sur PIU-PIU ✨</h2>
+  <p>Le réseau qui nous rapproche.</p>
+  <div id="homeStatus" class="status">Chargement...</div>
+  <button class="gold" onclick="showPage('members')">Découvrir les membres</button>
+ </div>
+ <div class="grid">
+  <div class="tile"><div class="symbol">👑</div><b>VIP</b><p>Découvre les niveaux VIP.</p></div>
+  <div class="tile"><div class="symbol">🎁</div><b>Cadeaux</b><p>Offre des cadeaux aux membres.</p></div>
+  <div class="tile"><div class="symbol">🎮</div><b>Jeux</b><p>Découvre les jeux PIU-PIU.</p></div>
+  <div class="tile"><div class="symbol">🌍</div><b>Communauté</b><p>Rencontre des membres du monde entier.</p></div>
+ </div>
 </section>
 
 <section id="auth" class="page hidden">
-<div class="card center">
-<h2>Connexion à PIU-PIU</h2>
-<label>Adresse e-mail</label>
-<input id="authEmail" type="email" autocomplete="email">
-<label>Mot de passe</label>
-<input id="authPassword" type="password" autocomplete="current-password">
-<div class="row">
-<button class="gold" onclick="login()">Se connecter</button>
-<button onclick="register()">Créer un compte</button>
-</div>
-<button onclick="resetPassword()">Mot de passe oublié ?</button>
-<p id="authStatus" class="status"></p>
-</div>
+ <div class="card center">
+  <h2>Connexion à PIU-PIU</h2>
+  <label>Adresse e-mail</label><input id="authEmail" type="email" autocomplete="email">
+  <label>Mot de passe</label><input id="authPassword" type="password" autocomplete="current-password">
+  <div class="row">
+   <button class="gold" onclick="login()">Se connecter</button>
+   <button onclick="register()">Créer un compte</button>
+  </div>
+  <button onclick="resetPassword()">Mot de passe oublié ?</button>
+  <p id="authStatus" class="status"></p>
+ </div>
 </section>
 
 <section id="members" class="page hidden">
-<div class="card">
-<h2>Les membres</h2>
-<input id="memberSearch" placeholder="Rechercher un membre..." oninput="renderMembers()">
-<button class="gold" onclick="loadMembers()">Actualiser</button>
-<div id="membersList"></div>
-</div>
+ <div class="card">
+  <h2>Les membres</h2>
+  <input id="memberSearch" placeholder="Rechercher un membre..." oninput="renderMembers()">
+  <button class="gold" onclick="loadMembers()">Actualiser</button>
+  <div id="membersList"></div>
+ </div>
 </section>
 
 <section id="profile" class="page hidden">
-<div class="card">
-<h2>Mon profil</h2>
-<div id="myProfile"></div>
-</div>
-<div class="card">
-<h3>Mon espace privé</h3>
-<div id="ownerBalances">Chargement...</div>
-</div>
-<div class="card">
-<h3>Ma progression</h3>
-<div id="myProgress">Chargement...</div>
-</div>
-<div class="card">
-<h3>Mon statut VIP</h3>
-<div id="myVip">Chargement...</div>
-</div>
+ <div class="card profile-page">
+  <div id="myProfile">Chargement du profil...</div>
+  <div id="ownerBalances"></div>
+  <div id="myProgress"></div>
+  <div id="myVip"></div>
+ </div>
 </section>
 
 <section id="publicProfile" class="page hidden">
-<div class="card">
-<button onclick="showPage('members')">← Retour</button>
-<div id="publicProfileContent"></div>
-</div>
+ <div class="card profile-page">
+  <button onclick="showPage('members')">← Retour</button>
+  <div id="publicProfileContent"></div>
+ </div>
 </section>
 
 <section id="messages" class="page hidden">
-<div class="card">
-<h2>Messages privés</h2>
-<div id="conversationList"></div>
-<hr>
-<div id="chatArea">Choisis un membre pour commencer.</div>
-</div>
+ <div class="card">
+  <h2>Messages privés</h2>
+  <div id="conversationList"></div><hr>
+  <div id="chatArea">Choisis un membre pour commencer.</div>
+ </div>
 </section>
 
 <section id="gifts" class="page hidden">
-<div class="card">
-<h2>Cadeaux PIU-PIU 🎁</h2>
-<p id="giftRecipient">Choisis d'abord un membre.</p>
-<h3>Cadeaux classiques</h3>
-<div class="grid" id="classicGifts">
-<div class="tile" onclick="chooseGift('rose')">🌹 Rose</div>
-<div class="tile" onclick="chooseGift('coeur')">❤️ Cœur</div>
-<div class="tile" onclick="chooseGift('diamant')">💎 Diamant</div>
-<div class="tile" onclick="chooseGift('ourson')">🧸 Ourson</div>
-<div class="tile" onclick="chooseGift('couronne')">👑 Couronne</div>
-<div class="tile" onclick="chooseGift('trophee')">🏆 Trophée</div>
-</div>
-<h3>Boutique premium</h3>
-<div id="giftCatalog" class="grid">Chargement du catalogue...</div>
-<p class="muted">Les prix affichés sont des prix en pièces virtuelles. L'achat sécurisé n'est pas encore activé.</p>
-<textarea id="giftMessage" placeholder="Ajouter un petit message"></textarea>
-<button class="gold" onclick="sendGift()">Envoyer le cadeau classique sélectionné</button>
-<p id="giftStatus" class="status"></p>
-</div>
-<div class="card">
-<h3>Historique des cadeaux</h3>
-<div id="giftHistory"></div>
-</div>
+ <div class="card">
+  <h2>Cadeaux PIU-PIU 🎁</h2>
+  <p id="giftRecipient">Choisis d'abord un membre.</p>
+  <h3>Cadeaux classiques</h3>
+  <div class="grid" id="classicGifts">
+   <div class="tile" onclick="chooseGift('rose')">🌹 Rose</div>
+   <div class="tile" onclick="chooseGift('coeur')">❤️ Cœur</div>
+   <div class="tile" onclick="chooseGift('diamant')">💎 Diamant</div>
+   <div class="tile" onclick="chooseGift('ourson')">🧸 Ourson</div>
+   <div class="tile" onclick="chooseGift('couronne')">👑 Couronne</div>
+   <div class="tile" onclick="chooseGift('trophee')">🏆 Trophée</div>
+  </div>
+  <h3>Boutique premium</h3>
+  <div id="giftCatalog" class="grid">Chargement du catalogue...</div>
+  <p class="muted">Les achats sécurisés ne sont pas encore activés.</p>
+  <textarea id="giftMessage" placeholder="Ajouter un petit message"></textarea>
+  <button class="gold" onclick="sendGift()">Envoyer le cadeau classique sélectionné</button>
+  <p id="giftStatus" class="status"></p>
+ </div>
+ <div class="card"><h3>Historique des cadeaux</h3><div id="giftHistory"></div></div>
 </section>
 
 <section id="vip" class="page hidden">
-<div class="card">
-<h2>Club VIP PIU-PIU 👑</h2>
-<p>Le statut VIP est indépendant du niveau de progression.</p>
-<div class="grid">
-<div class="tile">🥉<p>Bronze</p></div>
-<div class="tile">🥈<p>Argent</p></div>
-<div class="tile">🥇<p>Or</p></div>
-<div class="tile">💎<p>Diamant</p></div>
-<div class="tile">👑<p>Royal</p></div>
-</div>
-<div id="vipStatus" class="notice">Connecte-toi pour consulter ton statut VIP.</div>
-<p class="muted">L'attribution et le paiement des statuts VIP doivent être validés par le serveur. Aucun achat n'est activé ici.</p>
-</div>
+ <div class="card">
+  <h2>Club VIP PIU-PIU 👑</h2>
+  <p>Le statut VIP est indépendant du niveau de progression.</p>
+  <div class="grid">
+   <div class="tile">🥉<p>Bronze</p></div><div class="tile">🥈<p>Argent</p></div>
+   <div class="tile">🥇<p>Or</p></div><div class="tile">💎<p>Diamant</p></div>
+   <div class="tile">👑<p>Royal</p></div>
+  </div>
+  <div id="vipStatus" class="notice">Connecte-toi pour consulter ton statut VIP.</div>
+  <p class="muted">Aucun achat VIP n'est activé ici.</p>
+ </div>
 </section>
 
 <section id="wallet" class="page hidden">
-<div class="card">
-<h2>Mon portefeuille</h2>
-<div id="walletInfo">Connecte-toi pour consulter ton portefeuille.</div>
-<div class="notice">Les pièces PIU-PIU et les montants USD sont affichés à titre de portefeuille. Les recharges et transferts réels ne sont pas activés.</div>
-</div>
-<div class="card">
-<h3>Historique des transactions</h3>
-<div id="transactions">Aucune transaction chargée.</div>
-</div>
+ <div class="card">
+  <h2>Mon portefeuille</h2>
+  <div id="walletInfo">Connecte-toi pour consulter ton portefeuille.</div>
+  <div class="notice">Les recharges et transferts réels ne sont pas activés.</div>
+ </div>
+ <div class="card"><h3>Historique des transactions</h3><div id="transactions">Aucune transaction chargée.</div></div>
 </section>
 
 <section id="clubs" class="page hidden">
-<div class="card">
-<h2>Fan Clubs ⭐</h2>
-<p>Découvre les clubs des créateurs PIU-PIU.</p>
-<div id="clubList">Chargement...</div>
-<p class="muted">La création de clubs et les adhésions payantes nécessitent des règles serveur supplémentaires.</p>
-</div>
+ <div class="card">
+  <h2>Fan Clubs ⭐</h2>
+  <p>Découvre les clubs des créateurs PIU-PIU.</p>
+  <div id="clubList">Chargement...</div>
+  <p class="muted">La création de clubs et les adhésions payantes nécessitent des règles serveur supplémentaires.</p>
+ </div>
 </section>
 
 <section id="games" class="page hidden">
-<div class="card">
-<h2>Jeux PIU-PIU 🎮</h2>
-<div id="gameList">Chargement des jeux...</div>
-<hr>
-<h3>Mini quiz</h3>
-<p>Quelle est la couleur principale de PIU-PIU ?</p>
-<button onclick="answerQuiz('bleu')">Bleu nuit</button>
-<button onclick="answerQuiz('rose')">Rose</button>
-<button onclick="answerQuiz('vert')">Vert</button>
-<p id="quizResult" class="status"></p>
-<p class="muted">Ce mini quiz est une démonstration locale. Il ne crédite pas de pièces ni de points.</p>
-</div>
-<div class="card">
-<h3>Classement des jeux</h3>
-<div id="gameScores">Chargement...</div>
-</div>
+ <div class="card">
+  <h2>Jeux PIU-PIU 🎮</h2>
+  <div id="gameList">Chargement des jeux...</div><hr>
+  <h3>Mini quiz</h3>
+  <p>Quelle est la couleur principale de PIU-PIU ?</p>
+  <button onclick="answerQuiz('bleu')">Bleu nuit</button>
+  <button onclick="answerQuiz('rose')">Rose</button>
+  <button onclick="answerQuiz('vert')">Vert</button>
+  <p id="quizResult" class="status"></p>
+  <p class="muted">Ce quiz ne crédite pas de pièces ni de points.</p>
+ </div>
+ <div class="card"><h3>Classement des jeux</h3><div id="gameScores">Chargement...</div></div>
 </section>
 
 <section id="lives" class="page hidden">
-<div class="card">
-<h2>Lives audio et vidéo 🔴</h2>
-<p>Découvre les directs PIU-PIU.</p>
-<div id="liveList">Chargement des directs...</div>
-<p class="muted">La diffusion vidéo/audio réelle nécessite un fournisseur WebRTC ou streaming et des jetons sécurisés côté serveur.</p>
-</div>
+ <div class="card">
+  <h2>Lives audio et vidéo 🔴</h2>
+  <p>Découvre les directs PIU-PIU.</p>
+  <div id="liveList">Chargement des directs...</div>
+  <p class="muted">La diffusion réelle nécessite un fournisseur de streaming.</p>
+ </div>
 </section>
 
 <section id="rankings" class="page hidden">
-<div class="card">
-<h2>Classements PIU-PIU 🌍</h2>
-<p>Classements des membres par progression.</p>
-<div id="rankingList">Chargement...</div>
-<p class="muted">Les classements nationaux nécessitent que les pays soient renseignés sur les profils.</p>
-</div>
+ <div class="card">
+  <h2>Classements PIU-PIU 🌍</h2>
+  <p>Classements des membres par progression.</p>
+  <div id="rankingList">Chargement...</div>
+ </div>
 </section>
 
 <section id="notifications" class="page hidden">
-<div class="card">
-<h2>Notifications 🔔</h2>
-<button onclick="loadNotifications()">Actualiser</button>
-<div id="notificationList"></div>
-</div>
+ <div class="card">
+  <h2>Notifications 🔔</h2>
+  <button onclick="loadNotifications()">Actualiser</button>
+  <div id="notificationList"></div>
+ </div>
 </section>
-
 </main>
+
 <footer>PIU-PIU © 2026 — Le réseau qui nous rapproche</footer>
 
 <script>
@@ -317,7 +300,6 @@ const emojis={rose:"🌹",coeur:"❤️",diamant:"💎",ourson:"🧸",couronne:"
 function esc(v){
  return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
-
 function showPage(name){
  document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
  $(name)?.classList.remove("hidden");
@@ -333,10 +315,7 @@ function showPage(name){
  if(name==="rankings")loadRankings();
  if(name==="vip")loadVip();
 }
-
-function updateAuthButton(){
- $("authButton").textContent=currentUser?"Déconnexion":"Connexion";
-}
+function updateAuthButton(){$("authButton").textContent=currentUser?"Déconnexion":"Connexion";}
 function requireLogin(){
  if(!currentUser){alert("Connecte-toi pour utiliser cette fonction.");showPage("auth");return false;}
  return true;
@@ -352,7 +331,6 @@ async function login(){
  if(error){status.textContent="Connexion impossible : "+error.message;return;}
  currentUser=data.user;updateAuthButton();await refreshSession();showPage("home");
 }
-
 async function register(){
  const email=$("authEmail").value.trim().toLowerCase(),password=$("authPassword").value,status=$("authStatus");
  if(!email||!$("authEmail").checkValidity()){status.textContent="Entre une adresse e-mail valide.";return;}
@@ -363,21 +341,18 @@ async function register(){
  if(!data.session)status.textContent="Compte créé. Consulte tes e-mails pour confirmer ton adresse.";
  else{currentUser=data.user;updateAuthButton();await refreshSession();showPage("home");}
 }
-
 async function resetPassword(){
  const email=$("authEmail").value.trim().toLowerCase(),status=$("authStatus");
  if(!email||!$("authEmail").checkValidity()){status.textContent="Entre d'abord ton adresse e-mail.";return;}
  const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:"https://elfehri62-design.github.io/PIU-PIU/"});
  status.textContent=error?"Erreur : "+error.message:"Si cette adresse correspond à un compte, un e-mail de réinitialisation va être envoyé.";
 }
-
 async function logout(){
  const {error}=await db.auth.signOut();
  if(error){alert(error.message);return;}
  currentUser=null;myProfileData=null;updateAuthButton();
  $("homeStatus").textContent="Tu es déconnecté.";showPage("home");
 }
-
 async function refreshSession(){
  const {data,error}=await db.auth.getSession();
  if(error){$("homeStatus").textContent="Erreur : "+error.message;return;}
@@ -385,7 +360,6 @@ async function refreshSession(){
  $("homeStatus").textContent=currentUser?"Bienvenue sur PIU-PIU ! Tu es connecté.":"Connecte-toi pour découvrir PIU-PIU.";
  if(currentUser)await loadMyProfile();
 }
-
 function avatar(url){
  return url?`<img class="avatar" src="${esc(url)}" alt="Photo de profil">`:`<div class="avatar"></div>`;
 }
@@ -401,6 +375,34 @@ function countryFlag(country){
  return "🌍";
 }
 
+function profileStats(followers,following){
+ return `<div class="profile-stats">
+ <div class="profile-stat"><div class="symbol">👥</div><strong>—</strong><span>Amis</span></div>
+ <div class="profile-stat"><div class="symbol">💙</div><strong>${following||0}</strong><span>Suivi</span></div>
+ <div class="profile-stat"><div class="symbol">💗</div><strong>${followers||0}</strong><span>Abonnés</span></div>
+ <div class="profile-stat"><div class="symbol">👁️</div><strong>—</strong><span>Visiteurs</span></div>
+ </div>`;
+}
+function profileShortcuts(){
+ return `<div class="profile-shortcuts">
+ <div class="profile-shortcut" onclick="showPage('gifts')"><span class="symbol">🎁</span>Cadeaux</div>
+ <div class="profile-shortcut" onclick="showPage('rankings')"><span class="symbol">🏆</span>Rang</div>
+ <div class="profile-shortcut" onclick="showPage('games')"><span class="symbol">🏝️</span>Île amusante</div>
+ <div class="profile-shortcut" onclick="showPage('wallet')"><span class="symbol">🛍️</span>Magasin</div>
+ <div class="profile-shortcut" onclick="showPage('members')"><span class="symbol">💌</span>Inviter</div>
+ <div class="profile-shortcut" onclick="showPage('rankings')"><span class="symbol">🌟</span>Niveau d'honneur</div>
+ <div class="profile-shortcut" onclick="showPage('clubs')"><span class="symbol">💗</span>Club des fans</div>
+ <div class="profile-shortcut"><span class="symbol">🏅</span>Mur des médailles</div>
+ </div>`;
+}
+function profileLowerSection(){
+ return `<div class="profile-banner"><strong>🐣 PIU-PIU</strong><p>Crée · Streame · Gagne</p></div>
+ <div class="profile-center-links">
+ <button onclick="showPage('lives')">📹 Centre du streamer　›</button>
+ <button onclick="alert('Centre de création vidéo : bientôt disponible.')">🎬 Centre de création vidéo　›</button>
+ </div>`;
+}
+
 async function loadMyProfile(){
  if(!requireLogin())return;
  const {data,error}=await db.from("profiles")
@@ -409,22 +411,45 @@ async function loadMyProfile(){
  if(error){$("myProfile").textContent=error.message;return;}
  myProfileData=data;
  if(!data){$("myProfile").textContent="Profil en cours de création. Actualise la page.";return;}
+
  const number=data.profile_number?String(data.profile_number).padStart(6,"0"):"En attente";
+ const [followers,following]=await Promise.all([
+  db.from("follows").select("id",{count:"exact",head:true}).eq("following_id",currentUser.id),
+  db.from("follows").select("id",{count:"exact",head:true}).eq("follower_id",currentUser.id)
+ ]);
+
  $("myProfile").innerHTML=`
- <div class="profile-hero">${avatar(data.avatar_url)}
- <h2 class="profile-name">${esc(data.display_name||"Mon profil")}</h2>
- <p>@${esc(data.username||"sans_pseudo")}</p>
- <span class="profile-id">PIU-${number}</span>
- <p>${countryFlag(data.country)} ${esc(data.country||"Pays non renseigné")}</p>
- <span class="badge">Profil personnel</span></div>
- <label>Photo de profil</label><input type="file" id="avatarFile" accept="image/*">
- <label>Nom affiché</label><input id="displayName" maxlength="50" value="${esc(data.display_name)}">
- <label>Pseudo</label><input id="username" maxlength="30" value="${esc(data.username)}">
- <label>Présentation</label><textarea id="bio">${esc(data.bio)}</textarea>
- <label>Pays</label><input id="country" maxlength="60" value="${esc(data.country)}">
- <label>Date de naissance (privée)</label><input id="birthDate" type="date" value="${esc(data.birth_date)}">
- <button class="gold" onclick="saveProfile()">Enregistrer mon profil</button>
- <p id="profileStatus" class="status"></p>`;
+ <div class="profile-top">
+  ${avatar(data.avatar_url)}
+  <div class="profile-identity">
+   <h2 class="profile-name">${esc(data.display_name||"Mon profil")} ✨</h2>
+   <div>@${esc(data.username||"sans_pseudo")}</div>
+   <p class="profile-id">ID : PIU-${number}</p>
+   <div class="profile-flags">${countryFlag(data.country)}</div>
+   <p>${esc(data.country||"Pays non renseigné")}</p>
+   <span class="online-pill">● Connecté</span>
+  </div>
+ </div>
+ ${profileStats(followers.count,following.count)}
+ <div class="profile-private-grid">
+  <div class="profile-private-card"><div class="symbol">🪙</div><b>PIU Coins</b><p>Mon solde privé</p></div>
+  <div class="profile-private-card pink"><div class="symbol">🐣</div><b>Poussins</b><p>Mes points privés</p></div>
+ </div>
+ <div class="profile-vip-bar" onclick="showPage('vip')">👑 VIP — Mon espace VIP　›</div>
+ ${profileShortcuts()}
+ ${profileLowerSection()}
+ <div class="profile-edit">
+  <h3>Modifier mon profil</h3>
+  <label>Photo de profil</label><input type="file" id="avatarFile" accept="image/*">
+  <label>Nom affiché</label><input id="displayName" maxlength="50" value="${esc(data.display_name)}">
+  <label>Pseudo</label><input id="username" maxlength="30" value="${esc(data.username)}">
+  <label>Présentation</label><textarea id="bio">${esc(data.bio)}</textarea>
+  <label>Pays</label><input id="country" maxlength="60" value="${esc(data.country)}">
+  <label>Date de naissance (privée)</label><input id="birthDate" type="date" value="${esc(data.birth_date)}">
+  <button class="gold" onclick="saveProfile()">Enregistrer mon profil</button>
+  <p id="profileStatus" class="status"></p>
+ </div>`;
+ await loadOwnerBalances();await loadProgress();await loadVip();
 }
 
 async function saveProfile(){
@@ -439,9 +464,12 @@ async function saveProfile(){
   if(error){status.textContent="Erreur photo : "+error.message;return;}
   avatarUrl=db.storage.from("avatars").getPublicUrl(path).data.publicUrl;
  }
- const payload={id:currentUser.id,username:$("username").value.trim().replace(/^@/,"")||null,
- display_name:$("displayName").value.trim(),bio:$("bio").value.trim(),country:$("country").value.trim(),
- birth_date:$("birthDate").value||null,avatar_url:avatarUrl,updated_at:new Date().toISOString()};
+ const payload={
+  id:currentUser.id,username:$("username").value.trim().replace(/^@/,"")||null,
+  display_name:$("displayName").value.trim(),bio:$("bio").value.trim(),
+  country:$("country").value.trim(),birth_date:$("birthDate").value||null,
+  avatar_url:avatarUrl,updated_at:new Date().toISOString()
+ };
  const {error}=await db.from("profiles").upsert(payload,{onConflict:"id"});
  if(error){status.textContent="Erreur : "+error.message;return;}
  status.textContent="Profil enregistré !";await loadMyProfile();
@@ -449,17 +477,39 @@ async function saveProfile(){
 
 async function loadOwnerBalances(){
  if(!currentUser)return;
- $("ownerBalances").textContent="Chargement de tes soldes privés...";
+ $("ownerBalances").innerHTML="<h3 class='profile-section-title'>Mon espace privé</h3>Chargement...";
  const [w,p]=await Promise.all([
   db.from("piu_wallets").select("coin_balance").eq("user_id",currentUser.id).maybeSingle(),
   db.from("piu_member_progress").select("level_points,level_number").eq("user_id",currentUser.id).maybeSingle()
  ]);
- const bits=[];
- if(w.error)bits.push(`<div class="tile">🪙<p>Pièces indisponibles</p></div>`);
- else bits.push(`<div class="tile private-balance"><div class="symbol">🪙</div><b>${w.data?Number(w.data.coin_balance||0).toLocaleString("fr-FR"):"Non initialisé"}</b><p>Mes pièces PIU-PIU</p></div>`);
- if(p.error)bits.push(`<div class="tile">🐣<p>Points indisponibles</p></div>`);
- else bits.push(`<div class="tile private-balance"><div class="symbol">🐣</div><b>${p.data?Number(p.data.level_points||0).toLocaleString("fr-FR"):"Non initialisé"}</b><p>Mes points poussins</p></div>`);
- $("ownerBalances").innerHTML=`<div class="grid">${bits.join("")}</div><p class="muted">Ces soldes sont privés et ne sont affichés que dans ton espace personnel.</p>`;
+ const coins=w.error?"Indisponible":w.data?Number(w.data.coin_balance||0).toLocaleString("fr-FR"):"Non initialisé";
+ const points=p.error?"Indisponibles":p.data?Number(p.data.level_points||0).toLocaleString("fr-FR"):"Non initialisés";
+ $("ownerBalances").innerHTML=`<h3 class="profile-section-title">Mon espace privé</h3>
+ <div class="profile-private-grid">
+ <div class="profile-private-card"><div class="symbol">🪙</div><b>${coins}</b><p>Mes PIU Coins</p></div>
+ <div class="profile-private-card pink"><div class="symbol">🐣</div><b>${points}</b><p>Mes points poussins</p></div>
+ </div><p class="muted">Ces informations sont visibles uniquement dans ton espace personnel.</p>`;
+}
+async function loadProgress(){
+ if(!currentUser)return;
+ const {data,error}=await db.from("piu_member_progress").select("level_number,level_points").eq("user_id",currentUser.id).maybeSingle();
+ if(error){$("myProgress").textContent="Progression indisponible : "+error.message;return;}
+ if(!data){$("myProgress").textContent="Progression non initialisée.";return;}
+ const level=Math.max(1,Math.min(200,Number(data.level_number)||1));
+ $("myProgress").innerHTML=`<h3 class="profile-section-title">🐣 Ma progression</h3><h3>Niveau ${level} / 200</h3>
+ <div class="progress"><span style="width:${level/2}%"></span></div>
+ <p>${Number(data.level_points||0).toLocaleString("fr-FR")} points</p>`;
+}
+async function loadVip(){
+ const box=$("myVip");if(!box)return;
+ if(!currentUser){box.textContent="Connecte-toi pour consulter ton statut VIP.";return;}
+ const {data,error}=await db.from("piu_vip_memberships").select("vip_tier").eq("user_id",currentUser.id).maybeSingle();
+ if(error){box.textContent="Statut VIP indisponible : "+error.message;return;}
+ const tier=data?.vip_tier||"none";
+ box.innerHTML=tier==="none"
+ ?"<div class='profile-vip-bar'>👑 Tu n'as pas encore de statut VIP.</div>"
+ :`<div class="profile-vip-bar">👑 Membre VIP ${esc(tier.toUpperCase())}</div>`;
+ $("vipStatus").textContent=tier==="none"?"Tu n'as pas encore de statut VIP.":"Ton statut VIP : "+tier.toUpperCase();
 }
 
 async function loadMembers(){
@@ -483,11 +533,11 @@ function renderMembers(){
 
 async function openPublicProfile(id){
  if(!requireLogin())return;
- // Seuls les champs publics sont demandés : pas de date de naissance ni de soldes.
  const {data,error}=await db.from("profiles")
  .select("id,username,display_name,bio,avatar_url,profile_number,country,created_at")
  .eq("id",id).single();
- if(error){alert(error.message);return;}selectedMember=data;
+ if(error){alert(error.message);return;}
+ selectedMember=data;
  const [followers,following,follow]=await Promise.all([
   db.from("follows").select("id",{count:"exact",head:true}).eq("following_id",id),
   db.from("follows").select("id",{count:"exact",head:true}).eq("follower_id",id),
@@ -495,41 +545,42 @@ async function openPublicProfile(id){
  ]);
  const number=data.profile_number?String(data.profile_number).padStart(6,"0"):"En attente";
  const self=id===currentUser.id;
+ const vipText="👑 Espace VIP";
  $("publicProfileContent").innerHTML=`
- <div class="profile-hero">${avatar(data.avatar_url)}
- <h2 class="profile-name">${esc(data.display_name||"Membre PIU-PIU")}</h2>
- <p>@${esc(data.username||"sans_pseudo")}</p>
- <span class="profile-id">PIU-${number}</span>
- <p>${countryFlag(data.country)} ${esc(data.country||"Pays non renseigné")}</p>
- <p>${esc(data.bio||"Bienvenue sur mon profil PIU-PIU !")}</p></div>
- <div class="grid profile-stats">
- <div class="tile">👥<strong>${followers.count||0}</strong><small>Abonnés</small></div>
- <div class="tile">❤️<strong>${following.count||0}</strong><small>Abonnements</small></div>
- <div class="tile">👁️<strong>—</strong><small>Visiteurs</small></div>
+ <div class="profile-top">
+  ${avatar(data.avatar_url)}
+  <div class="profile-identity">
+   <h2 class="profile-name">${esc(data.display_name||"Membre PIU-PIU")} ✨</h2>
+   <div>@${esc(data.username||"sans_pseudo")}</div>
+   <p class="profile-id">ID : PIU-${number}</p>
+   <div class="profile-flags">${countryFlag(data.country)}</div>
+   <p>${esc(data.country||"Pays non renseigné")}</p>
+   <span>${esc(data.bio||"Bienvenue sur mon profil PIU-PIU !")}</span>
+  </div>
  </div>
- <div class="grid">
- <div class="tile"><div class="symbol">🪙</div><b>PIU Coins</b><p>🔒 Privé</p></div>
- <div class="tile"><div class="symbol">🐣</div><b>Points poussins</b><p>🔒 Privé</p></div>
+ ${profileStats(followers.count,following.count)}
+ <div class="profile-private-grid">
+  <div class="profile-private-card"><div class="symbol">🪙</div><b>PIU Coins</b><p>🔒 Informations privées</p></div>
+  <div class="profile-private-card pink"><div class="symbol">🐣</div><b>Poussins</b><p>🔒 Informations privées</p></div>
  </div>
- <h3>Découvrir</h3>
- <div class="grid profile-shortcuts">
- <div class="tile">👑<p>VIP</p></div><div class="tile">🎁<p>Cadeaux</p></div>
- <div class="tile">🏆<p>Récompenses</p></div><div class="tile">⭐<p>Fan Club</p></div>
- <div class="tile">🎮<p>Jeux</p></div><div class="tile">🎥<p>Vidéos</p></div>
- </div>
- ${!self?`<div class="row">
- <button class="gold" onclick="toggleFollow('${id}')">${follow.data?"Ne plus suivre":"❤️ Suivre"}</button>
- <button onclick="startMessage('${id}')">💬 Message</button>
- <button onclick="selectGiftRecipient('${id}')">🎁 Cadeau</button>
- </div>`:"<p class='center'>C'est ton profil public. Tes soldes restent dans ton espace privé.</p>"}`;
+ <div class="profile-vip-bar">${vipText}</div>
+ ${profileShortcuts()}
+ ${profileLowerSection()}
+ ${!self?`<div class="profile-actions">
+  <button onclick="startMessage('${id}')">💬 Message</button>
+  <button onclick="toggleFollow('${id}')">${follow.data?"✓ Suivi":"👤 Suivre"}</button>
+  <button onclick="selectGiftRecipient('${id}')">🎁 Cadeau</button>
+ </div>`:"<p class='center'>C'est ton profil public. Tes soldes restent privés.</p>"}
+ `;
  showPage("publicProfile");
 }
-
 async function toggleFollow(id){
  if(!requireLogin())return;
- const {data}=await db.from("follows").select("id").eq("follower_id",currentUser.id).eq("following_id",id).maybeSingle();
+ const {data,error}=await db.from("follows").select("id").eq("follower_id",currentUser.id).eq("following_id",id).maybeSingle();
+ if(error){alert(error.message);return;}
  const result=data?await db.from("follows").delete().eq("id",data.id):await db.from("follows").insert({follower_id:currentUser.id,following_id:id});
- if(result.error){alert(result.error.message);return;}await openPublicProfile(id);
+ if(result.error){alert(result.error.message);return;}
+ await openPublicProfile(id);
 }
 
 async function loadConversations(){
@@ -539,10 +590,10 @@ async function loadConversations(){
  if(error){$("conversationList").textContent=error.message;return;}
  const ids=[...new Set((data||[]).map(m=>m.sender_id===currentUser.id?m.receiver_id:m.sender_id))];
  if(!ids.length){$("conversationList").textContent="Pas encore de conversation.";return;}
- const {data:people}=await db.from("profiles").select("id,username,display_name").in("id",ids);
+ const {data:people,error:peopleError}=await db.from("profiles").select("id,username,display_name").in("id",ids);
+ if(peopleError){$("conversationList").textContent=peopleError.message;return;}
  $("conversationList").innerHTML=(people||[]).map(p=>`<button onclick="startMessage('${p.id}')">@${esc(p.username||p.display_name||"membre")}</button>`).join(" ");
 }
-
 async function startMessage(id){
  if(!requireLogin())return;
  const {data,error}=await db.from("profiles").select("id,username,display_name").eq("id",id).single();
@@ -581,7 +632,10 @@ function chooseGift(type){
 }
 async function sendGift(){
  if(!requireLogin()||!selectedMember||!selectedGift){alert("Choisis un destinataire et un cadeau.");return;}
- const {error}=await db.from("gifts").insert({sender_id:currentUser.id,receiver_id:selectedMember.id,gift_type:selectedGift,message:$("giftMessage").value.trim()});
+ const {error}=await db.from("gifts").insert({
+  sender_id:currentUser.id,receiver_id:selectedMember.id,
+  gift_type:selectedGift,message:$("giftMessage").value.trim()
+ });
  if(error){$("giftStatus").textContent="Erreur : "+error.message;return;}
  $("giftStatus").textContent="Cadeau envoyé ! 🎁";selectedGift=null;await loadGiftHistory();
 }
@@ -606,25 +660,6 @@ async function loadGiftCatalog(){
  <p>${esc(g.collection)}</p><div class="price">${Number(g.price_coins).toLocaleString("fr-FR")} pièces</div></div>`).join("");
 }
 
-async function loadProgress(){
- if(!currentUser)return;
- const {data,error}=await db.from("piu_member_progress").select("level_number,level_points").eq("user_id",currentUser.id).maybeSingle();
- if(error){$("myProgress").textContent="Progression indisponible : "+error.message;return;}
- if(!data){$("myProgress").textContent="Progression non initialisée.";return;}
- const level=Math.max(1,Math.min(200,Number(data.level_number)||1));
- $("myProgress").innerHTML=`<h3>Niveau ${level} / 200</h3><div class="progress"><span style="width:${level/2}%"></span></div>
- <p>${Number(data.level_points||0).toLocaleString("fr-FR")} points 🐣</p>`;
-}
-async function loadVip(){
- const box=$("myVip")||$("vipStatus");if(!box)return;
- if(!currentUser){box.textContent="Connecte-toi pour consulter ton statut VIP.";return;}
- const {data,error}=await db.from("piu_vip_memberships").select("vip_tier").eq("user_id",currentUser.id).maybeSingle();
- if(error){box.textContent="Statut VIP indisponible : "+error.message;return;}
- const tier=data?.vip_tier||"none";
- box.textContent=tier==="none"?"Tu n'as pas encore de statut VIP.":"Ton statut VIP : "+tier.toUpperCase();
- $("vipStatus").textContent=box.textContent;
-}
-
 async function loadWallet(){
  if(!requireLogin())return;
  $("walletInfo").textContent="Chargement...";
@@ -637,7 +672,6 @@ async function loadWallet(){
  if(txError){$("transactions").textContent="Historique indisponible : "+txError.message;return;}
  $("transactions").innerHTML=(tx||[]).map(t=>`<div class="notice">${esc(t.transaction_type)} · ${Number(t.amount).toLocaleString("fr-FR")} pièces<br><small>${esc(t.description||"")} · ${new Date(t.created_at).toLocaleString("fr-FR")}</small></div>`).join("")||"Aucune transaction.";
 }
-
 async function loadClubs(){
  if(!requireLogin())return;
  const box=$("clubList");box.textContent="Chargement...";
@@ -649,7 +683,6 @@ async function loadClubs(){
  const names=Object.fromEntries((people||[]).map(p=>[p.id,p.display_name||p.username||"Créateur"]));
  box.innerHTML=data.map(c=>`<div class="notice"><h3>${esc(c.club_name)}</h3><p>${esc(c.description||"")}</p><small>Créateur : ${esc(names[c.creator_id]||"Membre PIU-PIU")}</small></div>`).join("");
 }
-
 async function loadGames(){
  const box=$("gameList");
  const {data,error}=await db.from("piu_games").select("game_code,game_name").eq("is_active",true);
@@ -666,10 +699,7 @@ async function loadScores(){
  const names=Object.fromEntries((people||[]).map(p=>[p.id,p.username||p.display_name||"Membre"]));
  box.innerHTML=data.map((s,i)=>`<div class="notice">#${i+1} @${esc(names[s.user_id]||"Membre")} — ${Number(s.score)} points</div>`).join("");
 }
-function answerQuiz(answer){
- $("quizResult").textContent=answer==="bleu"?"Bonne réponse ! 🎉":"Essaie encore !";
-}
-
+function answerQuiz(answer){$("quizResult").textContent=answer==="bleu"?"Bonne réponse ! 🎉":"Essaie encore !";}
 async function loadLives(){
  if(!requireLogin())return;
  const box=$("liveList");box.textContent="Chargement...";
@@ -681,7 +711,6 @@ async function loadLives(){
  const names=Object.fromEntries((people||[]).map(p=>[p.id,p.display_name||p.username||"Créateur"]));
  box.innerHTML=data.map(l=>`<div class="notice"><b>🔴 ${esc(l.title)}</b><p>${l.live_type==="audio"?"🎙️ Direct audio":"📹 Direct vidéo"}</p><small>Présenté par ${esc(names[l.host_id]||"Membre PIU-PIU")}</small></div>`).join("");
 }
-
 async function loadRankings(){
  if(!requireLogin())return;
  const box=$("rankingList");box.textContent="Chargement...";
@@ -693,7 +722,6 @@ async function loadRankings(){
  const names=Object.fromEntries((people||[]).map(p=>[p.id,p]));
  box.innerHTML=data.map((p,i)=>{const person=names[p.user_id]||{};return `<div class="notice">#${i+1} ${esc(person.display_name||person.username||"Membre")} — Niveau ${p.level_number}<br><small>${esc(person.country||"Pays non renseigné")}</small></div>`}).join("");
 }
-
 async function loadNotifications(){
  if(!requireLogin())return;
  $("notificationList").textContent="Chargement...";
