@@ -1,4 +1,4 @@
-DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -8,71 +8,78 @@ DOCTYPE html>
 
 <style>
 :root{
- --bg:#071f20;
- --panel:#103b39;
- --panel2:#18534d;
- --gold:#e7ca78;
- --white:#fff;
- --muted:#b5d5cd;
- --line:#34766b;
- --green:#55d6a5;
- --mint:#75e6c1;
- --emerald:#087f68;
- --pink:#eaa5c9;
- --purple:#9275bd;
- --cyan:#79e3d0;
+ --bg:#101C46;
+ --panel:#172B60;
+ --panel2:#243B78;
+ --gold:#A98BFF;
+ --white:#BFD5FF;
+ --muted:#A9BCEB;
+ --line:#405B9B;
+ --green:#3478E8;
+ --mint:#7DB5FF;
+ --emerald:#50318F;
+ --pink:#8156D9;
+ --purple:#8156D9;
+ --cyan:#7DB5FF;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:white;font-family:Arial,sans-serif;padding:82px 0 85px}
-button{background:#18534d;color:white;border:1px solid var(--mint);padding:11px 14px;border-radius:22px;cursor:pointer;font-size:14px}
-button.gold{background:var(--gold);color:#102b25;font-weight:bold;border-color:var(--gold)}
-button.pink{background:linear-gradient(100deg,var(--mint),var(--emerald));border:0;color:#062b25;font-weight:bold}
+body{margin:0;background:var(--bg);color:#BFD5FF;font-family:Arial,sans-serif;padding:82px 0 85px}
+button{background:#243B78;color:#BFD5FF;border:1px solid #8156D9;padding:11px 14px;border-radius:22px;cursor:pointer;font-size:14px}
+button.gold{background:linear-gradient(110deg,#8156D9,#3478E8);color:#BFD5FF;font-weight:bold;border-color:#A98BFF}
+button.pink{background:linear-gradient(100deg,#50318F,#8156D9);border:1px solid #A98BFF;color:#BFD5FF;font-weight:bold}
 button:disabled{opacity:.5;cursor:not-allowed}
 main{max-width:900px;margin:14px auto;padding:10px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:16px;margin:12px 0}
-h2,h3{color:var(--mint)}
-input,textarea,select{width:100%;padding:13px;margin:7px 0;border:1px solid #9acfc0;border-radius:9px;background:#f5fffb;color:#102b25;font-size:16px}
+h2,h3{color:#A98BFF}
+input,textarea,select{width:100%;padding:13px;margin:7px 0;border:1px solid #5879C2;border-radius:9px;background:#172B60;color:#BFD5FF;font-size:16px}
 textarea{min-height:85px}
 label{display:block;margin-top:12px;color:var(--muted)}
 .hidden{display:none!important}
 .muted,small{color:var(--muted)}
-.status{color:var(--gold);padding:8px}
+.status{color:#A98BFF;padding:8px}
 .center{text-align:center}
-.avatar{width:75px;height:75px;border:3px solid var(--mint);border-radius:50%;object-fit:cover;background:#18534d}
+.avatar{width:75px;height:75px;border:3px solid #8156D9;border-radius:50%;object-fit:cover;background:#243B78}
 .member{display:flex;align-items:center;gap:12px}
 .member-info{flex:1;min-width:0}
 .row{display:flex;flex-wrap:wrap;gap:8px}
 .row>*{flex:1}
-.badge{display:inline-block;background:#21665b;padding:6px 10px;border-radius:20px;margin:3px}
-.notice{padding:12px;background:#18534d;border-left:4px solid var(--mint);margin:10px 0;border-radius:8px}
-.message{padding:12px;margin:8px 0;background:#18534d;border-radius:12px}
-.mine{margin-left:12%;border:1px solid var(--mint)}
+.badge{display:inline-block;background:#50318F;padding:6px 10px;border-radius:20px;margin:3px;color:#BFD5FF}
+.notice{padding:12px;background:#243B78;border-left:4px solid #8156D9;margin:10px 0;border-radius:8px}
+.message{padding:12px;margin:8px 0;background:#243B78;border-radius:12px}
+.mine{margin-left:12%;border:1px solid #8156D9}
 .theirs{margin-right:12%}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}
-.tile{background:#f0fff8;color:#123d34;border:1px solid #9ed9c6;border-radius:14px;padding:15px;text-align:center}
+.tile{background:linear-gradient(145deg,#243B78,#302451);color:#BFD5FF;border:1px solid #5879C2;border-radius:14px;padding:15px;text-align:center;cursor:pointer}
 .tile .symbol{font-size:34px;margin-bottom:8px}
-.price{color:#087f68;font-weight:bold}
-.progress{height:13px;background:#28594f;border-radius:20px;overflow:hidden}
-.progress>span{display:block;height:100%;background:var(--mint)}
+.price{color:#A98BFF;font-weight:bold}
+.progress{height:13px;background:#101C46;border-radius:20px;overflow:hidden}
+.progress>span{display:block;height:100%;background:linear-gradient(90deg,#3478E8,#8156D9)}
 footer{text-align:center;padding:25px;color:var(--muted)}
 hr{border:0;border-top:1px solid var(--line);margin:18px 0}
-a{color:var(--mint)}
+a{color:#7DB5FF}
 
 /* EN-TÊTE */
 .piu-header{
  position:fixed;top:0;left:0;right:0;height:72px;z-index:60;
  display:flex;align-items:center;justify-content:space-between;
- padding:8px 14px;background:#062b28;border-bottom:1px solid #34766b;
+ padding:8px 14px;
+ background:linear-gradient(100deg,#101C46,#243B78,#50318F);
+ border-bottom:1px solid #8156D9;
  box-shadow:0 3px 15px #0005;
 }
 .piu-menu-button,.piu-account{
  width:45px;height:45px;border-radius:14px;font-size:23px;
  display:flex;align-items:center;justify-content:center;
- background:#18534d;border:1px solid var(--mint);
+ background:linear-gradient(135deg,#3478E8,#8156D9);
+ border:1px solid #A98BFF;
 }
 .piu-brand{display:flex;align-items:center;gap:9px}
-.piu-brand .logo{width:48px;height:48px;border:1px solid var(--gold)}
-.piu-brand h1{font-size:19px;letter-spacing:3px;color:var(--mint);margin:0}
+.piu-brand .logo{
+ width:43px;height:43px;object-fit:contain;
+ border:2px solid #8156D9;border-radius:50%;
+ box-shadow:0 0 14px #8156D9;
+}
+.piu-brand h1{font-size:19px;letter-spacing:3px;color:#A98BFF;margin:0}
 .piu-brand small{font-size:9px;letter-spacing:1px}
 
 /* MENU LATÉRAL */
@@ -83,84 +90,115 @@ a{color:var(--mint)}
 .piu-menu-overlay.open{opacity:1;visibility:visible}
 .piu-side-menu{
  position:fixed;z-index:90;top:0;bottom:0;left:0;width:min(310px,85vw);
- background:#092e2b;border-right:1px solid var(--mint);
+ background:linear-gradient(180deg,#101C46,#172B60,#302451);
+ border-right:1px solid #8156D9;
  padding:16px;overflow-y:auto;
  transform:translateX(-105%);transition:transform .28s ease;
  box-shadow:8px 0 25px #0005;
 }
 .piu-side-menu.open{transform:translateX(0)}
 .piu-menu-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line)}
-.piu-menu-head h2{margin:0;color:var(--mint);font-size:21px}
+.piu-menu-head h2{margin:0;color:#A98BFF;font-size:21px}
 .piu-menu-close{font-size:23px;padding:7px 13px}
-.piu-menu-group{color:var(--gold);font-size:12px;font-weight:bold;letter-spacing:1px;margin:18px 4px 7px}
+.piu-menu-group{color:#A98BFF;font-size:12px;font-weight:bold;letter-spacing:1px;margin:18px 4px 7px}
 .piu-side-menu>button:not(.piu-menu-close){
  display:block;width:100%;text-align:left;border:0;border-radius:11px;
- background:transparent;padding:12px;margin:3px 0;color:#eafff7;
+ background:transparent;padding:12px;margin:3px 0;color:#BFD5FF;
 }
 .piu-side-menu>button:not(.piu-menu-close):active,
-.piu-side-menu>button:not(.piu-menu-close):hover{background:#18534d;color:var(--mint)}
+.piu-side-menu>button:not(.piu-menu-close):hover{background:#3478E8;color:#BFD5FF}
 
 /* NAVIGATION BASSE */
 .bottom-nav{
  position:fixed;bottom:0;left:0;right:0;z-index:50;
  display:grid;grid-template-columns:repeat(5,1fr);
- background:#062b28;border-top:1px solid var(--line);
+ background:linear-gradient(90deg,#101C46,#172B60,#302451);
+ border-top:1px solid #8156D9;
  padding:7px 3px calc(7px + env(safe-area-inset-bottom));
 }
-.bottom-nav button{border:0;background:transparent;border-radius:10px;padding:6px 2px;color:#b5d5cd;font-size:11px}
+.bottom-nav button{border:0;background:transparent;border-radius:10px;padding:6px 2px;color:#A9BCEB;font-size:11px}
 .bottom-nav button span{display:block;font-size:22px;margin-bottom:3px}
-.bottom-nav button.active{color:var(--mint);background:#18534d}
+.bottom-nav button.active{color:#BFD5FF;background:#3478E8}
 
 /* PROFIL */
-.profile-page{background:linear-gradient(160deg,#0a302d,#145247);border:1px solid var(--mint);border-radius:25px;padding:16px}
+.profile-page{background:linear-gradient(160deg,#101C46,#243B78,#302451);border:1px solid #8156D9;border-radius:25px;padding:16px}
 .profile-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 4px 20px}
-.profile-top .avatar{width:105px;height:105px;border:4px solid var(--mint);box-shadow:0 0 15px #75e6c166}
+.profile-top .avatar{width:105px;height:105px;border:4px solid #8156D9;box-shadow:0 0 15px #8156D966}
 .profile-identity{flex:1;min-width:160px}
-.profile-name{font-size:24px;color:white;margin:5px 0}
-.profile-id{color:var(--gold);font-weight:bold}
+.profile-name{font-size:24px;color:#BFD5FF;margin:5px 0}
+.profile-id{color:#A98BFF;font-weight:bold}
 .profile-flags{font-size:23px;margin:8px 0}
-.online-pill{display:inline-block;background:#168c62;color:white;border-radius:20px;padding:6px 12px;font-size:13px}
-.profile-stats{display:grid;grid-template-columns:repeat(4,1fr);background:#f0fff8;color:#101b35;border-radius:18px;padding:14px 5px;margin:12px 0;gap:3px}
-.profile-stat{text-align:center;border-right:1px solid #dce1ed}
+.online-pill{display:inline-block;background:#3478E8;color:#BFD5FF;border-radius:20px;padding:6px 12px;font-size:13px}
+.profile-stats{display:grid;grid-template-columns:repeat(4,1fr);background:#243B78;color:#BFD5FF;border:1px solid #405B9B;border-radius:18px;padding:14px 5px;margin:12px 0;gap:3px}
+.profile-stat{text-align:center;border-right:1px solid #405B9B}
 .profile-stat:last-child{border:0}
-.profile-stat strong{display:block;font-size:21px;color:#111b35}
-.profile-stat span{font-size:11px;font-weight:bold}
+.profile-stat strong{display:block;font-size:21px;color:#BFD5FF}
+.profile-stat span{font-size:11px;font-weight:bold;color:#BFD5FF}
 .profile-stat .symbol{font-size:23px}
 .profile-private-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
-.profile-private-card{border-radius:18px;padding:16px 10px;color:#17213b;text-align:center;background:#d9f7e9}
-.profile-private-card.pink{background:#f9e5f0}
+.profile-private-card{border-radius:18px;padding:16px 10px;color:#BFD5FF;text-align:center;background:linear-gradient(145deg,#243B78,#50318F);border:1px solid #8156D9}
+.profile-private-card.pink{background:linear-gradient(145deg,#302451,#50318F)}
 .profile-private-card .symbol{font-size:30px}
-.profile-vip-bar{background:linear-gradient(90deg,#ffe98c,#eab72e);color:#19172a;border-radius:16px;padding:16px;font-weight:bold;margin:14px 0;cursor:pointer}
-.profile-shortcuts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:#f0fff8;border-radius:18px;padding:12px 6px}
-.profile-shortcut{color:#123d34;text-align:center;padding:8px 2px;cursor:pointer;font-size:11px;font-weight:bold}
+.profile-vip-bar{background:linear-gradient(90deg,#50318F,#8156D9,#3478E8);color:#BFD5FF;border:1px solid #A98BFF;border-radius:16px;padding:16px;font-weight:bold;margin:14px 0;cursor:pointer}
+.profile-shortcuts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:#243B78;border:1px solid #405B9B;border-radius:18px;padding:12px 6px}
+.profile-shortcut{color:#BFD5FF;text-align:center;padding:8px 2px;cursor:pointer;font-size:11px;font-weight:bold}
 .profile-shortcut .symbol{font-size:27px;display:block;margin-bottom:5px}
-.profile-banner{background:linear-gradient(110deg,#075344,#138b70,#0a473d);border-radius:18px;padding:22px 12px;margin:16px 0;text-align:center}
-.profile-banner strong{font-size:25px;color:#ffdf65}
-.profile-center-links{background:#f0fff8;color:#14213d;border-radius:18px;padding:8px 16px;margin:14px 0}
-.profile-center-links button{display:block;width:100%;text-align:left;background:transparent;color:#123d34;border:0;border-bottom:1px solid #d5e9df;border-radius:0;padding:15px 5px;font-weight:bold}
+.profile-banner{background:linear-gradient(110deg,#101C46,#3478E8,#50318F);border:1px solid #8156D9;border-radius:18px;padding:22px 12px;margin:16px 0;text-align:center}
+.profile-banner strong{font-size:25px;color:#BFD5FF}
+.profile-center-links{background:#243B78;color:#BFD5FF;border:1px solid #405B9B;border-radius:18px;padding:8px 16px;margin:14px 0}
+.profile-center-links button{display:block;width:100%;text-align:left;background:transparent;color:#BFD5FF;border:0;border-bottom:1px solid #405B9B;border-radius:0;padding:15px 5px;font-weight:bold}
 .profile-actions{display:flex;gap:8px;margin-top:18px}
-.profile-actions button{flex:1;background:#087f68;border:0;border-radius:28px;padding:13px 5px;font-weight:bold}
-.profile-edit{background:#103b39;border-radius:16px;padding:14px;margin-top:16px}
-.profile-section-title{color:var(--mint);margin:18px 0 10px}
+.profile-actions button{flex:1;background:linear-gradient(110deg,#3478E8,#8156D9);border:0;border-radius:28px;padding:13px 5px;font-weight:bold}
+.profile-edit{background:#172B60;border:1px solid #405B9B;border-radius:16px;padding:14px;margin-top:16px}
+.profile-section-title{color:#A98BFF;margin:18px 0 10px}
 
-/* ÉCRANS PARTY ET EXPLORATION */
-.piu-hero{background:linear-gradient(130deg,#075344,#138b70,#103b39);border-radius:20px;padding:22px 15px;margin:12px 0;text-align:center;border:1px solid var(--mint)}
-.piu-hero h2{color:white;font-size:25px}
+/* PARTY ET EXPLORATION */
+.piu-hero{background:linear-gradient(130deg,#101C46,#3478E8,#50318F);border-radius:20px;padding:22px 15px;margin:12px 0;text-align:center;border:1px solid #8156D9}
+.piu-hero h2{color:#BFD5FF;font-size:25px}
 .piu-pills{display:flex;gap:8px;overflow-x:auto;padding:8px 0}
 .piu-pills button{white-space:nowrap}
-.room-card{background:linear-gradient(145deg,#145247,#103b39);border:1px solid var(--mint);border-radius:18px;padding:14px;margin:10px 0}
+.room-card{background:linear-gradient(145deg,#172B60,#50318F);border:1px solid #8156D9;border-radius:18px;padding:14px;margin:10px 0}
 .room-seats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:15px 0}
-.room-seat{min-height:72px;border:1px dashed #9acfc0;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-direction:column;background:#123d37;font-size:11px}
+.room-seat{min-height:72px;border:1px dashed #5879C2;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-direction:column;background:#172B60;font-size:11px;color:#BFD5FF}
 .room-seat .seat-icon{font-size:24px}
-.room-seat.occupied{border:1px solid var(--gold)}
+.room-seat.occupied{border:1px solid #A98BFF}
 .piu-feature-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.piu-feature{background:#eafff7;color:#123d34;border:1px solid #9acfc0;border-radius:16px;padding:16px;text-align:center;cursor:pointer}
-.piu-feature strong{display:block;margin:7px 0;color:#087f68}
+.piu-feature{background:linear-gradient(145deg,#243B78,#302451);color:#BFD5FF;border:1px solid #5879C2;border-radius:16px;padding:16px;text-align:center;cursor:pointer}
+.piu-feature strong{display:block;margin:7px 0;color:#A98BFF}
 .piu-gift-animation{position:fixed;z-index:100;left:50%;top:42%;transform:translate(-50%,-50%);font-size:75px;pointer-events:none;animation:piuGift 1.5s ease forwards}
 @keyframes piuGift{0%{opacity:0;transform:translate(-50%,20%) scale(.3)}25%{opacity:1;transform:translate(-50%,-20%) scale(1.3)}75%{opacity:1;transform:translate(-50%,-80%) scale(1)}100%{opacity:0;transform:translate(-50%,-160%) scale(.6)}}
 .entry-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.entry-choice{padding:12px 4px;text-align:center;background:#18534d;border:1px solid var(--mint);border-radius:13px;cursor:pointer}
+.entry-choice{padding:12px 4px;text-align:center;background:#243B78;border:1px solid #8156D9;border-radius:13px;cursor:pointer;color:#BFD5FF}
 .entry-choice b{display:block;font-size:26px}
+
+/* LOGO ET BADGE HD 4K */
+.piu-home-logo{
+ width:112px;height:112px;object-fit:contain;padding:8px;
+ border-radius:50%;
+ background:linear-gradient(145deg,#243B78,#50318F);
+ border:2px solid #8156D9;
+ box-shadow:0 0 25px #8156D9;
+ margin:12px auto;display:block;
+}
+.piu-hd-badge{
+ display:inline-block;font-size:10px;font-weight:bold;
+ letter-spacing:2px;padding:5px 9px;margin:5px;
+ border-radius:20px;color:#BFD5FF;
+ background:linear-gradient(100deg,#3478E8,#8156D9);
+ border:1px solid #A98BFF;box-shadow:0 0 12px #8156D9;
+}
+.piu-home-title{
+ font-size:27px;letter-spacing:1px;color:#BFD5FF;
+ text-shadow:0 0 15px #3478E8;
+}
+.piu-home-hero{
+ background:linear-gradient(145deg,#101C46,#243B78,#50318F);
+ border:1px solid #8156D9;border-radius:25px;
+ padding:25px 15px;box-shadow:0 8px 25px #0005;
+}
+.piu-home-hero p{color:#BFD5FF}
+.piu-home-tiles{margin-top:16px}
+
 @media(max-width:520px){
  main{padding:7px}.card{padding:13px}
  .profile-stats{grid-template-columns:repeat(4,1fr)}
@@ -168,6 +206,8 @@ a{color:var(--mint)}
  .profile-shortcuts{grid-template-columns:repeat(4,1fr)}
  .profile-top .avatar{width:90px;height:90px}.profile-name{font-size:21px}
  .room-seats{gap:5px}.room-seat{min-height:65px}
+ .piu-home-logo{width:95px;height:95px}
+ .piu-home-title{font-size:23px}
 }
 </style>
 </head>
@@ -178,7 +218,11 @@ a{color:var(--mint)}
  <button class="piu-menu-button" aria-label="Ouvrir le menu" onclick="togglePiuMenu()">☰</button>
  <div class="piu-brand">
   <img class="logo" src="AB3A6E9D-2421-4105-8C3A-8EE46DD38966.png" alt="Logo PIU-PIU">
-  <div><h1>PIU-PIU</h1><small>LE RÉSEAU QUI NOUS RAPPROCHE</small></div>
+  <div>
+   <h1>PIU-PIU</h1>
+   <small>LE RÉSEAU QUI NOUS RAPPROCHE</small>
+   <span class="piu-hd-badge">HD 4K</span>
+  </div>
  </div>
  <button class="piu-account" id="authButton" aria-label="Connexion" onclick="authAction()">👤</button>
 </header>
@@ -221,20 +265,33 @@ a{color:var(--mint)}
 </aside>
 
 <main>
+
 <section id="home" class="page">
- <div class="card center">
-  <img class="logo" src="AB3A6E9D-2421-4105-8C3A-8EE46DD38966.png" alt="Mascotte PIU-PIU">
-  <h2>Bienvenue sur PIU-PIU ✨</h2>
+ <div class="piu-home-hero center">
+  <img class="piu-home-logo" src="AB3A6E9D-2421-4105-8C3A-8EE46DD38966.png" alt="Mascotte PIU-PIU HD 4K">
+  <span class="piu-hd-badge">HD 4K</span>
+  <h2 class="piu-home-title">Bienvenue sur PIU-PIU ✨</h2>
   <p>Le réseau qui nous rapproche.</p>
   <div id="homeStatus" class="status">Chargement...</div>
-  <button class="gold" onclick="showPage('explore')">Explorer PIU-PIU</button>
-  <button class="pink" onclick="showPage('party')">🎉 Party LIVE</button>
+  <div class="row">
+   <button class="gold" onclick="showPage('explore')">🌍 Explorer PIU-PIU</button>
+   <button class="pink" onclick="showPage('party')">🎉 Party LIVE</button>
+  </div>
  </div>
- <div class="grid">
-  <div class="tile" onclick="showPage('vip')"><div class="symbol">👑</div><b>VIP</b><p>Découvre les niveaux VIP.</p></div>
-  <div class="tile" onclick="showPage('gifts')"><div class="symbol">🎁</div><b>Cadeaux</b><p>Offre des cadeaux.</p></div>
-  <div class="tile" onclick="showPage('games')"><div class="symbol">🎮</div><b>Jeux</b><p>Découvre les jeux.</p></div>
-  <div class="tile" onclick="showPage('members')"><div class="symbol">🌍</div><b>Communauté</b><p>Rencontre des membres.</p></div>
+
+ <div class="grid piu-home-tiles">
+  <div class="tile" onclick="showPage('members')"><div class="symbol">👥</div><b>Membres</b><p>Rencontre la communauté.</p></div>
+  <div class="tile" onclick="showPage('lives')"><div class="symbol">🔴</div><b>Lives</b><p>Découvre les directs.</p></div>
+  <div class="tile" onclick="showPage('gifts')"><div class="symbol">🎁</div><b>Cadeaux</b><p>Fais plaisir à tes amis.</p></div>
+  <div class="tile" onclick="showPage('vip')"><div class="symbol">👑</div><b>Espace VIP</b><p>Découvre les niveaux VIP.</p></div>
+  <div class="tile" onclick="showPage('games')"><div class="symbol">🎮</div><b>Jeux</b><p>Amuse-toi avec les membres.</p></div>
+  <div class="tile" onclick="showPage('clubs')"><div class="symbol">💜</div><b>Fan Clubs</b><p>Rejoins tes communautés.</p></div>
+ </div>
+
+ <div class="piu-hero">
+  <h2>💜 L'univers PIU-PIU t'attend !</h2>
+  <p>Rencontre, partage et profite de la communauté.</p>
+  <button class="gold" onclick="showPage('explore')">Découvrir maintenant</button>
  </div>
 </section>
 
@@ -338,6 +395,7 @@ a{color:var(--mint)}
 <section id="rankings" class="page hidden"><div class="card"><h2>Classements PIU-PIU 🌍</h2><p>Classements des membres par progression.</p><div id="rankingList">Chargement...</div></div></section>
 
 <section id="notifications" class="page hidden"><div class="card"><h2>Notifications 🔔</h2><button onclick="loadNotifications()">Actualiser</button><div id="notificationList"></div></div></section>
+
 </main>
 
 <footer>PIU-PIU © 2026 — Le réseau qui nous rapproche</footer>
