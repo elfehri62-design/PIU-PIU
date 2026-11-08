@@ -156,6 +156,7 @@ a{color:#7DB5FF}
 .piu-home-hero p{color:var(--white)}
 .piu-home-tiles{margin-top:16px}
 
+
 /* DIRECTS LIVEKIT */
 .live-stage{background:#0b1535;border:1px solid #8156D9;border-radius:16px;padding:10px;margin:12px 0;min-height:90px}
 .live-stage-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px}
@@ -183,6 +184,7 @@ a{color:#7DB5FF}
 }
 </style>
 </head>
+
 <body>
 <header class="piu-header">
  <button class="piu-menu-button" aria-label="Ouvrir le menu" onclick="togglePiuMenu()">☰</button>
@@ -384,7 +386,7 @@ a{color:#7DB5FF}
 </div>
 
 <script>
- const SUPABASE_URL="https://edwqvlibagfllfobazmd.supabase.co";
+const SUPABASE_URL="https://edwqvlibagfllfobazmd.supabase.co";
 const SUPABASE_KEY="sb_publishable_8Kf69i7SKAlU0j3QW4ndHA_-micATkn";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 
@@ -1076,7 +1078,6 @@ async function loadExploreLives(){
  if(!data?.length){box.textContent="Aucun direct en cours.";return;}
  box.innerHTML=data.map(l=>`<div class="notice">🔴 <b>${esc(l.title)}</b> — ${l.live_type==="audio"?"Audio":"Vidéo"} <button onclick="joinLive('${l.host_id}','${l.live_type}','${esc(l.title).replace(/'/g,"&#39;")}')">Rejoindre</button></div>`).join("");
 }
-
 /* CLASSEMENTS */
 async function loadRankings(){
  if(!requireLogin())return;
