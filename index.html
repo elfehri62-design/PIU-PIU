@@ -1,6 +1,6 @@
-```html
 <!DOCTYPE html>
 <html lang="fr">
+<!-- Version consolidee : corrections LIVE et parametres Supabase existants conserves. -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -183,7 +183,6 @@ a{color:#7DB5FF}
 }
 </style>
 </head>
-
 <body>
 <header class="piu-header">
  <button class="piu-menu-button" aria-label="Ouvrir le menu" onclick="togglePiuMenu()">☰</button>
@@ -294,7 +293,7 @@ a{color:#7DB5FF}
  </div><div class="card"><h3>Historique des cadeaux</h3><div id="giftHistory"></div></div>
 </section>
 
-<section id="vip" class="page hidden"><div class="card"><h2>Club VIP PIU-PIU 👑</h2><p>Le statut VIP est indépendant du niveau de progression.</p><div class="grid"><div class="tile">🥉<p>Bronze</p></div><div class="tile">🥈<p>Argent</p></div><div class="tile">🥇<p>Or</p></div><div class="tile">💎<p>Diamant</p></div><div class="tile">👑<p>Royal</p></div></div><div id="vipStatus" class="notice">Connecte-toi per consulter ton statut VIP.</div><p class="muted">Aucun achat VIP n'est activé ici.</p></div></section>
+<section id="vip" class="page hidden"><div class="card"><h2>Club VIP PIU-PIU 👑</h2><p>Le statut VIP est indépendant du niveau de progression.</p><div class="grid"><div class="tile">🥉<p>Bronze</p></div><div class="tile">🥈<p>Argent</p></div><div class="tile">🥇<p>Or</p></div><div class="tile">💎<p>Diamant</p></div><div class="tile">👑<p>Royal</p></div></div><div id="vipStatus" class="notice">Connecte-toi pour consulter ton statut VIP.</div><p class="muted">Aucun achat VIP n'est activé ici.</p></div></section>
 
 <section id="wallet" class="page hidden"><div class="card"><h2>Mon portefeuille</h2><div id="walletInfo">Connecte-toi pour consulter ton portefeuille.</div><div class="notice">Les recharges et transferts réels ne sont pas activés.</div><button class="gold" onclick="showPage('recharge')">Voir les options de recharge</button></div><div class="card"><h3>Historique des transactions</h3><div id="transactions">Aucune transaction chargée.</div></div></section>
 
@@ -373,6 +372,7 @@ a{color:#7DB5FF}
 <section id="rankings" class="page hidden"><div class="card"><h2>Classements PIU-PIU 🌍</h2><p>Classements des membres par progression.</p><div id="rankingList">Chargement...</div></div></section>
 <section id="notifications" class="page hidden"><div class="card"><h2>Notifications 🔔</h2><button onclick="loadNotifications()">Actualiser</button><div id="notificationList"></div></div></section>
 </main>
+
 <footer>PIU-PIU © 2026 — Le réseau qui nous rapproche</footer>
 
 <div class="bottom-nav">
@@ -384,7 +384,7 @@ a{color:#7DB5FF}
 </div>
 
 <script>
-const SUPABASE_URL="https://edwqvlibagfllfobazmd.supabase.co";
+ const SUPABASE_URL="https://edwqvlibagfllfobazmd.supabase.co";
 const SUPABASE_KEY="sb_publishable_8Kf69i7SKAlU0j3QW4ndHA_-micATkn";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 
@@ -901,18 +901,25 @@ function clearLiveStage(){
 }
 function removeLiveTrack(track){
  if(!track)return;
- try{track.detach().forEach(el=>el.remove());}catch(_){}
+ try{
+  const elements=track.detach();
+  elements.forEach(el=>{
+   const tile=el.closest?.(".live-tile");
+   el.remove();
+   if(tile && !tile.querySelector("video,audio"))tile.remove();
+  });
+ }catch(_){}
 }
 function addLiveTrack(track,participant,local=false){
  const target=$(local?"myLivePreview":"liveStage");if(!target||!track)return;
- // Do not attach the same track twice.
- if(target.querySelector(`[data-track-sid="${CSS.escape(track.sid||"")}"]`))return;
+ // Do not attach the same track twice (compatible with mobile Safari).
+ if(track.sid && Array.from(target.querySelectorAll("[data-track-sid]")).some(el=>el.dataset.trackSid===track.sid))return;
  const tile=document.createElement("div");tile.className="live-tile";
  if(track.sid)tile.dataset.trackSid=track.sid;
  const media=track.attach();
- if(media.tagName==="VIDEO"){media.autoplay=true;media.playsInline=true;media.muted=!!local;}
- if(media.tagName==="AUDIO"){media.autoplay=true;media.muted=!!local;}
-  tile.appendChild(media);
+ if(media.tagName==="VIDEO"){media.autoplay=true;media.playsInline=true;media.muted=!!local;media.controls=true;}
+ if(media.tagName==="AUDIO"){media.autoplay=true;media.muted=!!local;media.controls=true;}
+ tile.appendChild(media);
  const label=document.createElement("small");
  label.textContent=local?"Moi":(participant?.name||participant?.identity||"Participant");
  tile.appendChild(label);target.appendChild(tile);
@@ -937,6 +944,7 @@ async function connectLiveRoom(hostId,isHost,liveType){
  const auth=await getLiveToken(hostId);
  const roomName=auth.roomName||("piu-"+hostId);
  const room=new lk.Room({adaptiveStream:true,dynacast:true});
+ room.prepareConnection?.(auth.url,auth.token);
  piuLiveRoom=room;piuLiveRoomName=roomName;piuLiveIsHost=isHost;piuLiveType=liveType;
  room.on(lk.RoomEvent.TrackSubscribed,(track,_publication,participant)=>addLiveTrack(track,participant,false));
  room.on(lk.RoomEvent.TrackUnsubscribed,(track)=>removeLiveTrack(track));
@@ -944,11 +952,18 @@ async function connectLiveRoom(hostId,isHost,liveType){
   if(publication?.track)removeLiveTrack(publication.track);
  });
  room.on(lk.RoomEvent.Disconnected,()=>{
-  if(piuLiveRoom===room){piuLiveRoom=null;piuLiveRoomName=null;piuLiveIsHost=false;piuLiveType=null;}
+  const wasCurrent=piuLiveRoom===room;
+  const wasHost=wasCurrent && piuLiveIsHost;
+  if(wasCurrent){piuLiveRoom=null;piuLiveRoomName=null;piuLiveIsHost=false;piuLiveType=null;}
   clearLiveStage();
   liveStatus("Connexion au direct terminée.");
   if($("liveAudioToggle"))$("liveAudioToggle").disabled=true;
   if($("liveVideoToggle"))$("liveVideoToggle").disabled=true;
+  // Si la connexion de l'hôte tombe sans utiliser le bouton Quitter, ferme aussi l'entrée en base.
+  if(wasHost && currentUser){
+   db.from("piu_live_rooms").update({status:"ended",ended_at:new Date().toISOString()})
+    .eq("host_id",currentUser.id).eq("status","live");
+  }
  });
  await room.connect(auth.url,auth.token);
  room.remoteParticipants.forEach(p=>attachSubscribedTracks(p,false));
@@ -990,7 +1005,10 @@ async function startLive(){
   const {data:existing,error:checkError}=await db.from("piu_live_rooms").select("host_id").eq("host_id",currentUser.id).eq("status","live").limit(1);
   if(checkError)throw new Error("Vérification de tes directs impossible : "+checkError.message);
   if(existing?.length)throw new Error("Tu as déjà un direct en cours. Rejoins-le depuis la liste ou quitte-le d'abord.");
-  const {error:insertError}=await db.from("piu_live_rooms").insert({host_id:currentUser.id,title,live_type:type,status:"live"});
+  const {error:insertError}=await db.from("piu_live_rooms").insert({
+   host_id:currentUser.id,title,live_type:type,status:"live",
+   provider:"livekit",provider_room_id:roomName,started_at:new Date().toISOString(),ended_at:null
+  });
   if(insertError)throw new Error("La salle n'a pas pu être enregistrée : "+insertError.message);
   roomRowCreated=true;
   showPage("lives");
@@ -1001,7 +1019,7 @@ async function startLive(){
  }catch(err){
   status.textContent="Démarrage impossible : "+(err?.message||String(err));
   // If the DB row was created but connection failed, mark it ended to avoid a ghost live.
-  if(roomRowCreated)await db.from("piu_live_rooms").update({status:"ended"}).eq("host_id",currentUser.id).eq("status","live");
+  if(roomRowCreated)await db.from("piu_live_rooms").update({status:"ended",ended_at:new Date().toISOString()}).eq("host_id",currentUser.id).eq("status","live");
  }finally{button.disabled=false;}
 }
 async function joinLive(hostId,liveType,title){
@@ -1021,7 +1039,7 @@ async function leaveLiveRoom(updateRoom=true){
  $("liveAudioToggle").disabled=true;$("liveVideoToggle").disabled=true;
  liveStatus("Tu as quitté le direct.");
  if(updateRoom&&wasHost&&hostId){
-  const {error}=await db.from("piu_live_rooms").update({status:"ended"}).eq("host_id",hostId).eq("status","live");
+  const {error}=await db.from("piu_live_rooms").update({status:"ended",ended_at:new Date().toISOString()}).eq("host_id",hostId).eq("status","live");
   if(error)liveStatus("Direct quitté, mais sa fermeture dans la liste a échoué : "+error.message);
   await loadLives();
  }
@@ -1058,10 +1076,6 @@ async function loadExploreLives(){
  if(!data?.length){box.textContent="Aucun direct en cours.";return;}
  box.innerHTML=data.map(l=>`<div class="notice">🔴 <b>${esc(l.title)}</b> — ${l.live_type==="audio"?"Audio":"Vidéo"} <button onclick="joinLive('${l.host_id}','${l.live_type}','${esc(l.title).replace(/'/g,"&#39;")}')">Rejoindre</button></div>`).join("");
 }
-/* Compatibilité avec les anciens boutons Party / streamer */
-function createPartyPreview(){showPage("streamer");}
-function savePartyPreview(){startLive();}
-function prepareLive(){startLive();}
 
 /* CLASSEMENTS */
 async function loadRankings(){
@@ -1097,17 +1111,29 @@ function partyDemoGift(emoji){
 }
 function createPartyPreview(){
  if(!requireLogin())return;
- $("partyPreview").innerHTML=`<div class="card"><h3>Créer une salle</h3><label>Nom de la salle</label><input id="newPartyName" maxlength="60" placeholder="Ma salle PIU-PIU"><label>Type</label><select id="newPartyMode"><option value="audio">🎙️ Audio</option><option value="video">📹 Vidéo</option></select><button class="gold" onclick="savePartyPreview()">Créer l'aperçu</button><p id="newPartyStatus" class="status"></p></div>`;
+ $("partyPreview").innerHTML=`<div class="card">
+  <h3>Créer une vraie salle LIVE</h3>
+  <label>Nom de la salle</label>
+  <input id="newPartyName" maxlength="80" placeholder="Ma salle PIU-PIU">
+  <label>Type de direct</label>
+  <select id="newPartyMode"><option value="audio">🎙️ Audio</option><option value="video">📹 Vidéo</option></select>
+  <button class="gold" id="createPartyLiveButton" onclick="savePartyPreview()">🔴 Démarrer le direct</button>
+  <p id="newPartyStatus" class="status">Le navigateur demandera l'accès au micro ou à la caméra.</p>
+ </div>`;
 }
-function savePartyPreview(){
+async function savePartyPreview(){
  const name=$("newPartyName")?.value.trim();
- if(!name){$("newPartyStatus").textContent="Donne un nom à ta salle.";return;}
- $("newPartyStatus").textContent="Aperçu préparé : "+name+". La création d'une vraie salle synchronisée nécessite encore l'activation serveur.";
+ const type=$("newPartyMode")?.value||"audio";
+ const status=$("newPartyStatus");
+ if(!name){if(status)status.textContent="Donne un nom à ta salle.";return;}
+ // Réutilise le même flux de création que le Centre streamer : une seule logique LiveKit.
+ $("partyTitle").value=name;
+ $("partyType").value=type;
+ showPage("streamer");
+ await startLive();
+ if($("streamerStatus")?.textContent) liveStatus($("streamerStatus").textContent);
 }
-function prepareLive(){
- // Le bouton historique du centre streamer lance maintenant le vrai direct LiveKit.
- return startLive();
-}
+function prepareLive(){return startLive();}
 
 /* AUTH SUPABASE */
 db.auth.onAuthStateChange((_event,session)=>{
