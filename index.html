@@ -937,7 +937,12 @@ async function getLiveToken(hostId){
  const {data,error}=await db.functions.invoke(LIVE_TOKEN_FUNCTION,{body:{hostId}});
  if(error)throw new Error("Impossible d'obtenir le jeton LiveKit : "+error.message);
  const payload=data?.data||data;
- if(!payload?.token||!payload?.url)throw new Error(payload?.error||"Réponse du serveur incomplète (token ou url manquant).");
+console.log("LIVEKIT DEBUG", {
+  hasToken: !!payload?.token,
+  tokenLength: payload?.token?.length,
+  url: payload?.url,
+  roomName: payload?.roomName
+});if(!payload?.token||!payload?.url)throw new Error(payload?.error||"Réponse du serveur incomplète (token ou url manquant).");
  return payload;
 }
 async function connectLiveRoom(hostId,isHost,liveType){
