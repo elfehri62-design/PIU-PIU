@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PIU-PIU — Le réseau qui nous rapproche</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/livekit-client/dist/livekit-client.umd.min.js"></script>
+
+<style>
+:root{
+ --bg:#101C46;--panel:#172B60;--panel2:#243B78;
+ --gold:#A98BFF;--white:#BFD5FF;--muted:#A9BCEB;
+ --line:#405B9B;--green:#3478E8;--mint:#7DB5FF;
+ --emerald:#50318F;--pink:#8156D9;--purple:#8156D9;--cyan:#7DB5FF;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--white);font-family:Arial,sans-serif;padding:82px 0 85px}
+button{background:#243B78;color:var(--white);border:1px solid #8156D9;padding:11px 14px;border-radius:22px;cursor:pointer;font-size:14px}
+button.gold{background:linear-gradient(110deg,#8156D9,#3478E8);color:var(--white);font-weight:bold;border-color:#A98BFF}
+button.pink{background:linear-gradient(100deg,#50318F,#8156D9);border:1px solid #A98BFF;color:var(--white);font-weight:bold}
+button:disabled{opacity:.5;cursor:not-allowed}
+main{max-width:900px;margin:14px auto;padding:10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:16px;margin:12px 0}
+h2,h3{color:#A98BFF}
+input,textarea,select{width:100%;padding:13px;margin:7px 0;border:1px solid #5879C2;border-radius:9px;background:#172B60;color:var(--white);font-size:16px}
+textarea{min-height:85px}
+label{display:block;margin-top:12px;color:var(--muted)}
+.hidden{display:none!important}
+.muted,small{color:var(--muted)}
+.status{color:#A98BFF;padding:8px}
+.center{text-align:center}
+.avatar{width:75px;height:75px;border:3px solid #8156D9;border-radius:50%;object-fit:cover;background:#243B78}
+.member{display:flex;align-items:center;gap:12px}
+.member-info{flex:1;min-width:0}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.row>*{flex:1}
+.badge{display:inline-block;background:#50318F;padding:6px 10px;border-radius:20px;margin:3px;color:var(--white)}
+.notice{padding:12px;background:#243B78;border-left:4px solid #8156D9;margin:10px 0;border-radius:8px}
+.message{padding:12px;margin:8px 0;background:#243B78;border-radius:12px}
+.mine{margin-left:12%;border:1px solid #8156D9}
+.theirs{margin-right:12%}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}
+.tile{background:linear-gradient(145deg,#243B78,#302451);color:var(--white);border:1px solid #5879C2;border-radius:14px;padding:15px;text-align:center;cursor:pointer}
+.tile .symbol{font-size:34px;margin-bottom:8px}
+.price{color:#A98BFF;font-weight:bold}
+.progress{height:13px;background:#101C46;border-radius:20px;overflow:hidden}
+.progress>span{display:block;height:100%;background:linear-gradient(90deg,#3478E8,#8156D9)}
+footer{text-align:center;padding:25px;color:var(--muted)}
+hr{border:0;border-top:1px solid var(--line);margin:18px 0}
+a{color:#7DB5FF}
+
+/* EN-TÊTE */
+.piu-header{position:fixed;top:0;left:0;right:0;height:72px;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:linear-gradient(100deg,#101C46,#243B78,#50318F);border-bottom:1px solid #8156D9;box-shadow:0 3px 15px #0005}
+.piu-menu-button,.piu-account{width:45px;height:45px;border-radius:14px;font-size:23px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#3478E8,#8156D9);border:1px solid #A98BFF}
+.piu-brand{display:flex;align-items:center;gap:9px}
+.piu-brand .logo{width:43px;height:43px;object-fit:contain;border:2px solid #8156D9;border-radius:50%;box-shadow:0 0 14px #8156D9}
+.piu-brand h1{font-size:19px;letter-spacing:3px;color:#A98BFF;margin:0}
+.piu-brand small{font-size:9px;letter-spacing:1px}
+
+/* MENU */
+.piu-menu-overlay{position:fixed;inset:0;background:#0009;z-index:80;opacity:0;visibility:hidden;transition:.25s}
+.piu-menu-overlay.open{opacity:1;visibility:visible}
+.piu-side-menu{position:fixed;z-index:90;top:0;bottom:0;left:0;width:min(310px,85vw);background:linear-gradient(180deg,#101C46,#172B60,#302451);border-right:1px solid #8156D9;padding:16px;overflow-y:auto;transform:translateX(-105%);transition:transform .28s ease;box-shadow:8px 0 25px #0005}
+.piu-side-menu.open{transform:translateX(0)}
+.piu-menu-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.piu-menu-head h2{margin:0;color:#A98BFF;font-size:21px}
+.piu-menu-close{font-size:23px;padding:7px 13px}
+.piu-menu-group{color:#A98BFF;font-size:12px;font-weight:bold;letter-spacing:1px;margin:18px 4px 7px}
+.piu-side-menu>button:not(.piu-menu-close){display:block;width:100%;text-align:left;border:0;border-radius:11px;background:transparent;padding:12px;margin:3px 0;color:var(--white)}
+.piu-side-menu>button:not(.piu-menu-close):active,.piu-side-menu>button:not(.piu-menu-close):hover{background:#3478E8}
+
+/* NAVIGATION */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:50;display:grid;grid-template-columns:repeat(5,1fr);background:linear-gradient(90deg,#101C46,#172B60,#302451);border-top:1px solid #8156D9;padding:7px 3px calc(7px + env(safe-area-inset-bottom))}
+.bottom-nav button{border:0;background:transparent;border-radius:10px;padding:6px 2px;color:#A9BCEB;font-size:11px}
+.bottom-nav button span{display:block;font-size:22px;margin-bottom:3px}
+.bottom-nav button.active{color:var(--white);background:#3478E8}
+
+/* PROFILS */
+.profile-page{background:linear-gradient(160deg,#101C46,#243B78,#302451);border:1px solid #8156D9;border-radius:25px;padding:0;overflow:hidden}
+.profile-showcase{position:relative;padding:14px;background:radial-gradient(ellipse at top right,#8156D988,transparent 55%),linear-gradient(145deg,#101C46,#172B60 55%,#50318F)}
+.profile-cover{height:155px;min-height:155px;position:relative;overflow:hidden;border-radius:19px;background:radial-gradient(circle at 75% 25%,#A98BFF88,transparent 25%),radial-gradient(circle at 20% 100%,#3478E888,transparent 40%),linear-gradient(120deg,#101C46,#3478E8 48%,#50318F);border:1px solid #A98BFF;box-shadow:0 5px 22px #0005}
+.profile-cover:after{content:"🐣";position:absolute;right:22px;bottom:5px;font-size:65px;opacity:.22}
+.profile-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 4px 20px}
+.profile-showcase .profile-top{position:relative;margin-top:-48px;align-items:flex-end;padding:0 5px 12px;z-index:2;gap:12px}
+.profile-top .avatar,.profile-showcase .avatar{width:100px;height:100px;border:4px solid #A98BFF;box-shadow:0 0 18px #8156D988;flex-shrink:0}
+.profile-identity{flex:1;min-width:130px}
+.profile-name{font-size:24px;color:var(--white);margin:5px 0;overflow-wrap:anywhere}
+.profile-showcase .profile-name{text-shadow:0 0 10px #3478E8;font-size:22px}
+.profile-id{color:#A98BFF;font-weight:bold}
+.profile-follow-plus{margin-left:auto;align-self:flex-end;flex-shrink:0;width:54px;height:54px;min-width:54px;border-radius:50%;padding:0;font-size:32px;line-height:1;color:#fff;background:linear-gradient(145deg,#3478E8,#8156D9);border:3px solid #A98BFF;box-shadow:0 0 18px #8156D9;display:flex;align-items:center;justify-content:center}
+.profile-follow-plus.following{background:linear-gradient(145deg,#50318F,#3478E8)}
+.profile-stats{display:grid;grid-template-columns:repeat(4,1fr);background:#243B78;color:var(--white);border:1px solid #405B9B;border-radius:18px;padding:14px 5px;margin:12px 0;gap:3px}
+.profile-stat{text-align:center;border-right:1px solid #405B9B}
+.profile-stat:last-child{border:0}
+.profile-stat strong{display:block;font-size:21px;color:var(--white)}
+.profile-stat span{font-size:11px;font-weight:bold;color:var(--white)}
+.profile-stat .symbol{font-size:23px}
+.profile-info-cards{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:10px 0}
+.profile-info-card{background:linear-gradient(130deg,#243B78,#50318F);border:1px solid #8156D9;border-radius:16px;padding:13px 9px;color:var(--white);text-align:center;min-height:82px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.profile-private-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.profile-private-card{border-radius:18px;padding:16px 10px;color:var(--white);text-align:center;background:linear-gradient(145deg,#243B78,#50318F);border:1px solid #8156D9;box-shadow:0 5px 15px #0003}
+.profile-private-card.pink{background:linear-gradient(145deg,#302451,#50318F)}
+.profile-private-card .symbol{font-size:30px}
+.profile-vip-bar{background:linear-gradient(90deg,#50318F,#8156D9,#3478E8);color:var(--white);border:1px solid #A98BFF;border-radius:16px;padding:16px;font-weight:bold;margin:14px 0;cursor:pointer}
+.profile-shortcuts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:#243B78;border:1px solid #405B9B;border-radius:18px;padding:12px 6px}
+.profile-shortcut{color:var(--white);text-align:center;padding:8px 2px;cursor:pointer;font-size:11px;font-weight:bold}
+.profile-shortcut .symbol{font-size:27px;display:block;margin-bottom:5px}
+.profile-banner{background:linear-gradient(110deg,#101C46,#3478E8,#50318F);border:1px solid #8156D9;border-radius:18px;padding:22px 12px;margin:16px 0;text-align:center}
+.profile-banner strong{font-size:25px;color:var(--white)}
+.profile-center-links{background:#243B78;color:var(--white);border:1px solid #405B9B;border-radius:18px;padding:8px 16px;margin:14px 0}
+.profile-center-links button{display:block;width:100%;text-align:left;background:transparent;color:var(--white);border:0;border-bottom:1px solid #405B9B;border-radius:0;padding:15px 5px;font-weight:bold}
+.profile-actions{display:flex;gap:8px;margin-top:18px}
+.profile-actions button{flex:1;background:linear-gradient(110deg,#3478E8,#8156D9);border:0;border-radius:28px;padding:13px 5px;font-weight:bold}
+.profile-edit{background:#172B60;border:1px solid #405B9B;border-radius:16px;padding:14px;margin:14px}
+.profile-section-title{color:#A98BFF;margin:18px 0 10px}
+.profile-tabs{position:sticky;top:72px;z-index:10;display:grid;grid-template-columns:repeat(4,1fr);background:#243B78;border-bottom:1px solid #8156D9;border-radius:14px;overflow:hidden;margin:12px 14px}
+.profile-tabs button{border:0;border-radius:0;background:transparent;padding:13px 3px;font-size:24px;color:#A9BCEB}
+.profile-tabs button.active{color:#fff;background:linear-gradient(140deg,#3478E8,#50318F);box-shadow:inset 0 -3px #A98BFF}
+.profile-tab-panel{min-height:130px;padding:12px 15px}
+.profile-contribution{margin:14px;padding:15px;border-radius:17px;background:linear-gradient(100deg,#50318F,#8156D9,#3478E8);border:1px solid #A98BFF}
+.profile-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:12px 14px}
+.profile-gallery-item{aspect-ratio:1;border-radius:13px;background:linear-gradient(145deg,#243B78,#50318F);border:1px solid #8156D9;display:flex;align-items:center;justify-content:center;font-size:30px;overflow:hidden}
+.profile-gallery-item img{width:100%;height:100%;object-fit:cover}
+.profile-public-section{padding:5px 16px 15px}
+.profile-interest{display:inline-block;padding:8px 12px;margin:4px;border-radius:22px;background:#243B78;border:1px solid #8156D9;color:var(--white)}
+.profile-bottom-actions{display:flex;gap:10px;padding:12px 14px 18px}
+.profile-bottom-actions button{flex:1;min-height:52px;border-radius:28px;background:linear-gradient(100deg,#50318F,#3478E8);border:1px solid #A98BFF;font-weight:bold}
+.profile-owner-balance{margin:12px 14px}
+
+/* PARTY ET EXPLORATION */
+.piu-hero{background:linear-gradient(130deg,#101C46,#3478E8,#50318F);border-radius:20px;padding:22px 15px;margin:12px 0;text-align:center;border:1px solid #8156D9}
+.piu-hero h2{color:var(--white);font-size:25px}
+.piu-pills{display:flex;gap:8px;overflow-x:auto;padding:8px 0}
+.piu-pills button{white-space:nowrap}
+.room-card{background:linear-gradient(145deg,#172B60,#50318F);border:1px solid #8156D9;border-radius:18px;padding:14px;margin:10px 0}
+.room-seats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:15px 0}
+.room-seat{min-height:72px;border:1px dashed #5879C2;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-direction:column;background:#172B60;font-size:11px;color:var(--white)}
+.room-seat .seat-icon{font-size:24px}
+.room-seat.occupied{border:1px solid #A98BFF}
+.piu-feature-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.piu-feature{background:linear-gradient(145deg,#243B78,#302451);color:var(--white);border:1px solid #5879C2;border-radius:16px;padding:16px;text-align:center;cursor:pointer}
+.piu-feature strong{display:block;margin:7px 0;color:#A98BFF}
+.piu-gift-animation{position:fixed;z-index:100;left:50%;top:42%;transform:translate(-50%,-50%);font-size:75px;pointer-events:none;animation:piuGift 1.5s ease forwards}
+@keyframes piuGift{0%{opacity:0;transform:translate(-50%,20%) scale(.3)}25%{opacity:1;transform:translate(-50%,-20%) scale(1.3)}75%{opacity:1;transform:translate(-50%,-80%) scale(1)}100%{opacity:0;transform:translate(-50%,-160%) scale(.6)}}
+.entry-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.entry-choice{padding:12px 4px;text-align:center;background:#243B78;border:1px solid #8156D9;border-radius:13px;cursor:pointer;color:var(--white)}
+.entry-choice b{display:block;font-size:26px}
+
+/* LOGO */
+.piu-home-logo{width:112px;height:112px;object-fit:contain;padding:8px;border-radius:50%;background:linear-gradient(145deg,#243B78,#50318F);border:2px solid #8156D9;box-shadow:0 0 25px #8156D9;margin:12px auto;display:block}
+.piu-hd-badge{display:inline-block;font-size:10px;font-weight:bold;letter-spacing:2px;padding:5px 9px;margin:5px;border-radius:20px;color:var(--white);background:linear-gradient(100deg,#3478E8,#8156D9);border:1px solid #A98BFF;box-shadow:0 0 12px #8156D9}
+.piu-home-title{font-size:27px;letter-spacing:1px;color:var(--white);text-shadow:0 0 15px #3478E8}
+.piu-home-hero{background:linear-gradient(145deg,#101C46,#243B78,#50318F);border:1px solid #8156D9;border-radius:25px;padding:25px 15px;box-shadow:0 8px 25px #0005}
+.piu-home-hero p{color:var(--white)}
+.piu-home-tiles{margin-top:16px}
+
+
+/* DIRECTS LIVEKIT */
+.live-stage{background:#0b1535;border:1px solid #8156D9;border-radius:16px;padding:10px;margin:12px 0;min-height:90px}
+.live-stage-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px}
+.live-tile{background:#172B60;border:1px solid #405B9B;border-radius:12px;padding:8px;min-width:0}
+.live-tile video{width:100%;max-height:260px;aspect-ratio:4/3;object-fit:cover;background:#050a1b;border-radius:9px}
+.live-tile audio{width:100%}
+.live-tile small{display:block;overflow-wrap:anywhere;margin-top:5px}
+.live-controls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.live-controls button{flex:1;min-width:125px}
+.live-status{padding:10px;background:#243B78;border-radius:10px;margin:8px 0;overflow-wrap:anywhere}
+
+@media(max-width:520px){
+ main{padding:7px}.card{padding:13px}
+ .profile-stats{grid-template-columns:repeat(4,1fr)}
+ .profile-stat strong{font-size:18px}.profile-stat span{font-size:9px}
+ .profile-shortcuts{grid-template-columns:repeat(4,1fr)}
+ .profile-showcase .avatar{width:85px;height:85px}
+ .profile-showcase .profile-name{font-size:20px}
+ .profile-follow-plus{width:54px;height:54px;min-width:54px;font-size:33px}
+ .profile-cover{height:135px;min-height:135px}
+ .profile-showcase .profile-top{margin-top:-40px}
+ .room-seats{gap:5px}.room-seat{min-height:65px}
+ .piu-home-logo{width:95px;height:95px}
+ .piu-home-title{font-size:23px}
+}
+
+/* IDENTITE VISUELLE PIU-PIU — inspiration live-social premium */
+:root{
+ --bg:#100D16;--panel:#1B1722;--panel2:#282130;
+ --gold:#F5C451;--white:#FFF8F0;--muted:#BDB4C5;
+ --line:#493B50;--green:#E84B83;--mint:#FF8BAE;
+ --emerald:#7A3159;--pink:#F04D8A;--purple:#8C4BD8;--cyan:#F5C451;
+}
+body{background:radial-gradient(ellipse at 50% -15%,#422039 0%,#17111D 42%,#0D0B12 100%);color:var(--white)}
+button{background:#292230;color:var(--white);border-color:#5A4058}
+button.gold{background:linear-gradient(110deg,#F5C451,#D99B2B);color:#26180A;border-color:#FFE09A;box-shadow:0 3px 12px #D99B2B35}
+button.pink{background:linear-gradient(100deg,#E83F7D,#A83CC2);border-color:#FF9ABC;color:#fff}
+h2,h3,.status,.price,.profile-section-title{color:var(--gold)}
+input,textarea,select{border-color:#594454;background:#211A27;color:#FFF8F0}
+.card{background:linear-gradient(145deg,#211A27,#18131E);border-color:#493746;box-shadow:0 7px 22px #0004}
+.tile{background:linear-gradient(145deg,#302333,#1C1722);border-color:#5C4053;color:#FFF8F0}
+.price{color:#F5C451}
+.progress{background:#302638}.progress>span{background:linear-gradient(90deg,#E84B83,#F5C451)}
+.piu-header{background:linear-gradient(100deg,#100D16,#211522 65%,#352033);border-bottom:1px solid #75445D;box-shadow:0 3px 18px #0009}
+.piu-menu-button,.piu-account{background:linear-gradient(135deg,#E84B83,#A83CC2);border-color:#FF9ABC;color:#fff}
+.piu-brand h1,.piu-menu-head h2,.piu-menu-group{color:#F5C451}
+.piu-brand .logo{border-color:#F5C451;box-shadow:0 0 14px #F5C45155}
+.piu-side-menu{background:linear-gradient(180deg,#100D16,#211522,#302034);border-right-color:#75445D}
+.piu-side-menu>button:not(.piu-menu-close):active,.piu-side-menu>button:not(.piu-menu-close):hover{background:#4A263D}
+.bottom-nav{background:#15111B;border-top:1px solid #604054}
+.bottom-nav button{color:#BDB4C5}.bottom-nav button.active{color:#F5C451;background:#352333}
+.profile-page{background:linear-gradient(160deg,#17111D,#2A1B2A);border-color:#75445D}
+.profile-showcase{background:radial-gradient(ellipse at top right,#E84B8344,transparent 55%),linear-gradient(145deg,#17111D,#211722 55%,#382039)}
+.profile-cover{background:radial-gradient(circle at 75% 25%,#F5C45155,transparent 25%),radial-gradient(circle at 20% 100%,#E84B8366,transparent 40%),linear-gradient(120deg,#17111D,#51243E 48%,#382039);border-color:#A85A75}
+.profile-top .avatar,.profile-showcase .avatar{border-color:#F5C451;box-shadow:0 0 18px #F5C45144}
+.profile-id{color:#F5C451}
+.profile-follow-plus{background:linear-gradient(145deg,#E84B83,#A83CC2);border-color:#FFB1C9;box-shadow:0 0 18px #E84B8355}
+.profile-stats,.profile-shortcuts,.profile-center-links{background:#211A27;border-color:#493746}
+.profile-info-card,.profile-private-card{background:linear-gradient(130deg,#302333,#211722);border-color:#624252}
+.profile-vip-bar,.profile-contribution{background:linear-gradient(90deg,#7A3159,#C34479,#D99B2B);border-color:#F5C451;color:#fff}
+.profile-banner{background:linear-gradient(110deg,#17111D,#51243E,#302039);border-color:#75445D}
+.profile-tabs{background:#211A27;border-color:#75445D}
+.profile-tabs button.active{background:linear-gradient(140deg,#E84B83,#7A3159);box-shadow:inset 0 -3px #F5C451}
+.profile-interest{background:#29202D;border-color:#68465A}
+.profile-actions button,.profile-bottom-actions button{background:linear-gradient(110deg,#E84B83,#A83CC2);border-color:#FF9ABC}
+.piu-hero{background:linear-gradient(130deg,#17111D,#51243E,#302039);border-color:#75445D}
+.piu-hero h2{color:#F5C451}
+.room-card,.live-status{background:linear-gradient(145deg,#211A27,#382039);border-color:#75445D}
+.room-seat{background:#211A27;border-color:#624252}.room-seat.occupied{border-color:#F5C451}
+.piu-feature{background:linear-gradient(145deg,#302333,#1C1722);border-color:#624252}
+.piu-feature strong{color:#F5C451}
+.entry-choice{background:#29202D;border-color:#68465A}
+.piu-hd-badge{color:#2A1A0A;background:linear-gradient(100deg,#F5C451,#E8A83A);border-color:#FFE09A;box-shadow:0 0 12px #F5C45144}
+.piu-home-hero{background:linear-gradient(145deg,#17111D,#302039,#51243E);border-color:#75445D}
+.piu-home-title{color:#F5C451;text-shadow:0 0 15px #F5C45144}
+.piu-home-hero p{color:#FFF8F0}
+.live-stage{background:#100D16;border-color:#75445D}.live-tile{background:#211A27;border-color:#493746}
+.notice{background:#302333;border-left-color:#F5C451}
+.message{background:#29202D}.mine{border-color:#E84B83}
+a{color:#F5C451}
+@media(max-width:520px){.bottom-nav button.active{background:#352333}}
+
+
+/* PIU-PIU GOLD COIN — pièce métallique dorée */
+.piu-gold-coin{
+ display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;
+ width:1.35em;height:1.35em;border-radius:50%;margin:0 .12em;
+ color:#704509;font-size:.9em;font-weight:900;line-height:1;
+ background:radial-gradient(circle at 32% 25%,#FFF7C2 0%,#FFE78A 18%,#F6C84F 38%,#D99A1D 68%,#9A610B 100%);
+ border:2px solid #FFE9A0;
+ box-shadow:inset 0 0 0 1px #B87912,inset 0 1px 3px #FFF9D8,0 1px 4px #0008;
+ text-shadow:0 1px 0 #FFF0B2;
+}
+.piu-gold-coin::after{content:"";position:absolute}
+
+/* PIU-PIU LIVE redesign — original brand, familiar social-live layout */
+:root{--bg:#100D14;--panel:#1B1520;--panel2:#261B2A;--gold:#F4C451;--white:#FFF8F0;--muted:#BDB1C1;--line:#493449;--green:#9D6CFF;--mint:#E8B95B;--emerald:#6B3C61;--pink:#F05A9D;--purple:#8D55D8;--cyan:#E7B74F}
+html{background:#100D14}body{background:radial-gradient(ellipse at 50% -20%,#43213B 0,#1A1320 42%,#100D14 76%);color:#FFF8F0;padding-top:76px}
+main{max-width:760px;padding:10px 13px 24px}h2,h3{color:#F5C451}
+.card{background:linear-gradient(145deg,#211925,#19131D);border:1px solid #493449;border-radius:19px;box-shadow:0 9px 28px #0005}
+button{background:#302333;color:#FFF8F0;border-color:#5A405A}button.gold,.live-primary{background:linear-gradient(110deg,#F7D978,#D99A2B 58%,#A96717);color:#2A1806;border:1px solid #FFE7A0;font-weight:800;box-shadow:0 4px 16px #D99A2B38}
+button.pink{background:linear-gradient(110deg,#F05A9D,#9A4FD1);color:white;border:0}input,textarea,select{background:#211925;color:#FFF8F0;border-color:#60475E}a{color:#F4C451}
+.piu-header{background:rgba(20,14,23,.96);backdrop-filter:blur(18px);border-bottom:1px solid #493449;box-shadow:0 5px 22px #0008}
+.piu-menu-button,.piu-account{background:#2A202E;border:1px solid #65445F;color:#F5C451}.piu-brand .logo{border-color:#F4C451;box-shadow:0 0 13px #F4C45455}.piu-brand h1{color:#F4C451}.piu-brand small{color:#C7B5C8}
+.piu-side-menu{background:linear-gradient(180deg,#17111B,#251827 70%,#382039);border-color:#65445F}.piu-side-menu>button:not(.piu-menu-close):hover{background:#39253B}
+.bottom-nav{background:rgba(23,17,27,.97);backdrop-filter:blur(18px);border-top:1px solid #493449}.bottom-nav button{color:#BDB1C1}.bottom-nav button.active{color:#F5C451;background:#38273A}
+.piu-gold-coin{position:relative;width:1.35em;height:1.35em;color:#704509!important;background:radial-gradient(circle at 30% 24%,#FFFBE0 0%,#FFE98A 18%,#F7CD55 38%,#D99A1D 68%,#995B0A 100%);border:2px solid #FFE9A0;box-shadow:inset 0 0 0 1px #B87912,inset 0 1px 3px #FFF9D8,0 2px 7px #0009;text-shadow:0 1px #FFF0B2;font-weight:900}
+.piu-hero{background:linear-gradient(130deg,#211725,#4A2442,#2B1A35);border:1px solid #68435F}.tile{background:linear-gradient(145deg,#2B2030,#1B1520);border-color:#5A405A;color:#FFF8F0}.notice{background:#2A202E;border-left-color:#F4C451}.status{color:#F4C451}
+.profile-page{background:#17111B;border-color:#65445F}.profile-showcase{background:radial-gradient(ellipse at top right,#F05A9D33,transparent 55%),linear-gradient(145deg,#17111B,#2B1B30)}
+.profile-cover{background:radial-gradient(circle at 75% 25%,#F4C45177,transparent 25%),radial-gradient(circle at 20% 100%,#F05A9D66,transparent 40%),linear-gradient(120deg,#211725,#63365B 48%,#35213F);border-color:#C18B46}
+.profile-stats,.profile-shortcuts,.profile-center-links{background:#2A202E;border-color:#60475E}.profile-info-card,.profile-private-card{background:linear-gradient(130deg,#302233,#4B2B48);border-color:#76506D}
+.profile-vip-bar{background:linear-gradient(90deg,#7A4C21,#D99A2B,#F4C451);color:#241506;border-color:#FFE7A0}
+.live-home-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 0 14px}.live-home-brand{display:flex;align-items:center;gap:10px}.live-home-logo{width:42px;height:42px;object-fit:contain;border-radius:50%;border:1px solid #D5A84B}
+.live-home-brand strong{display:block;color:#F4C451;font-size:19px;letter-spacing:2px}.live-home-brand small{display:block;color:#BDB1C1;font-size:9px;letter-spacing:1.4px;margin-top:3px}
+.live-home-actions{display:flex;align-items:center;gap:7px}.coin-pill{display:flex;align-items:center;gap:7px;border-radius:22px;background:#2B202D;border:1px solid #8B6737;padding:8px 11px;color:#F7D978;font-weight:bold}.coin-pill b{font-size:18px;color:#F7D978}.round-action{width:38px;height:38px;border-radius:50%;padding:0;background:#2B202D;border:1px solid #60475E}
+.live-tabs{display:flex;gap:20px;overflow-x:auto;white-space:nowrap;border-bottom:1px solid #493449;margin:0 -2px 14px;padding:0 2px 11px}.live-tabs button{background:transparent;border:0;border-radius:0;padding:8px 2px;color:#BDB1C1;font-size:14px}.live-tabs button.selected{color:#F4C451;border-bottom:2px solid #F4C451}
+.live-welcome{min-height:190px;border-radius:22px;padding:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;overflow:hidden;background:radial-gradient(circle at 82% 25%,#F4C45144,transparent 26%),linear-gradient(115deg,#40213C,#211725 70%);border:1px solid #76506D;box-shadow:0 10px 25px #0005}
+.live-welcome-copy{max-width:440px}.live-kicker{font-size:10px;letter-spacing:2px;font-weight:800;color:#F4C451}.live-welcome h2{font-size:25px;line-height:1.12;color:#FFF8F0;margin:9px 0}.live-welcome p{font-size:13px;color:#D0C3D0;line-height:1.45;margin:0 0 14px}
+.live-primary{border-radius:22px;padding:11px 16px}.live-welcome-coin{display:flex;flex-direction:column;align-items:center;gap:8px;transform:rotate(-12deg);flex-shrink:0}.live-welcome-coin .piu-gold-coin{font-size:50px;width:1.45em;height:1.45em;border-width:3px;box-shadow:0 0 24px #F4C45155,inset 0 0 0 3px #B87912}.live-welcome-coin small{font-size:9px;letter-spacing:2px;color:#F4C451;font-weight:bold}
+.live-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:22px 1px 12px}.live-section-head h2{font-size:19px;color:#FFF8F0;margin:0 0 4px}.live-section-head p{font-size:11px;color:#BDB1C1;margin:0}.live-section-head>button:not(.live-primary){border:0;background:transparent;color:#F4C451;padding:7px}
+.live-feed{min-height:90px}.live-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.live-card{min-width:0;overflow:hidden;border:1px solid #513A50;border-radius:16px;background:#211925;box-shadow:0 6px 18px #0004}
+.live-card-cover{height:145px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(circle at 70% 25%,#F4C45144,transparent 28%),linear-gradient(145deg,#422440,#201725 60%,#50304D)}
+.live-card:nth-child(3n+2) .live-card-cover{background:radial-gradient(circle at 25% 35%,#9B5CEB55,transparent 30%),linear-gradient(145deg,#30233E,#211725 60%,#56314F)}
+.live-card:nth-child(3n) .live-card-cover{background:radial-gradient(circle at 70% 25%,#F05A9D55,transparent 28%),linear-gradient(145deg,#54263F,#211725 65%,#362342)}
+.live-card-mark{font-size:20px;font-weight:900;letter-spacing:2px;color:#FFF8F0;text-shadow:0 2px 10px #000}.live-card-mark span{color:#F4C451}.live-on{position:absolute;top:9px;left:9px;border-radius:20px;padding:5px 8px;background:#E63F61;color:white;font-size:9px;font-weight:900}.live-card-type{position:absolute;right:8px;top:9px;background:#17111BCC;border:1px solid #76506D;border-radius:15px;padding:4px 7px;font-size:9px}
+.live-card-info{padding:10px}.live-card-info>b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.live-card-info>small{display:block;color:#BDB1C1;margin:5px 0 9px}.live-join{width:100%;border:0;border-radius:18px;background:linear-gradient(100deg,#F05A9D,#9A4FD1);color:white;font-weight:bold;padding:8px}
+.live-empty{display:flex;align-items:center;flex-direction:column;justify-content:center;gap:8px;text-align:center;border:1px dashed #65445F;border-radius:17px;padding:24px 12px;color:#FFF8F0;background:#1C1520}.live-empty>span{font-size:30px;color:#F4C451}.live-empty small{color:#BDB1C1}
+.live-shortcuts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.live-shortcuts button{display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 4px;border-radius:15px;background:#241B29;border:1px solid #493449}.live-shortcuts button>span{font-size:24px}.live-shortcuts button>b{font-size:11px;color:#FFF8F0}.live-shortcuts button>small{font-size:9px;color:#BDB1C1;text-align:center}
+.live-bottom-callout{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:18px 0 8px;padding:15px;border-radius:17px;background:linear-gradient(110deg,#38213B,#241A2B);border:1px solid #68435F}.live-bottom-callout b,.live-bottom-callout small{display:block}.live-bottom-callout b{color:#F4C451}.live-bottom-callout small{font-size:11px;color:#C8B9C9;margin-top:4px}.explore-heading{margin:8px 2px 16px}
+@media(max-width:420px){main{padding:8px 10px 22px}.live-welcome{padding:16px;min-height:175px}.live-welcome h2{font-size:21px}.live-welcome-coin .piu-gold-coin{font-size:39px}.live-card-cover{height:125px}.live-shortcuts{gap:5px}.live-shortcuts button>small{font-size:8px}.coin-pill{font-size:11px;padding:7px 8px}}
+
+</style>
+</head>
+
+<body>
+<header class="piu-header">
+ <button class="piu-menu-button" aria-label="Ouvrir le menu" onclick="togglePiuMenu()">â°</button>
+ <div class="piu-brand">
+  <img class="logo" src="AB3A6E9D-2421-4105-8C3A-8EE46DD38966.png" alt="Logo PIU-PIU">
+  <div><h1>PIU-PIU</h1><small>LE RÃSEAU QUI NOUS RAPPROCHE</small><span class="piu-hd-badge">HD 4K</span></div>
+ </div>
+ <button class="piu-account" id="authButton" aria-label="Connexion" onclick="authAction()">ð¤</button>
+</header>
+
+<div id="piuMenuOverlay" class="piu-menu-overlay" onclick="togglePiuMenu(false)"></div>
+<aside id="piuSideMenu" class="piu-side-menu">
+ <div class="piu-menu-head"><h2>ð£ PIU-PIU</h2><button class="piu-menu-close" onclick="togglePiuMenu(false)">â</button></div>
+ <div class="piu-menu-group">PRINCIPAL</div>
+ <button onclick="piuMenuGo('home')">ð  Accueil</button>
+ <button onclick="piuMenuGo('explore')">ð Explorer</button>
+ <button onclick="piuMenuGo('members')">ð¥ Membres</button>
+ <button onclick="piuMenuGo('profile')">ð¤ Mon profil</button>
+ <div class="piu-menu-group">COMMUNAUTÃ</div>
+ <button onclick="piuMenuGo('messages')">ð¬ Messages</button>
+ <button onclick="piuMenuGo('notifications')">ð Notifications</button>
+ <button onclick="piuMenuGo('clubs')">ð Fan Clubs</button>
+ <button onclick="piuMenuGo('party')">ð Party LIVE</button>
+ <button onclick="piuMenuGo('lives')">ð´ Lives</button>
+ <div class="piu-menu-group">UNIVERS PIU-PIU</div>
+ <button onclick="piuMenuGo('gifts')">ð Cadeaux</button>
+ <button onclick="piuMenuGo('vip')">ð Espace VIP</button>
+ <button onclick="piuMenuGo('games')">ð® Jeux</button>
+ <button onclick="piuMenuGo('levels')">ð£ Niveaux</button>
+ <button onclick="piuMenuGo('rankings')">ð Classements</button>
+ <div class="piu-menu-group">MON COMPTE</div>
+ <button onclick="piuMenuGo('wallet')">ð° Portefeuille</button>
+ <button onclick="piuMenuGo('recharge')"><span class="piu-gold-coin" aria-label="PIU Coin dorÃ©">P</span> Recharge</button>
+ <button onclick="piuMenuGo('streamer')">ð¡ Centre streamer</button>
+ <button onclick="piuMenuGo('creator')">ð¬ Centre crÃ©ateur</button>
+ <button onclick="piuMenuGo('auth')">ð Connexion / inscription</button>
+ <button onclick="authAction();togglePiuMenu(false)">ðª Connexion / DÃ©connexion</button>
+</aside>
+
+<main>
+<section id="home" class="page">
+ <div class="live-home-top">
+  <div class="live-home-brand">
+   <img src="AB3A6E9D-2421-4105-8C3A-8EE46DD38966.png" alt="PIU-PIU" class="live-home-logo">
+   <div><strong>PIU-PIU</strong><small>LIVE â¢ COMMUNAUTÃ</small></div>
+  </div>
+  <div class="live-home-actions">
+   <button class="coin-pill" onclick="showPage('recharge')"><span class="piu-gold-coin">P</span> <span id="homeCoinLabel">Coins</span> <b>ï¼</b></button>
+   <button class="round-action" onclick="showPage('notifications')" aria-label="Notifications">â§</button>
+  </div>
+ </div>
+ <div class="live-tabs">
+  <button class="selected" onclick="showPage('explore')">Pour toi</button>
+  <button onclick="showPage('explore')">Populaires</button>
+  <button onclick="showPage('members')">Suivis</button>
+  <button onclick="showPage('members')">Nouveaux</button>
+ </div>
+ <div class="live-welcome">
+  <div class="live-welcome-copy">
+   <span class="live-kicker">TON UNIVERS EN DIRECT</span>
+   <h2>Rencontre. Partage. Vis en LIVE.</h2>
+   <p>DÃ©couvre les crÃ©ateurs et rejoins la communautÃ© PIU-PIU.</p>
+   <button class="live-primary" onclick="showPage('lives')">ð´ DÃ©couvrir les LIVE</button>
+  </div>
+  <div class="live-welcome-coin"><span class="piu-gold-coin">P</span><small>PIU COINS</small></div>
+ </div>
+ <div class="live-section-head"><div><h2>En direct maintenant</h2><p>Les crÃ©ateurs qui sont en LIVE</p></div><button onclick="showPage('lives')">Tout voir âº</button></div>
+ <div id="homeLiveFeed" class="live-feed">
+  <div class="live-empty"><span>â</span><b>Les directs arrivent ici</b><small>Connecte-toi pour dÃ©couvrir les lives en cours.</small></div>
+ </div>
+ <div class="live-section-head"><div><h2>Explorer PIU-PIU</h2><p>Tout un univers Ã  dÃ©couvrir</p></div></div>
+ <div class="live-shortcuts">
+  <button onclick="showPage('party')"><span>ð</span><b>Party</b><small>Salles Ã  plusieurs</small></button>
+  <button onclick="showPage('gifts')"><span>ð</span><b>Cadeaux</b><small>Envoie de l'amour</small></button>
+  <button onclick="showPage('rankings')"><span>ð</span><b>Classements</b><small>Les meilleurs</small></button>
+  <button onclick="showPage('clubs')"><span>ð</span><b>Fan Clubs</b><small>Rejoins un groupe</small></button>
+ </div>
+ <div class="live-bottom-callout">
+  <div><b>PrÃªt Ã  lancer ton LIVE ?</b><small>CrÃ©e ta salle et retrouve ta communautÃ©.</small></div>
+  <button class="live-primary" onclick="showPage('streamer')">ï¼ DÃ©marrer</button>
+ </div>
+ <div id="homeStatus" class="status"></div>
+</section>
+
+<section id="explore" class="page hidden">
+ <div class="live-section-head explore-heading"><div><span class="live-kicker">DÃCOUVERTE</span><h2>Explorer les LIVE</h2><p>DÃ©couvre les crÃ©ateurs PIU-PIU</p></div><button class="live-primary" onclick="showPage('streamer')">ï¼ Lancer un LIVE</button></div>
+ <div class="piu-pills"><button onclick="showPage('members')">ð Membres</button><button onclick="showPage('lives')">ðï¸ Audio</button><button onclick="showPage('clubs')">ð Fan Clubs</button><button onclick="showPage('rankings')">ð Classements</button><button onclick="showPage('games')">ð® Jeux</button></div>
+ <div class="piu-feature-grid">
+  <div class="piu-feature" onclick="showPage('members')">ð<strong>CrÃ©ateurs</strong><small>DÃ©couvrir les profils</small></div>
+  <div class="piu-feature" onclick="showPage('party')">ð<strong>Party LIVE</strong><small>DÃ©couvrir les salles</small></div>
+  <div class="piu-feature" onclick="showPage('games')">ð®<strong>Jeux</strong><small>Jouer avec la communautÃ©</small></div>
+  <div class="piu-feature" onclick="showPage('rankings')">ð<strong>Classements</strong><small>Voir les niveaux</small></div>
+ </div>
+ <div class="card"><h3>Les directs en cours</h3><div id="exploreLives">Connecte-toi pour consulter les directs.</div><button onclick="showPage('lives')">Voir tous les directs</button></div>
+</section>
+
+<section id="auth" class="page hidden">
+ <div class="card center"><h2>Connexion Ã  PIU-PIU</h2>
+  <label>Adresse e-mail</label><input id="authEmail" type="email" autocomplete="email">
+  <label>Mot de passe</label><input id="authPassword" type="password" autocomplete="current-password">
+  <div class="row"><button class="gold" onclick="login()">Se connecter</button><button onclick="register()">CrÃ©er un compte</button></div>
+  <button onclick="resetPassword()">Mot de passe oubliÃ© ?</button><p id="authStatus" class="status"></p>
+ </div>
+</section>
+
+<section id="members" class="page hidden"><div class="card"><h2>Les membres</h2><input id="memberSearch" placeholder="Rechercher un membre..." oninput="renderMembers()"><button class="gold" onclick="loadMembers()">Actualiser</button><div id="membersList"></div></div></section>
+
+<section id="profile" class="page hidden">
+ <div class="card profile-page">
+  <div id="myProfile">Chargement du profil...</div>
+  <div id="ownerBalances"></div><div id="myProgress"></div><div id="myVip"></div>
+ </div>
+</section>
+
+<section id="publicProfile" class="page hidden">
+ <div class="card profile-page">
+  <button onclick="showPage('members')">â Retour</button>
+  <div id="publicProfileContent"></div>
+ </div>
+</section>
+
+<section id="messages" class="page hidden"><div class="card"><h2>Messages privÃ©s</h2><div id="conversationList"></div><hr><div id="chatArea">Choisis un membre pour commencer.</div></div></section>
+
+<section id="gifts" class="page hidden">
+ <div class="card"><h2>Cadeaux PIU-PIU ð</h2><p id="giftRecipient">Choisis d'abord un membre.</p>
+ <h3>Cadeaux classiques</h3><div class="grid" id="classicGifts">
+  <div class="tile" onclick="chooseGift('rose')">ð¹ Rose</div><div class="tile" onclick="chooseGift('coeur')">â¤ï¸ CÅur</div><div class="tile" onclick="chooseGift('diamant')">ð Diamant</div><div class="tile" onclick="chooseGift('ourson')">ð§¸ Ourson</div><div class="tile" onclick="chooseGift('couronne')">ð Couronne</div><div class="tile" onclick="chooseGift('trophee')">ð TrophÃ©e</div>
+ </div>
+ <h3>Boutique premium</h3><div id="giftCatalog" class="grid">Chargement du catalogue...</div>
+ <p class="muted">Les achats sÃ©curisÃ©s ne sont pas encore activÃ©s.</p>
+ <textarea id="giftMessage" placeholder="Ajouter un petit message"></textarea><button class="gold" onclick="sendGift()">Envoyer le cadeau classique sÃ©lectionnÃ©</button><p id="giftStatus" class="status"></p>
+ </div><div class="card"><h3>Historique des cadeaux</h3><div id="giftHistory"></div></div>
+</section>
+
+<section id="vip" class="page hidden"><div class="card"><h2>Club VIP PIU-PIU ð</h2><p>Le statut VIP est indÃ©pendant du niveau de progression.</p><div class="grid"><div class="tile">ð¥<p>Bronze</p></div><div class="tile">ð¥<p>Argent</p></div><div class="tile">ð¥<p>Or</p></div><div class="tile">ð<p>Diamant</p></div><div class="tile">ð<p>Royal</p></div></div><div id="vipStatus" class="notice">Connecte-toi pour consulter ton statut VIP.</div><p class="muted">Aucun achat VIP n'est activÃ© ici.</p></div></section>
+
+<section id="wallet" class="page hidden"><div class="card"><h2>Mon portefeuille</h2><div id="walletInfo">Connecte-toi pour consulter ton portefeuille.</div><div class="notice">Les recharges et transferts rÃ©els ne sont pas activÃ©s.</div><button class="gold" onclick="showPage('recharge')">Voir les options de recharge</button></div><div class="card"><h3>Historique des transactions</h3><div id="transactions">Aucune transaction chargÃ©e.</div></div></section>
+
+<section id="recharge" class="page hidden">
+ <div class="piu-hero"><h2><span class="piu-gold-coin" aria-label="PIU Coin dorÃ©">P</span> Recharge PIU-PIU</h2><p>Ton portefeuille personnel</p></div>
+ <div class="card"><h3>Mon solde</h3><div id="rechargeBalance">Connecte-toi pour voir ton solde.</div>
+ <div class="notice">Tarif : 10 000 PIU Coins = 1,00 â¬. Les piÃ¨ces sont ajoutÃ©es uniquement aprÃ¨s confirmation du paiement par Stripe.</div>
+ <h3>Choisir une recharge</h3>
+ <div class="grid">
+  <button class="tile" onclick="selectRecharge(5000)"><span class="piu-gold-coin" aria-label="PIU Coin dorÃ©">P</span><b>5 000</b><p>0,50 â¬</p></button>
+  <button class="tile" onclick="selectRecharge(10000)"><span class="piu-gold-coin" aria-label="PIU Coin dorÃ©">P</span><b>10 000</b><p>1,00 â¬</p></button>
+  <button class="tile" onclick="selectRecharge(50000)"><span class="piu-gold-coin" aria-label="PIU Coin dorÃ©">P</span><b>50 000</b><p>5,00 â¬</p></button>
+  <button class="tile" onclick="selectRecharge(100000)"><span class="piu-gold-coin" aria-label="PIU Coin dorÃ©">P</span><b>100 000</b><p>10,00 â¬</p></button>
+  <button class="tile" onclick="selectRecharge(500000)"><span class="piu-gold-coin" aria-label="PIU Coin dorÃ©">P</span><b>500 000</b><p>50,00 â¬</p></button>
+  <button class="tile" onclick="selectRecharge(1000000)"><span class="piu-gold-coin" aria-label="PIU Coin dorÃ©">P</span><b>1 000 000</b><p>100,00 â¬</p></button>
+ </div>
+ <label for="customRechargeCoins">Autre montant (de 5 000 Ã  5 000 000, par pas de 1 000)</label>
+ <input id="customRechargeCoins" type="number" min="5000" max="5000000" step="1000" inputmode="numeric" placeholder="Ex. 25000" oninput="updateRechargePrice()">
+ <p id="rechargePrice" class="status">SÃ©lectionne un montant.</p>
+ <button id="rechargePayButton" class="gold" onclick="startStripeCheckout()" disabled>Continuer vers Stripe</button>
+ <p id="rechargeStatus" class="status">Paiements en cours de configuration. Aucun dÃ©bit ne sera lancÃ© tant que la confirmation automatique Stripe n'aura pas Ã©tÃ© vÃ©rifiÃ©e.</p>
+ <button onclick="showPage('wallet')">Consulter mon portefeuille</button></div>
+</section>
+
+<section id="clubs" class="page hidden"><div class="card"><h2>Fan Clubs â­</h2><p>DÃ©couvre les clubs des crÃ©ateurs PIU-PIU.</p><div id="clubList">Chargement...</div><p class="muted">La crÃ©ation de clubs et les adhÃ©sions payantes nÃ©cessitent des rÃ¨gles serveur supplÃ©mentaires.</p></div></section>
+
+<section id="games" class="page hidden"><div class="card"><h2>Jeux PIU-PIU ð®</h2><div id="gameList">Chargement des jeux...</div><hr><h3>Mini quiz</h3><p>Quelle est la couleur principale de PIU-PIU ?</p><button onclick="answerQuiz('bleu')">Bleu nuit</button><button onclick="answerQuiz('rose')">Rose</button><button onclick="answerQuiz('vert')">Vert</button><p id="quizResult" class="status"></p><p class="muted">Ce quiz ne crÃ©dite pas de piÃ¨ces ni de points.</p></div><div class="card"><h3>Classement des jeux</h3><div id="gameScores">Chargement...</div></div></section>
+
+<section id="lives" class="page hidden">
+ <div class="card">
+  <h2>Lives audio et vidÃ©o ð´</h2><p>DÃ©couvre les directs PIU-PIU et rejoins une salle.</p>
+  <div id="liveList">Chargement des directs...</div>
+  <button class="pink" onclick="showPage('streamer')">ï¼ CrÃ©er mon direct</button>
+ </div>
+ <div class="card">
+  <h3>Lecteur du direct</h3>
+  <div id="liveRoomStatus" class="live-status">Aucun direct rejoint.</div>
+  <div id="liveStage" class="live-stage"><p class="muted">Les vidÃ©os et les sons des participants apparaÃ®tront ici.</p></div>
+  <div class="live-controls">
+   <button id="liveAudioToggle" onclick="toggleLiveAudio()" disabled>ðï¸ Couper micro</button>
+   <button id="liveVideoToggle" onclick="toggleLiveVideo()" disabled>ð· Couper camÃ©ra</button>
+   <button onclick="leaveLiveRoom()">Quitter le direct</button>
+  </div>
+ </div>
+</section>
+
+<section id="party" class="page hidden">
+ <div class="piu-hero"><h2>ð PIU-PIU PARTY LIVE</h2><p>Des salles communautaires jusqu'Ã  8 places.</p><button class="pink" onclick="createPartyPreview()">ï¼ CrÃ©er une salle</button></div>
+ <div class="notice">Les directs audio et vidÃ©o utilisent maintenant LiveKit. Pour crÃ©er une salle, ouvre le centre streamer ; pour rejoindre un direct, utilise la page Lives.</div>
+ <div id="partyPreview"></div>
+ <div id="partyRooms"><div class="room-card"><h3>ð Salle de dÃ©monstration</h3><span class="badge">ðï¸ Audio / vidÃ©o</span>
+  <div class="room-seats">
+   <div class="room-seat occupied"><span class="seat-icon">ð</span>HÃ´te</div>
+   <div class="room-seat"><span class="seat-icon">ï¼</span>Place 2</div><div class="room-seat"><span class="seat-icon">ï¼</span>Place 3</div><div class="room-seat"><span class="seat-icon">ï¼</span>Place 4</div><div class="room-seat"><span class="seat-icon">ï¼</span>Place 5</div><div class="room-seat"><span class="seat-icon">ï¼</span>Place 6</div><div class="room-seat"><span class="seat-icon">ï¼</span>Place 7</div><div class="room-seat"><span class="seat-icon">ï¼</span>Place 8</div>
+  </div>
+  <button onclick="partyDemoGift('ð¹')">ð¹ Rose</button><button onclick="partyDemoGift('ð')">ð Diamant</button><button onclick="partyDemoGift('ð¦')">ð¦ Lion</button>
+  <p class="muted">Salle de dÃ©monstration â pas de direct rÃ©el.</p>
+ </div></div>
+ <div class="card"><h3>EntrÃ©es spectaculaires</h3><p>Choisis un effet pour voir son animation de dÃ©monstration.</p><div class="entry-grid">
+  <div class="entry-choice" onclick="partyDemoGift('ð')"><b>ð</b>Dragon</div><div class="entry-choice" onclick="partyDemoGift('ðï¸')"><b>ðï¸</b>Voiture</div><div class="entry-choice" onclick="partyDemoGift('ð§')"><b>ð§</b>Vampire</div><div class="entry-choice" onclick="partyDemoGift('ð¥')"><b>ð¥</b>Phoenix</div><div class="entry-choice" onclick="partyDemoGift('ð¦')"><b>ð¦</b>Lion</div><div class="entry-choice" onclick="partyDemoGift('ð¸')"><b>ð¸</b>OVNI</div>
+ </div></div>
+</section>
+
+<section id="streamer" class="page hidden">
+ <div class="piu-hero"><h2>ð¡ Centre streamer</h2><p>CrÃ©e ton propre direct audio ou vidÃ©o.</p></div>
+ <div class="card">
+  <label>Titre du direct</label><input id="partyTitle" maxlength="80" placeholder="Bienvenue dans mon LIVE !">
+  <label>Type de direct</label><select id="partyType"><option value="audio">ðï¸ Audio</option><option value="video">ð¹ VidÃ©o</option></select>
+  <button class="pink" id="startLiveButton" onclick="startLive()">ð´ DÃ©marrer mon direct</button>
+  <p id="streamerStatus" class="status">Ton navigateur demandera l'autorisation du micro ou de la camÃ©ra.</p>
+  <div class="live-stage"><div id="myLivePreview" class="live-stage-grid"></div></div>
+  <button onclick="showPage('lives')">Voir les directs</button>
+ </div>
+</section>
+
+<section id="creator" class="page hidden">
+ <div class="piu-hero"><h2>ð¬ Centre crÃ©ateur</h2><p>DÃ©veloppe ton univers PIU-PIU.</p></div>
+ <div class="piu-feature-grid">
+  <div class="piu-feature" onclick="showPage('lives')">ð¹<strong>Mes directs</strong><small>Consulter les lives</small></div>
+  <div class="piu-feature" onclick="showPage('clubs')">ð<strong>Mon Fan Club</strong><small>CommunautÃ©</small></div>
+  <div class="piu-feature" onclick="showPage('rankings')">ð<strong>Progression</strong><small>Classements</small></div>
+  <div class="piu-feature" onclick="showPage('gifts')">ð<strong>Cadeaux</strong><small>Catalogue</small></div>
+ </div>
+ <div class="notice">Les statistiques de revenus et les retraits crÃ©ateur seront disponibles aprÃ¨s la mise en place du systÃ¨me de paiement sÃ©curisÃ©.</div>
+</section>
+
+<section id="levels" class="page hidden"><div class="piu-hero"><h2>ð£ Niveaux et rÃ©compenses</h2><p>Progresse dans PIU-PIU.</p></div><div class="card"><h3>Ma progression</h3><p>Les points et niveaux de ton compte restent privÃ©s.</p><button class="gold" onclick="showPage('profile')">Voir ma progression</button></div><div class="grid"><div class="tile">🥉<b>Bronze</b><p>Premiers pas</p></div><div class="tile">🥈<b>Argent</b><p>Communauté</p></div><div class="tile">🥇<b>Or</b><p>Créateur actif</p></div><div class="tile">💎<b>Diamant</b><p>Expert</p></div></div></section>
+
+<section id="rankings" class="page hidden"><div class="card"><h2>Classements PIU-PIU 🌍</h2><p>Classements des membres par progression.</p><div id="rankingList">Chargement...</div></div></section>
+<section id="notifications" class="page hidden"><div class="card"><h2>Notifications 🔔</h2><button onclick="loadNotifications()">Actualiser</button><div id="notificationList"></div></div></section>
+</main>
+
+<footer>PIU-PIU © 2026 — Le réseau qui nous rapproche</footer>
+
+<div class="bottom-nav">
+ <button onclick="showPage('explore')" id="navExplore"><span>🌍</span>Explorer</button>
+ <button onclick="showPage('party')" id="navParty"><span>🎉</span>Party</button>
+ <button onclick="showPage('messages')" id="navMessages"><span>💬</span>Messages</button>
+ <button onclick="showPage('recharge')" id="navRecharge"><span><span class="piu-gold-coin" aria-label="PIU Coin doré">P</span></span>Recharge</button>
+ <button onclick="showPage('profile')" id="navProfile"><span>👤</span>Profil</button>
+</div>
+
+<script>
+const SUPABASE_URL="https://edwqvlibagfllfobazmd.supabase.co";
+const SUPABASE_KEY="sb_publishable_8Kf69i7SKAlU0j3QW4ndHA_-micATkn";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+
+let currentUser=null,myProfileData=null,members=[],selectedMember=null,selectedGift=null,activeConversation=null;
+const $=id=>document.getElementById(id);
+const emojis={rose:"🌹",coeur:"❤️",diamant:"💎",ourson:"🧸",couronne:"👑",trophee:"🏆"};
+
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+
+/* MENU */
+function togglePiuMenu(force){
+ const menu=$("piuSideMenu"),overlay=$("piuMenuOverlay");
+ if(!menu||!overlay)return;
+ const open=typeof force==="boolean"?force:!menu.classList.contains("open");
+ menu.classList.toggle("open",open);overlay.classList.toggle("open",open);
+}
+function piuMenuGo(page){togglePiuMenu(false);showPage(page);}
+
+function showPage(name){
+ document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
+ $(name)?.classList.remove("hidden");
+ document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));
+ const map={explore:"navExplore",home:"navExplore",party:"navParty",lives:"navParty",messages:"navMessages",recharge:"navRecharge",wallet:"navRecharge",profile:"navProfile"};
+ if(map[name])$(map[name])?.classList.add("active");
+ if(name==="members")loadMembers();
+ if(name==="profile")loadMyProfile();
+ if(name==="messages")loadConversations();
+ if(name==="notifications")loadNotifications();
+ if(name==="gifts"){loadGiftHistory();loadGiftCatalog();}
+ if(name==="wallet")loadWallet();
+ if(name==="recharge")loadRechargePreview();
+ if(name==="clubs")loadClubs();
+ if(name==="games"){loadGames();loadScores();}
+ if(name==="lives"){loadLives();loadExploreLives();}
+ if(name==="home")loadExploreLives();
+ if(name==="rankings")loadRankings();
+ if(name==="vip")loadVip();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function updateAuthButton(){if($("authButton"))$("authButton").textContent="👤";}
+function requireLogin(){if(!currentUser){alert("Connecte-toi pour utiliser cette fonction.");showPage("auth");return false;}return true;}
+function authAction(){if(currentUser)logout();else showPage("auth");}
+
+/* AUTHENTIFICATION */
+async function login(){
+ const email=$("authEmail").value.trim().toLowerCase(),password=$("authPassword").value,status=$("authStatus");
+ if(!email||!$("authEmail").checkValidity()){status.textContent="Entre une adresse e-mail valide.";return;}
+ if(!password){status.textContent="Entre ton mot de passe.";return;}
+ status.textContent="Connexion en cours...";
+ const {data,error}=await db.auth.signInWithPassword({email,password});
+ if(error){status.textContent="Connexion impossible : "+error.message;return;}
+ currentUser=data.user;updateAuthButton();await refreshSession();showPage("home");
+}
+async function register(){
+ const email=$("authEmail").value.trim().toLowerCase(),password=$("authPassword").value,status=$("authStatus");
+ if(!email||!$("authEmail").checkValidity()){status.textContent="Entre une adresse e-mail valide.";return;}
+ if(password.length<6){status.textContent="Le mot de passe doit contenir au moins 6 caractères.";return;}
+ status.textContent="Création du compte...";
+ const {data,error}=await db.auth.signUp({email,password,options:{emailRedirectTo:"https://resonant-bonbon-0c54f3.netlify.app/"}});
+ if(error){status.textContent="Erreur : "+error.message;return;}
+ if(!data.session)status.textContent="Compte créé. Consulte tes e-mails pour confirmer ton adresse.";
+ else{currentUser=data.user;updateAuthButton();await refreshSession();showPage("home");}
+}
+async function resetPassword(){
+ const email=$("authEmail").value.trim().toLowerCase(),status=$("authStatus");
+ if(!email||!$("authEmail").checkValidity()){status.textContent="Entre d'abord ton adresse e-mail.";return;}
+ const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:"https://resonant-bonbon-0c54f3.netlify.app/"});
+ status.textContent=error?"Erreur : "+error.message:"Si cette adresse correspond à un compte, un e-mail de réinitialisation va être envoyé.";
+}
+async function logout(){
+ const {error}=await db.auth.signOut();if(error){alert(error.message);return;}
+ currentUser=null;myProfileData=null;updateAuthButton();$("homeStatus").textContent="Tu es déconnecté.";showPage("home");
+}
+async function refreshSession(){
+ const {data,error}=await db.auth.getSession();
+ if(error){$("homeStatus").textContent="Erreur : "+error.message;return;}
+ currentUser=data.session?.user||null;updateAuthButton();
+ $("homeStatus").textContent=currentUser?"Bienvenue sur PIU-PIU ! Tu es connecté.":"Connecte-toi pour découvrir PIU-PIU.";
+ if(currentUser)await loadMyProfile();
+}
+
+/* PROFILS */
+function avatar(url){return url?`<img class="avatar" src="${esc(url)}" alt="Photo de profil">`:`<div class="avatar"></div>`;}
+function countryFlag(country){
+ const c=(country||"").toLowerCase();
+ if(c.includes("suisse")||c.includes("switzerland"))return "🇨🇭";
+ if(c.includes("france"))return "🇫🇷";
+ if(c.includes("belgique")||c.includes("belgium"))return "🇧🇪";
+ if(c.includes("canada"))return "🇨🇦";
+ if(c.includes("maroc")||c.includes("morocco"))return "🇲🇦";
+ if(c.includes("algérie")||c.includes("algeria"))return "🇩🇿";
+ if(c.includes("tunisie")||c.includes("tunisia"))return "🇹🇳";
+ return "🌍";
+}
+function profileStats(followers,following){
+ return `<div class="profile-stats">
+ <div class="profile-stat"><div class="symbol">👥</div><strong>—</strong><span>Amis</span></div>
+ <div class="profile-stat"><div class="symbol">💙</div><strong>${following||0}</strong><span>Suivis</span></div>
+ <div class="profile-stat"><div class="symbol">💗</div><strong>${followers||0}</strong><span>Abonnés</span></div>
+ <div class="profile-stat"><div class="symbol">👁️</div><strong>—</strong><span>Visiteurs</span></div>
+ </div>`;
+}
+function profileShortcuts(){
+ return `<div class="profile-shortcuts">
+ <div class="profile-shortcut" onclick="showPage('gifts')"><span class="symbol">🎁</span>Cadeaux</div>
+ <div class="profile-shortcut" onclick="showPage('rankings')"><span class="symbol">🏆</span>Rang</div>
+ <div class="profile-shortcut" onclick="showPage('games')"><span class="symbol">🏝️</span>Jeux</div>
+ <div class="profile-shortcut" onclick="showPage('recharge')"><span class="symbol">🛍️</span>Recharge</div>
+ <div class="profile-shortcut" onclick="showPage('members')"><span class="symbol">💌</span>Membres</div>
+ <div class="profile-shortcut" onclick="showPage('levels')"><span class="symbol">🌟</span>Niveau</div>
+ <div class="profile-shortcut" onclick="showPage('clubs')"><span class="symbol">💗</span>Fan Club</div>
+ <div class="profile-shortcut" onclick="showPage('notifications')"><span class="symbol">🔔</span>Notifications</div>
+ </div>`;
+}
+function profileLowerSection(){
+ return `<div class="profile-banner"><strong>🐣 PIU-PIU</strong><p>Crée · Streame · Rencontre</p></div>
+ <div class="profile-center-links">
+ <button onclick="showPage('streamer')">📹 Centre du streamer　›</button>
+ <button onclick="showPage('creator')">🎬 Centre de création　›</button>
+ <button onclick="showPage('levels')">🏆 Niveaux et récompenses　›</button>
+ <button onclick="showPage('vip')">👑 Mon espace VIP　›</button>
+ </div>`;
+}
+
+/* ONGLETS PROFIL */
+function profileTabs(isOwner,data){
+ return `<div class="profile-tabs">
+  <button class="active" onclick="showProfileTab('photos',this)">▦</button>
+  <button onclick="showProfileTab('contributions',this)">♡</button>
+  <button onclick="showProfileTab('infos',this)">♙</button>
+  <button onclick="showProfileTab('interets',this)">☆</button>
+ </div>
+ <div id="profileTabContent" class="profile-tab-panel">
+  ${profileTabContent("photos",isOwner,data)}
+ </div>`;
+}
+function profileTabContent(tab,isOwner,data){
+ if(tab==="photos"){
+  return `<h3>📷 Galerie photos</h3>
+   <div class="profile-gallery">
+    <div class="profile-gallery-item">📷</div>
+    <div class="profile-gallery-item">🐣</div>
+    <div class="profile-gallery-item">💎</div>
+   </div>
+   <p class="muted center">La galerie photo sera disponible prochainement.</p>`;
+ }
+ if(tab==="contributions"){
+  return `<h3>🏆 Liste des contributions</h3>
+   <div class="profile-contribution">
+    <b>🌟 Contributions PIU-PIU</b>
+    <p>Les contributions et médailles apparaîtront ici lorsqu'elles seront disponibles.</p>
+   </div>`;
+ }
+ if(tab==="infos"){
+  return `<h3>♙ Informations personnelles</h3>
+   <p>${countryFlag(data.country)} ${esc(data.country||"Pays non renseigné")}</p>
+   <p>${esc(data.bio||"Bienvenue sur PIU-PIU !")}</p>
+   ${isOwner?`<p>📧 Adresse e-mail : privée</p><p>🎂 Date de naissance : privée</p>`:""}`;
+ }
+ return `<h3>☆ Centres d'intérêt</h3>
+  <span class="profile-interest">🐣 PIU-PIU</span>
+  <span class="profile-interest">💙 Communauté</span>
+  <span class="profile-interest">🎉 Party</span>
+  <span class="profile-interest">🎮 Jeux</span>`;
+}
+function showProfileTab(tab,button){
+ document.querySelectorAll(".profile-tabs button").forEach(b=>b.classList.remove("active"));
+ button.classList.add("active");
+ const owner=$("profile").classList.contains("hidden")===false;
+ const data=owner?myProfileData:selectedMember;
+ if(data)$("profileTabContent").innerHTML=profileTabContent(tab,owner,data);
+}
+
+/* PROFIL PERSONNEL */
+async function loadMyProfile(){
+ if(!requireLogin())return;
+ const {data,error}=await db.from("profiles")
+ .select("id,username,display_name,bio,avatar_url,profile_number,country,birth_date")
+ .eq("id",currentUser.id).maybeSingle();
+ if(error){$("myProfile").textContent=error.message;return;}
+ myProfileData=data;
+ if(!data){$("myProfile").textContent="Profil en cours de création. Actualise la page.";return;}
+
+ const number=data.profile_number?String(data.profile_number).padStart(6,"0"):"En attente";
+ const [followers,following]=await Promise.all([
+  db.from("follows").select("id",{count:"exact",head:true}).eq("following_id",currentUser.id),
+  db.from("follows").select("id",{count:"exact",head:true}).eq("follower_id",currentUser.id)
+ ]);
+
+ $("myProfile").innerHTML=`
+ <div class="profile-showcase">
+  <div class="profile-cover"></div>
+  <div class="profile-top">
+   ${avatar(data.avatar_url)}
+   <div class="profile-identity">
+    <h2 class="profile-name">${esc(data.display_name||"Mon profil")} ✨</h2>
+    <div>@${esc(data.username||"sans_pseudo")}</div>
+    <p class="profile-id">ID : PIU-${number}</p>
+    <span class="badge">👑 Créateur</span>
+    <span class="badge">💎 PIU-PIU</span>
+    <p>${countryFlag(data.country)} ${esc(data.country||"Pays non renseigné")}</p>
+   </div>
+  </div>
+  ${profileStats(followers.count,following.count)}
+  <div class="profile-info-cards">
+   <div class="profile-info-card"><span style="font-size:27px">💗</span><b>Mon Fan Club</b><small>Ma communauté</small></div>
+   <div class="profile-info-card"><span style="font-size:27px">🎁</span><b>Galerie de cadeaux</b><small>Mes cadeaux reçus</small></div>
+  </div>
+ </div>
+ ${profileTabs(true,data)}
+ <div class="profile-bottom-actions">
+  <button onclick="showPage('messages')">💬 Messages</button>
+  <button onclick="document.getElementById('profileEditArea').scrollIntoView({behavior:'smooth'})">✏️ Modifier le profil</button>
+ </div>
+ <div id="profileEditArea" class="profile-edit">
+  <h3>✏️ Modifier mon profil</h3>
+  <label>Photo de profil</label><input type="file" id="avatarFile" accept="image/*">
+  <label>Nom affiché</label><input id="displayName" maxlength="50" value="${esc(data.display_name)}">
+  <label>Pseudo</label><input id="username" maxlength="30" value="${esc(data.username)}">
+  <label>Présentation</label><textarea id="bio">${esc(data.bio)}</textarea>
+  <label>Pays</label><input id="country" maxlength="60" value="${esc(data.country)}">
+  <label>Date de naissance (privée)</label><input id="birthDate" type="date" value="${esc(data.birth_date)}">
+  <button class="gold" onclick="saveProfile()">Enregistrer mon profil</button>
+  <p id="profileStatus" class="status"></p>
+ </div>`;
+
+ await loadOwnerBalances();
+ await loadProgress();
+ await loadVip();
+}
+
+/* SAUVEGARDE PROFIL */
+async function saveProfile(){
+ if(!requireLogin())return;
+ const status=$("profileStatus");status.textContent="Enregistrement...";
+ let avatarUrl=myProfileData?.avatar_url||null;
+ const file=$("avatarFile").files[0];
+
+ if(file){
+  if(file.size>5*1024*1024){status.textContent="La photo doit faire moins de 5 Mo.";return;}
+  const ext=(file.name.split(".").pop()||"jpg").replace(/[^a-z0-9]/gi,"");
+  const path=currentUser.id+"/"+Date.now()+"."+ext;
+  const {error}=await db.storage.from("avatars").upload(path,file,{upsert:true,contentType:file.type});
+  if(error){status.textContent="Erreur photo : "+error.message;return;}
+  avatarUrl=db.storage.from("avatars").getPublicUrl(path).data.publicUrl;
+ }
+
+ const payload={
+  id:currentUser.id,
+  username:$("username").value.trim().replace(/^@/,"")||null,
+  display_name:$("displayName").value.trim(),
+  bio:$("bio").value.trim(),
+  country:$("country").value.trim(),
+  birth_date:$("birthDate").value||null,
+  avatar_url:avatarUrl,
+  updated_at:new Date().toISOString()
+ };
+ const {error}=await db.from("profiles").upsert(payload,{onConflict:"id"});
+ if(error){status.textContent="Erreur : "+error.message;return;}
+ status.textContent="Profil enregistré !";
+ await loadMyProfile();
+}
+
+/* SOLDES PRIVÉS */
+async function loadOwnerBalances(){
+ if(!currentUser){$("ownerBalances").innerHTML="";return;}
+ $("ownerBalances").innerHTML="<h3 class='profile-section-title'>Mon espace privé</h3>Chargement...";
+ const [w,p]=await Promise.all([
+  db.from("piu_wallets").select("coin_balance").eq("user_id",currentUser.id).maybeSingle(),
+  db.from("piu_member_progress").select("level_points,level_number").eq("user_id",currentUser.id).maybeSingle()
+ ]);
+ const coins=w.error?"Indisponible":w.data?Number(w.data.coin_balance||0).toLocaleString("fr-FR"):"Non initialisé";
+ const points=p.error?"Indisponibles":p.data?Number(p.data.level_points||0).toLocaleString("fr-FR"):"Non initialisés";
+ $("ownerBalances").innerHTML=`
+ <h3 class="profile-section-title">Mon espace privé</h3>
+ <div class="profile-private-grid">
+  <div class="profile-private-card"><div class="symbol"><span class="piu-gold-coin" aria-label="PIU Coin doré">P</span></div><b>${coins}</b><p>Mes PIU Coins</p></div>
+  <div class="profile-private-card pink"><div class="symbol">🐣</div><b>${points}</b><p>Mes Poussins</p></div>
+ </div>`;
+}
+async function loadProgress(){
+ if(!currentUser)return;
+ const {data,error}=await db.from("piu_member_progress").select("level_number,level_points").eq("user_id",currentUser.id).maybeSingle();
+ if(error){$("myProgress").textContent="Progression indisponible : "+error.message;return;}
+ if(!data){$("myProgress").textContent="Progression non initialisée.";return;}
+ const level=Math.max(1,Math.min(200,Number(data.level_number)||1));
+ $("myProgress").innerHTML=`<h3 class="profile-section-title">🐣 Ma progression</h3><h3>Niveau ${level} / 200</h3><div class="progress"><span style="width:${level/2}%"></span></div><p>${Number(data.level_points||0).toLocaleString("fr-FR")} points</p>`;
+}
+async function loadVip(){
+ const box=$("myVip");if(!box)return;
+ if(!currentUser){box.textContent="Connecte-toi pour consulter ton statut VIP.";return;}
+ const {data,error}=await db.from("piu_vip_memberships").select("vip_tier").eq("user_id",currentUser.id).maybeSingle();
+ if(error){box.textContent="Statut VIP indisponible : "+error.message;return;}
+ const tier=data?.vip_tier||"none";
+ box.innerHTML=tier==="none"?"<div class='profile-vip-bar'>👑 Tu n'as pas encore de statut VIP.</div>":`<div class="profile-vip-bar">👑 Membre VIP ${esc(tier.toUpperCase())}</div>`;
+ if($("vipStatus"))$("vipStatus").textContent=tier==="none"?"Tu n'as pas encore de statut VIP.":"Ton statut VIP : "+tier.toUpperCase();
+}
+
+/* MEMBRES */
+async function loadMembers(){
+ if(!requireLogin())return;
+ $("membersList").textContent="Chargement...";
+ const {data,error}=await db.from("profiles").select("id,username,display_name,bio,avatar_url,profile_number,country,created_at").order("created_at",{ascending:false}).limit(100);
+ if(error){$("membersList").textContent=error.message;return;}
+ members=data||[];renderMembers();
+}
+function renderMembers(){
+ const q=($("memberSearch")?.value||"").toLowerCase();
+ const list=members.filter(m=>(m.username||"").toLowerCase().includes(q)||(m.display_name||"").toLowerCase().includes(q));
+ $("membersList").innerHTML=list.map(m=>`
+ <div class="card member">
+  ${avatar(m.avatar_url)}
+  <div class="member-info"><strong>${esc(m.display_name||"Membre PIU-PIU")}</strong><p>@${esc(m.username||"sans_pseudo")}</p><small>${esc(m.bio||"")}</small></div>
+  <button onclick="openPublicProfile('${m.id}')">Voir</button>
+ </div>`).join("")||"<p>Aucun membre trouvé.</p>";
+}
+
+/* PROFIL PUBLIC : SANS SOLDES NI DONNÉES PRIVÉES */
+async function openPublicProfile(id){
+ if(!requireLogin())return;
+ if(id===currentUser.id){showPage("profile");return;}
+ const {data,error}=await db.from("profiles")
+ .select("id,username,display_name,bio,avatar_url,profile_number,country,created_at")
+ .eq("id",id).single();
+ if(error){alert(error.message);return;}
+ selectedMember=data;
+
+ const [followers,following,follow]=await Promise.all([
+  db.from("follows").select("id",{count:"exact",head:true}).eq("following_id",id),
+  db.from("follows").select("id",{count:"exact",head:true}).eq("follower_id",id),
+  db.from("follows").select("id").eq("follower_id",currentUser.id).eq("following_id",id).maybeSingle()
+ ]);
+ const number=data.profile_number?String(data.profile_number).padStart(6,"0"):"En attente";
+ const isFollowing=!!follow.data;
+
+ $("publicProfileContent").innerHTML=`
+ <div class="profile-showcase">
+  <div class="profile-cover"></div>
+  <div class="profile-top">
+   ${avatar(data.avatar_url)}
+   <div class="profile-identity">
+    <h2 class="profile-name">${esc(data.display_name||"Membre PIU-PIU")} ✨</h2>
+    <div>@${esc(data.username||"sans_pseudo")}</div>
+    <p class="profile-id">ID : PIU-${number}</p>
+    <span class="badge">💎 Membre PIU-PIU</span>
+    <p>${countryFlag(data.country)} ${esc(data.country||"Pays non renseigné")}</p>
+   </div>
+   <button id="publicFollowButton" class="profile-follow-plus ${isFollowing?"following":""}" aria-label="${isFollowing?"Ne plus suivre":"Suivre"}" onclick="toggleFollow('${id}')">${isFollowing?"✓":"+"}</button>
+  </div>
+  ${profileStats(followers.count,following.count)}
+  <div class="profile-info-cards">
+   <div class="profile-info-card"><span style="font-size:27px">💗</span><b>Fan Club</b><small>Communauté</small></div>
+   <div class="profile-info-card"><span style="font-size:27px">🎁</span><b>Galerie de cadeaux</b><small>Cadeaux reçus</small></div>
+  </div>
+ </div>
+ ${profileTabs(false,data)}
+ <div class="profile-bottom-actions">
+  <button onclick="startMessage('${id}')">💬 Message</button>
+ </div>`;
+ showPage("publicProfile");
+}
+
+/* SUIVRE / NE PLUS SUIVRE */
+async function toggleFollow(id){
+ if(!requireLogin())return;
+ if(id===currentUser.id)return;
+ const {data,error}=await db.from("follows").select("id").eq("follower_id",currentUser.id).eq("following_id",id).maybeSingle();
+ if(error){alert(error.message);return;}
+ const result=data
+  ?await db.from("follows").delete().eq("id",data.id)
+  :await db.from("follows").insert({follower_id:currentUser.id,following_id:id});
+ if(result.error){alert(result.error.message);return;}
+ await openPublicProfile(id);
+}
+
+/* MESSAGES */
+async function loadConversations(){
+ if(!requireLogin())return;
+ const {data,error}=await db.from("messages").select("sender_id,receiver_id,content,created_at").or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`).order("created_at",{ascending:false}).limit(100);
+ if(error){$("conversationList").textContent=error.message;return;}
+ const ids=[...new Set((data||[]).map(m=>m.sender_id===currentUser.id?m.receiver_id:m.sender_id))];
+ if(!ids.length){$("conversationList").textContent="Pas encore de conversation.";return;}
+ const {data:people,error:peopleError}=await db.from("profiles").select("id,username,display_name").in("id",ids);
+ if(peopleError){$("conversationList").textContent=peopleError.message;return;}
+ $("conversationList").innerHTML=(people||[]).map(p=>`<button onclick="startMessage('${p.id}')">@${esc(p.username||p.display_name||"membre")}</button>`).join(" ");
+}
+async function startMessage(id){
+ if(!requireLogin())return;
+ const {data,error}=await db.from("profiles").select("id,username,display_name").eq("id",id).single();
+ if(error){alert(error.message);return;}
+ selectedMember=data;activeConversation=id;showPage("messages");await loadChat();
+}
+async function loadChat(){
+ if(!activeConversation)return;
+ const other=activeConversation;
+ const filter=`and(sender_id.eq.${currentUser.id},receiver_id.eq.${other}),and(sender_id.eq.${other},receiver_id.eq.${currentUser.id})`;
+ const {data,error}=await db.from("messages").select("*").or(filter).order("created_at",{ascending:true}).limit(200);
+ if(error){$("chatArea").textContent=error.message;return;}
+ $("chatArea").innerHTML=`<h3>Conversation avec @${esc(selectedMember?.username||"membre")}</h3>
+ ${(data||[]).map(m=>`<div class="message ${m.sender_id===currentUser.id?"mine":"theirs"}">${esc(m.content||"")}<br><small>${new Date(m.created_at).toLocaleString("fr-FR")}</small></div>`).join("")}
+ <textarea id="messageText" placeholder="Écris ton message..."></textarea>
+ <button class="gold" onclick="sendMessage()">Envoyer</button>
+ <button onclick="selectGiftRecipient('${other}')">Offrir un cadeau 🎁</button>`;
+}
+async function sendMessage(){
+ if(!requireLogin()||!activeConversation)return;
+ const content=$("messageText").value.trim();if(!content)return;
+ const {error}=await db.from("messages").insert({sender_id:currentUser.id,receiver_id:activeConversation,content});
+ if(error){alert(error.message);return;}await loadChat();
+}
+
+/* CADEAUX */
+async function selectGiftRecipient(id){
+ const {data,error}=await db.from("profiles").select("id,username,display_name").eq("id",id).single();
+ if(error){alert(error.message);return;}
+ selectedMember=data;selectedGift=null;
+ $("giftRecipient").textContent="Destinataire : "+(data.display_name||data.username);
+ $("giftStatus").textContent="Choisis ton cadeau.";
+ showPage("gifts");
+}
+function chooseGift(type){
+ if(!requireLogin())return;
+ if(!selectedMember){alert("Choisis d'abord un membre.");return;}
+ selectedGift=type;$("giftStatus").textContent="Cadeau sélectionné : "+emojis[type];
+}
+async function sendGift(){
+ if(!requireLogin()||!selectedMember||!selectedGift){alert("Choisis un destinataire et un cadeau.");return;}
+ const {error}=await db.from("gifts").insert({sender_id:currentUser.id,receiver_id:selectedMember.id,gift_type:selectedGift,message:$("giftMessage").value.trim()});
+ if(error){$("giftStatus").textContent="Erreur : "+error.message;return;}
+ $("giftStatus").textContent="Cadeau envoyé ! 🎁";
+ partyDemoGift(emojis[selectedGift]);selectedGift=null;await loadGiftHistory();
+}
+async function loadGiftHistory(){
+ if(!requireLogin())return;
+ const {data,error}=await db.from("gifts").select("*").or(`sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`).order("created_at",{ascending:false}).limit(100);
+ if(error){$("giftHistory").textContent=error.message;return;}
+ if(!data?.length){$("giftHistory").textContent="Aucun cadeau pour le moment.";return;}
+ const ids=[...new Set(data.flatMap(g=>[g.sender_id,g.receiver_id]))];
+ const {data:people}=await db.from("profiles").select("id,username,display_name").in("id",ids);
+ const names=Object.fromEntries((people||[]).map(p=>[p.id,p.username||p.display_name||"membre"]));
+ $("giftHistory").innerHTML=data.map(g=>`<div class="notice">${emojis[g.gift_type]||"🎁"} <b>${esc(g.gift_type)}</b><p>${g.sender_id===currentUser.id?"Envoyé à":"Reçu de"} @${esc(names[g.sender_id===currentUser.id?g.receiver_id:g.sender_id]||"membre")}</p><small>${esc(g.message||"")} · ${new Date(g.created_at).toLocaleString("fr-FR")}</small></div>`).join("");
+}
+async function loadGiftCatalog(){
+ const box=$("giftCatalog");
+ const {data,error}=await db.from("piu_gift_catalog").select("*").eq("is_active",true).order("price_coins");
+ if(error){box.textContent="Catalogue indisponible : "+error.message;return;}
+ if(!data?.length){box.textContent="Le catalogue premium sera bientôt disponible.";return;}
+ box.innerHTML=data.map(g=>`<div class="tile"><div class="symbol">🎁</div><b>${esc(g.gift_name)}</b><p>${esc(g.collection)}</p><div class="price">${Number(g.price_coins).toLocaleString("fr-FR")} pièces</div></div>`).join("");
+}
+
+/* PORTEFEUILLE ET RECHARGE */
+async function loadWallet(){
+ if(!requireLogin())return;
+ $("walletInfo").textContent="Chargement...";
+ const {data,error}=await db.from("piu_wallets").select("coin_balance,usd_balance").eq("user_id",currentUser.id).maybeSingle();
+ if(error){$("walletInfo").textContent="Portefeuille indisponible : "+error.message;return;}
+ if(!data){$("walletInfo").textContent="Ton portefeuille sera initialisé par le système sécurisé.";return;}
+ $("walletInfo").innerHTML=`<div class="grid"><div class="tile"><div class="symbol"><span class="piu-gold-coin" aria-label="PIU Coin doré">P</span></div><b>${Number(data.coin_balance||0).toLocaleString("fr-FR")}</b><p>Pièces PIU-PIU</p></div><div class="tile"><div class="symbol">💵</div><b>${Number(data.usd_balance||0).toFixed(2)} $</b><p>Solde USD</p></div></div>`;
+ const {data:tx,error:txError}=await db.from("piu_coin_transactions").select("amount,transaction_type,description,created_at").eq("user_id",currentUser.id).order("created_at",{ascending:false}).limit(30);
+ if(txError){$("transactions").textContent="Historique indisponible : "+txError.message;return;}
+ $("transactions").innerHTML=(tx||[]).map(t=>`<div class="notice">${esc(t.transaction_type)} · ${Number(t.amount).toLocaleString("fr-FR")} pièces<br><small>${esc(t.description||"")} · ${new Date(t.created_at).toLocaleString("fr-FR")}</small></div>`).join("")||"Aucune transaction.";
+}
+// Paiements volontairement verrouillés jusqu'à la mise en place et au test du webhook Stripe.
+// Ne passer à true qu'après avoir déployé stripe-webhook, configuré STRIPE_WEBHOOK_SECRET
+// et vérifié qu'un paiement test crédite le portefeuille une seule fois.
+const PIU_STRIPE_CHECKOUT_ENABLED = false;
+let selectedRechargeCoins = 0;
+function selectRecharge(coins){
+ selectedRechargeCoins=coins;
+ const input=$("customRechargeCoins");if(input)input.value=String(coins);
+ updateRechargePrice();
+}
+function updateRechargePrice(){
+ const input=$("customRechargeCoins");
+ const coins=Number(input?.value||0);
+ const valid=Number.isSafeInteger(coins)&&coins>=5000&&coins<=5000000&&coins%1000===0;
+ selectedRechargeCoins=valid?coins:0;
+ if($("rechargePrice"))$("rechargePrice").textContent=valid
+  ? `${coins.toLocaleString("fr-FR")} PIU Coins — ${(coins/10000).toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})} €`
+  : "Montant invalide : choisis entre 5 000 et 5 000 000, par pas de 1 000.";
+ const button=$("rechargePayButton");if(button)button.disabled=!valid||!PIU_STRIPE_CHECKOUT_ENABLED;
+}
+async function startStripeCheckout(){
+ if(!requireLogin())return;
+ if(!PIU_STRIPE_CHECKOUT_ENABLED){
+  $("rechargeStatus").textContent="Paiements temporairement verrouillés : la confirmation Stripe et le crédit automatique doivent d'abord être installés et testés.";
+  return;
+ }
+ if(!selectedRechargeCoins){updateRechargePrice();return;}
+ const button=$("rechargePayButton"),status=$("rechargeStatus");
+ button.disabled=true;status.textContent="Création du paiement sécurisé...";
+ try{
+  const {data,error}=await db.functions.invoke("piu-checkout",{body:{coins:selectedRechargeCoins}});
+  if(error)throw new Error(error.message||"Erreur de connexion à Stripe.");
+  if(!data||typeof data.url!=="string"||!data.url.startsWith("https://checkout.stripe.com/"))
+   throw new Error(data?.error||"Stripe n'a pas retourné de lien de paiement valide.");
+  window.location.assign(data.url);
+ }catch(err){
+  status.textContent="Paiement non lancé : "+(err?.message||String(err));
+  button.disabled=false;
+ }
+}
+async function loadRechargePreview(){
+ if(!currentUser){$("rechargeBalance").textContent="Connecte-toi pour voir ton solde.";return;}
+ const {data,error}=await db.from("piu_wallets").select("coin_balance").eq("user_id",currentUser.id).maybeSingle();
+ if(error){$("rechargeBalance").textContent="Solde indisponible : "+error.message;return;}
+ $("rechargeBalance").innerHTML=data?`<h2>${Number(data.coin_balance||0).toLocaleString("fr-FR")} <span class="piu-gold-coin" aria-label="PIU Coin doré">P</span></h2>`:"Portefeuille non initialisé.";
+ updateRechargePrice();
+}
+
+/* FAN CLUBS */
+async function loadClubs(){
+ if(!requireLogin())return;
+ const box=$("clubList");box.textContent="Chargement...";
+ const {data,error}=await db.from("piu_fan_clubs").select("id,creator_id,club_name,description,created_at").order("created_at",{ascending:false}).limit(100);
+ if(error){box.textContent="Fan Clubs indisponibles : "+error.message;return;}
+ if(!data?.length){box.textContent="Aucun Fan Club créé pour le moment.";return;}
+ const ids=[...new Set(data.map(c=>c.creator_id))];
+ const {data:people}=await db.from("profiles").select("id,username,display_name").in("id",ids);
+ const names=Object.fromEntries((people||[]).map(p=>[p.id,p.display_name||p.username||"Créateur"]));
+ box.innerHTML=data.map(c=>`<div class="notice"><h3>${esc(c.club_name)}</h3><p>${esc(c.description||"")}</p><small>Créateur : ${esc(names[c.creator_id]||"Membre PIU-PIU")}</small></div>`).join("");
+}
+
+/* JEUX */
+async function loadGames(){
+ const box=$("gameList");
+ const {data,error}=await db.from("piu_games").select("game_code,game_name").eq("is_active",true);
+ if(error){box.textContent="Jeux indisponibles : "+error.message;return;}
+ box.innerHTML=data?.length?data.map(g=>`<div class="notice"><b>${esc(g.game_name)}</b><br><small>${esc(g.game_code)}</small></div>`).join(""):"Les jeux PIU-PIU arrivent bientôt.";
+}
+async function loadScores(){
+ const box=$("gameScores");
+ const {data,error}=await db.from("piu_game_scores").select("game_id,user_id,score").order("score",{ascending:false}).limit(20);
+ if(error){box.textContent="Classement indisponible : "+error.message;return;}
+ if(!data?.length){box.textContent="Aucun score enregistré.";return;}
+ const ids=[...new Set(data.map(x=>x.user_id))];
+ const {data:people}=await db.from("profiles").select("id,username,display_name").in("id",ids);
+ const names=Object.fromEntries((people||[]).map(p=>[p.id,p.username||p.display_name||"Membre"]));
+ box.innerHTML=data.map((s,i)=>`<div class="notice">#${i+1} @${esc(names[s.user_id]||"Membre")} — ${Number(s.score)} points</div>`).join("");
+}
+function answerQuiz(answer){$("quizResult").textContent=answer==="bleu"?"Bonne réponse ! 🎉":"Essaie encore !";}
+
+/* LIVES LIVEKIT */
+let piuLiveRoom=null,piuLiveRoomName=null,piuLiveIsHost=false,piuLiveType=null;
+const LIVE_TOKEN_FUNCTION="piu-live-token";
+
+function liveStatus(message,where="liveRoomStatus"){
+ const el=$(where);if(el)el.textContent=message;
+}
+function liveClient(){
+ if(!window.LivekitClient)throw new Error("Le SDK LiveKit ne s'est pas chargé. Recharge la page puis réessaie.");
+ return window.LivekitClient;
+}
+function clearLiveStage(){
+ ["liveStage","myLivePreview"].forEach(id=>{if($(id))$(id).innerHTML="";});
+}
+function removeLiveTrack(track){
+ if(!track)return;
+ try{track.detach().forEach(el=>el.remove());}catch(_){}
+}
+function addLiveTrack(track,participant,local=false){
+ const target=$(local?"myLivePreview":"liveStage");if(!target||!track)return;
+ // Do not attach the same track twice.
+ if(target.querySelector(`[data-track-sid="${CSS.escape(track.sid||"")}"]`))return;
+ const tile=document.createElement("div");tile.className="live-tile";
+ if(track.sid)tile.dataset.trackSid=track.sid;
+ const media=track.attach();
+ if(media.tagName==="VIDEO"){media.autoplay=true;media.playsInline=true;media.muted=!!local;}
+ if(media.tagName==="AUDIO"){media.autoplay=true;media.muted=!!local;}
+ tile.appendChild(media);
+ const label=document.createElement("small");
+ label.textContent=local?"Moi":(participant?.name||participant?.identity||"Participant");
+ tile.appendChild(label);target.appendChild(tile);
+}
+function attachSubscribedTracks(participant,local=false){
+ const pubs=participant?.trackPublications;
+ if(!pubs)return;
+ const values=typeof pubs.values==="function"?Array.from(pubs.values()):Array.from(pubs);
+ values.forEach(pub=>{if(pub?.track && pub.isSubscribed!==false)addLiveTrack(pub.track,participant,local);});
+}
+async function getLiveToken(hostId){
+ // Le serveur détermine lui-même si le participant est l’hôte.
+ const {data,error}=await db.functions.invoke(LIVE_TOKEN_FUNCTION,{body:{hostId}});
+ if(error)throw new Error("Impossible d'obtenir le jeton LiveKit : "+error.message);
+ const payload=data?.data||data;
+ if(!payload?.token||!payload?.url)throw new Error(payload?.error||"Réponse du serveur incomplète (token ou url manquant).");
+ return payload;
+}
+async function connectLiveRoom(hostId,isHost,liveType){
+ if(piuLiveRoom)await leaveLiveRoom(false);
+ const lk=liveClient();
+ const auth=await getLiveToken(hostId);
+ const roomName=auth.roomName||("piu-"+hostId);
+ const room=new lk.Room({adaptiveStream:true,dynacast:true});
+ piuLiveRoom=room;piuLiveRoomName=roomName;piuLiveIsHost=isHost;piuLiveType=liveType;
+ room.on(lk.RoomEvent.TrackSubscribed,(track,_publication,participant)=>addLiveTrack(track,participant,false));
+ room.on(lk.RoomEvent.TrackUnsubscribed,(track)=>removeLiveTrack(track));
+ room.on(lk.RoomEvent.TrackUnpublished,(publication,participant)=>{
+  if(publication?.track)removeLiveTrack(publication.track);
+ });
+ room.on(lk.RoomEvent.Disconnected,()=>{
+  if(piuLiveRoom===room){piuLiveRoom=null;piuLiveRoomName=null;piuLiveIsHost=false;piuLiveType=null;}
+  clearLiveStage();
+  liveStatus("Connexion au direct terminée.");
+  if($("liveAudioToggle"))$("liveAudioToggle").disabled=true;
+  if($("liveVideoToggle"))$("liveVideoToggle").disabled=true;
+ });
+ await room.connect(auth.url,auth.token);
+ room.remoteParticipants.forEach(p=>attachSubscribedTracks(p,false));
+ if(isHost){
+  await room.localParticipant.setMicrophoneEnabled(true);
+  if(liveType==="video")await room.localParticipant.setCameraEnabled(true);
+  attachSubscribedTracks(room.localParticipant,true);
+  room.localParticipant.on(lk.ParticipantEvent.TrackPublished,(publication)=>{
+   if(publication?.track)addLiveTrack(publication.track,room.localParticipant,true);
+  });
+  room.localParticipant.on(lk.ParticipantEvent.TrackUnpublished,(publication)=>{
+   if(publication?.track)removeLiveTrack(publication.track);
+  });
+ }else{
+  // On iOS, the first audio playback can require a user gesture.
+  try{await room.startAudio();}catch(_){}
+ }
+ if($("liveAudioToggle")){
+  $("liveAudioToggle").disabled=!isHost;
+  $("liveAudioToggle").textContent="🎙️ Couper micro";
+ }
+ if($("liveVideoToggle")){
+  $("liveVideoToggle").disabled=!isHost||liveType!=="video";
+  $("liveVideoToggle").textContent="📷 Couper caméra";
+ }
+ liveStatus(isHost?"Tu es en direct. Les membres peuvent te rejoindre.":"Tu as rejoint le direct.");
+ return room;
+}
+async function startLive(){
+ if(!requireLogin())return;
+ const title=$("partyTitle").value.trim(),type=$("partyType").value;
+ const status=$("streamerStatus"),button=$("startLiveButton");
+ if(!title){status.textContent="Ajoute un titre à ton direct.";return;}
+ if(!window.isSecureContext){status.textContent="Le micro et la caméra exigent une page HTTPS.";return;}
+ button.disabled=true;status.textContent="Création de ta salle...";
+ const roomName="piu-"+currentUser.id;
+ let roomRowCreated=false;
+ try{
+  const {data:existing,error:checkError}=await db.from("piu_live_rooms").select("host_id").eq("host_id",currentUser.id).eq("status","live").limit(1);
+  if(checkError)throw new Error("Vérification de tes directs impossible : "+checkError.message);
+  if(existing?.length)throw new Error("Tu as déjà un direct en cours. Rejoins-le depuis la liste ou quitte-le d'abord.");
+  const {error:insertError}=await db.from("piu_live_rooms").insert({host_id:currentUser.id,title,live_type:type,status:"live"});
+  if(insertError)throw new Error("La salle n'a pas pu être enregistrée : "+insertError.message);
+  roomRowCreated=true;
+  showPage("lives");
+  clearLiveStage();
+  await connectLiveRoom(currentUser.id,true,type);
+  status.textContent="Ton direct est lancé !";
+  await loadLives();
+ }catch(err){
+  status.textContent="Démarrage impossible : "+(err?.message||String(err));
+  // If the DB row was created but connection failed, mark it ended to avoid a ghost live.
+  if(roomRowCreated)await db.from("piu_live_rooms").update({status:"ended"}).eq("host_id",currentUser.id).eq("status","live");
+ }finally{button.disabled=false;}
+}
+async function joinLive(hostId,liveType,title){
+ if(!requireLogin())return;
+ if(hostId===currentUser.id){showPage("lives");liveStatus("C'est ton direct. Tu es déjà l'hôte.");return;}
+ try{
+  showPage("lives");clearLiveStage();
+  liveStatus("Connexion au direct de "+title+"...");
+  await connectLiveRoom(hostId,false,liveType||"video");
+ }catch(err){liveStatus("Impossible de rejoindre : "+(err?.message||String(err)));}
+}
+async function leaveLiveRoom(updateRoom=true){
+ const room=piuLiveRoom,wasHost=piuLiveIsHost,hostId=currentUser?.id;
+ piuLiveRoom=null;piuLiveRoomName=null;piuLiveIsHost=false;piuLiveType=null;
+ if(room){try{await room.disconnect();}catch(_){}}
+ clearLiveStage();
+ $("liveAudioToggle").disabled=true;$("liveVideoToggle").disabled=true;
+ liveStatus("Tu as quitté le direct.");
+ if(updateRoom&&wasHost&&hostId){
+  const {error}=await db.from("piu_live_rooms").update({status:"ended"}).eq("host_id",hostId).eq("status","live");
+  if(error)liveStatus("Direct quitté, mais sa fermeture dans la liste a échoué : "+error.message);
+  await loadLives();
+ }
+}
+async function toggleLiveAudio(){
+ if(!piuLiveRoom)return;
+ const enabled=piuLiveRoom.localParticipant.isMicrophoneEnabled;
+ await piuLiveRoom.localParticipant.setMicrophoneEnabled(!enabled);
+ $("liveAudioToggle").textContent=enabled?"🎙️ Activer micro":"🎙️ Couper micro";
+}
+async function toggleLiveVideo(){
+ if(!piuLiveRoom)return;
+ const enabled=piuLiveRoom.localParticipant.isCameraEnabled;
+ await piuLiveRoom.localParticipant.setCameraEnabled(!enabled);
+ $("liveVideoToggle").textContent=enabled?"📷 Activer caméra":"📷 Couper caméra";
+}
+async function loadLives(){
+ const box=$("liveList");if(!box)return;
+ if(!currentUser){box.textContent="Connecte-toi pour consulter les directs.";return;}
+ box.textContent="Chargement...";
+ const {data,error}=await db.from("piu_live_rooms").select("host_id,title,live_type,status,created_at").eq("status","live").order("created_at",{ascending:false}).limit(50);
+ if(error){box.textContent="Lives indisponibles : "+error.message;return;}
+ if(!data?.length){box.textContent="Aucun direct en cours. Tu peux être le premier à en créer un !";return;}
+ const ids=[...new Set(data.map(x=>x.host_id))];
+ const {data:people}=await db.from("profiles").select("id,username,display_name").in("id",ids);
+ const names=Object.fromEntries((people||[]).map(p=>[p.id,p.display_name||p.username||"Créateur"]));
+ box.innerHTML=data.map(l=>`<div class="notice"><b>🔴 ${esc(l.title)}</b><p>${l.live_type==="audio"?"🎙️ Direct audio":"📹 Direct vidéo"}</p><small>Présenté par ${esc(names[l.host_id]||"Membre PIU-PIU")}</small><p><button onclick="joinLive('${l.host_id}','${l.live_type}','${esc(l.title).replace(/'/g,"&#39;")}')">Rejoindre</button></p></div>`).join("");
+}
+async function loadExploreLives(){
+ const boxes=[$("exploreLives"),$("homeLiveFeed")].filter(Boolean);
+ if(!boxes.length)return;
+ if(!currentUser){
+  boxes.forEach(box=>box.innerHTML='<div class="live-empty"><span>◉</span><b>Connecte-toi pour voir les directs</b><small>Les lives disponibles apparaîtront ici.</small></div>');
+  return;
+ }
+ boxes.forEach(box=>box.innerHTML='<div class="live-empty"><span>◌</span><b>Recherche des directs…</b></div>');
+ const {data,error}=await db.from("piu_live_rooms").select("host_id,title,live_type,status,created_at").eq("status","live").order("created_at",{ascending:false}).limit(12);
+ if(error){
+  boxes.forEach(box=>box.innerHTML='<div class="live-empty"><b>Directs momentanément indisponibles.</b><small>Réessaie dans quelques instants.</small></div>');
+  return;
+ }
+ if(!data?.length){
+  boxes.forEach(box=>box.innerHTML='<div class="live-empty"><span>◉</span><b>Aucun direct pour le moment</b><small>Tu peux être le premier à lancer ton LIVE.</small><button class="live-primary" onclick="showPage(\'streamer\')">Créer mon LIVE</button></div>');
+  return;
+ }
+ const ids=[...new Set(data.map(x=>x.host_id))];
+ const {data:people}=await db.from("profiles").select("id,username,display_name").in("id",ids);
+ const names=Object.fromEntries((people||[]).map(p=>[p.id,p.display_name||p.username||"Créateur PIU-PIU"]));
+ const cards=data.map(l=>`<article class="live-card">
+  <div class="live-card-cover"><span class="live-on">● EN DIRECT</span><span class="live-card-type">${l.live_type==="audio"?"🎙️ AUDIO":"📹 VIDÉO"}</span><div class="live-card-mark">PIU<span>•</span>LIVE</div></div>
+  <div class="live-card-info"><b>${esc(l.title||"LIVE PIU-PIU")}</b><small>${esc(names[l.host_id]||"Créateur PIU-PIU")}</small>
+  <button class="live-join" onclick="joinLive('${l.host_id}','${l.live_type}','${esc(l.title||"LIVE").replace(/'/g,"&#39;")}')">Rejoindre ›</button></div>
+ </article>`).join("");
+ boxes.forEach(box=>box.innerHTML=`<div class="live-card-grid">${cards}</div>`);
+}
+/* Compatibilité avec les anciens boutons Party / streamer */
+function createPartyPreview(){showPage("streamer");}
+function savePartyPreview(){startLive();}
+function prepareLive(){startLive();}
+
+/* CLASSEMENTS */
+async function loadRankings(){
+ if(!requireLogin())return;
+ const box=$("rankingList");box.textContent="Chargement...";
+ const {data,error}=await db.from("piu_member_progress").select("user_id,level_number,level_points").order("level_number",{ascending:false}).order("level_points",{ascending:false}).limit(50);
+ if(error){box.textContent="Classement indisponible : "+error.message;return;}
+ if(!data?.length){box.textContent="Le classement sera disponible lorsque les progressions seront initialisées.";return;}
+ const ids=data.map(x=>x.user_id);
+ const {data:people}=await db.from("profiles").select("id,username,display_name,country").in("id",ids);
+ const names=Object.fromEntries((people||[]).map(p=>[p.id,p]));
+ box.innerHTML=data.map((p,i)=>{const person=names[p.user_id]||{};return `<div class="notice">#${i+1} ${esc(person.display_name||person.username||"Membre")} — Niveau ${p.level_number}<br><small>${esc(person.country||"Pays non renseigné")}</small></div>`}).join("");
+}
+
+/* NOTIFICATIONS */
+async function loadNotifications(){
+ if(!requireLogin())return;
+ $("notificationList").textContent="Chargement...";
+ const {data,error}=await db.from("notifications").select("*").order("created_at",{ascending:false}).limit(100);
+ if(error){$("notificationList").textContent="Erreur : "+error.message;return;}
+ if(!data?.length){$("notificationList").textContent="Aucune notification.";return;}
+ $("notificationList").innerHTML=data.map(n=>`<div class="notice"><strong>${esc(n.title||n.type||"Notification")}</strong><p>${esc(n.body||n.message||n.content||"")}</p><small>${n.created_at?new Date(n.created_at).toLocaleString("fr-FR"):""}</small>${n.is_read===false?`<button onclick="markNotificationRead('${n.id}')">Marquer comme lue</button>`:""}</div>`).join("");
+}
+async function markNotificationRead(id){
+ const {error}=await db.from("notifications").update({is_read:true}).eq("id",id);
+ if(error){alert(error.message);return;}
+ await loadNotifications();
+}
+
+/* PARTY ET CENTRE CRÉATEUR */
+function partyDemoGift(emoji){
+ const el=document.createElement("div");el.className="piu-gift-animation";el.textContent=emoji;document.body.appendChild(el);setTimeout(()=>el.remove(),1600);
+}
+function createPartyPreview(){
+ if(!requireLogin())return;
+ $("partyPreview").innerHTML=`<div class="card"><h3>Créer une salle</h3><label>Nom de la salle</label><input id="newPartyName" maxlength="60" placeholder="Ma salle PIU-PIU"><label>Type</label><select id="newPartyMode"><option value="audio">🎙️ Audio</option><option value="video">📹 Vidéo</option></select><button class="gold" onclick="savePartyPreview()">Créer l'aperçu</button><p id="newPartyStatus" class="status"></p></div>`;
+}
+function savePartyPreview(){
+ const name=$("newPartyName")?.value.trim();
+ if(!name){$("newPartyStatus").textContent="Donne un nom à ta salle.";return;}
+ $("newPartyStatus").textContent="Aperçu préparé : "+name+". La création d'une vraie salle synchronisée nécessite encore l'activation serveur.";
+}
+function prepareLive(){
+ // Le bouton historique du centre streamer lance maintenant le vrai direct LiveKit.
+ return startLive();
+}
+
+/* AUTH SUPABASE */
+db.auth.onAuthStateChange((_event,session)=>{
+ currentUser=session?.user||null;updateAuthButton();
+ if(!currentUser){
+  myProfileData=null;
+  $("myProfile").textContent="Connecte-toi pour consulter ton profil.";
+  $("ownerBalances").innerHTML="";$("myProgress").innerHTML="";$("myVip").innerHTML="";
+ }
+});
+refreshSession();
+</script>
+</body>
+</html>
