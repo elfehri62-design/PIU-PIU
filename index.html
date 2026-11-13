@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+<!-- PIU-PIU Studio : copie de travail sécurisée, base originale conservée. -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -287,46 +288,71 @@ button.pink{background:linear-gradient(110deg,#F05A9D,#9A4FD1);color:white;borde
 .live-bottom-callout{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:18px 0 8px;padding:15px;border-radius:17px;background:linear-gradient(110deg,#38213B,#241A2B);border:1px solid #68435F}.live-bottom-callout b,.live-bottom-callout small{display:block}.live-bottom-callout b{color:#F4C451}.live-bottom-callout small{font-size:11px;color:#C8B9C9;margin-top:4px}.explore-heading{margin:8px 2px 16px}
 @media(max-width:420px){main{padding:8px 10px 22px}.live-welcome{padding:16px;min-height:175px}.live-welcome h2{font-size:21px}.live-welcome-coin .piu-gold-coin{font-size:39px}.live-card-cover{height:125px}.live-shortcuts{gap:5px}.live-shortcuts button>small{font-size:8px}.coin-pill{font-size:11px;padding:7px 8px}}
 
+
+/* MODE PAGE UNIQUE : toutes les rubriques restent visibles */
+.page {
+  display: block;
+  scroll-margin-top: 88px;
+  margin: 0 0 26px;
+}
+.page.hidden {
+  display: block !important;
+}
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 88px;
+}
+body {
+  padding-bottom: calc(92px + env(safe-area-inset-bottom));
+}
+@media (max-width: 520px) {
+  .page { scroll-margin-top: 82px; }
+}
+</style>
+<style>
+/* Correctifs de robustesse PIU-PIU — ajoutés sans supprimer les styles historiques. */
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+[aria-live="polite"],[role="status"]{overflow-wrap:anywhere}
 </style>
 </head>
 
 <body>
 <header class="piu-header">
- <button class="piu-menu-button" aria-label="Ouvrir le menu" onclick="togglePiuMenu()">â°</button>
+ <button class="piu-menu-button" aria-label="Ouvrir le menu" onclick="togglePiuMenu()">☰</button>
  <div class="piu-brand">
   <img class="logo" src="AB3A6E9D-2421-4105-8C3A-8EE46DD38966.png" alt="Logo PIU-PIU">
-  <div><h1>PIU-PIU</h1><small>LE RÃSEAU QUI NOUS RAPPROCHE</small><span class="piu-hd-badge">HD 4K</span></div>
+  <div><h1>PIU-PIU</h1><small>LE RÉSEAU QUI NOUS RAPPROCHE</small><span class="piu-hd-badge">HD 4K</span></div>
  </div>
- <button class="piu-account" id="authButton" aria-label="Connexion" onclick="authAction()">ð¤</button>
+ <button class="piu-account" id="authButton" aria-label="Connexion" onclick="authAction()">👤</button>
 </header>
 
 <div id="piuMenuOverlay" class="piu-menu-overlay" onclick="togglePiuMenu(false)"></div>
 <aside id="piuSideMenu" class="piu-side-menu">
- <div class="piu-menu-head"><h2>ð£ PIU-PIU</h2><button class="piu-menu-close" onclick="togglePiuMenu(false)">â</button></div>
+ <div class="piu-menu-head"><h2>🐣 PIU-PIU</h2><button class="piu-menu-close" onclick="togglePiuMenu(false)">✕</button></div>
  <div class="piu-menu-group">PRINCIPAL</div>
- <button onclick="piuMenuGo('home')">ð  Accueil</button>
- <button onclick="piuMenuGo('explore')">ð Explorer</button>
- <button onclick="piuMenuGo('members')">ð¥ Membres</button>
- <button onclick="piuMenuGo('profile')">ð¤ Mon profil</button>
- <div class="piu-menu-group">COMMUNAUTÃ</div>
- <button onclick="piuMenuGo('messages')">ð¬ Messages</button>
- <button onclick="piuMenuGo('notifications')">ð Notifications</button>
- <button onclick="piuMenuGo('clubs')">ð Fan Clubs</button>
- <button onclick="piuMenuGo('party')">ð Party LIVE</button>
- <button onclick="piuMenuGo('lives')">ð´ Lives</button>
+ <button onclick="piuMenuGo('home')">🏠 Accueil</button>
+ <button onclick="piuMenuGo('explore')">🌍 Explorer</button>
+ <button onclick="piuMenuGo('members')">👥 Membres</button>
+ <button onclick="piuMenuGo('profile')">👤 Mon profil</button>
+ <div class="piu-menu-group">COMMUNAUTÉ</div>
+ <button onclick="piuMenuGo('messages')">💬 Messages</button>
+ <button onclick="piuMenuGo('notifications')">🔔 Notifications</button>
+ <button onclick="piuMenuGo('clubs')">💗 Fan Clubs</button>
+ <button onclick="piuMenuGo('party')">🎉 Party LIVE</button>
+ <button onclick="piuMenuGo('lives')">🔴 Lives</button>
  <div class="piu-menu-group">UNIVERS PIU-PIU</div>
- <button onclick="piuMenuGo('gifts')">ð Cadeaux</button>
- <button onclick="piuMenuGo('vip')">ð Espace VIP</button>
- <button onclick="piuMenuGo('games')">ð® Jeux</button>
- <button onclick="piuMenuGo('levels')">ð£ Niveaux</button>
- <button onclick="piuMenuGo('rankings')">ð Classements</button>
+ <button onclick="piuMenuGo('gifts')">🎁 Cadeaux</button>
+ <button onclick="piuMenuGo('vip')">👑 Espace VIP</button>
+ <button onclick="piuMenuGo('games')">🎮 Jeux</button>
+ <button onclick="piuMenuGo('levels')">🐣 Niveaux</button>
+ <button onclick="piuMenuGo('rankings')">🏆 Classements</button>
  <div class="piu-menu-group">MON COMPTE</div>
- <button onclick="piuMenuGo('wallet')">ð° Portefeuille</button>
- <button onclick="piuMenuGo('recharge')"><span class="piu-gold-coin" aria-label="PIU Coin dorÃ©">P</span> Recharge</button>
- <button onclick="piuMenuGo('streamer')">ð¡ Centre streamer</button>
- <button onclick="piuMenuGo('creator')">ð¬ Centre crÃ©ateur</button>
- <button onclick="piuMenuGo('auth')">ð Connexion / inscription</button>
- <button onclick="authAction();togglePiuMenu(false)">ðª Connexion / DÃ©connexion</button>
+ <button onclick="piuMenuGo('wallet')">💰 Portefeuille</button>
+ <button onclick="piuMenuGo('recharge')"><span class="piu-gold-coin" aria-label="PIU Coin doré">P</span> Recharge</button>
+ <button onclick="piuMenuGo('streamer')">📡 Centre streamer</button>
+ <button onclick="piuMenuGo('creator')">🎬 Centre créateur</button>
+ <button onclick="piuMenuGo('auth')">🔐 Connexion / inscription</button>
+ <button onclick="authAction();togglePiuMenu(false)">🚪 Connexion / Déconnexion</button>
 </aside>
 
 <main>
@@ -334,11 +360,11 @@ button.pink{background:linear-gradient(110deg,#F05A9D,#9A4FD1);color:white;borde
  <div class="live-home-top">
   <div class="live-home-brand">
    <img src="AB3A6E9D-2421-4105-8C3A-8EE46DD38966.png" alt="PIU-PIU" class="live-home-logo">
-   <div><strong>PIU-PIU</strong><small>LIVE â¢ COMMUNAUTÃ</small></div>
+   <div><strong>PIU-PIU</strong><small>LIVE • COMMUNAUTÉ</small></div>
   </div>
   <div class="live-home-actions">
-   <button class="coin-pill" onclick="showPage('recharge')"><span class="piu-gold-coin">P</span> <span id="homeCoinLabel">Coins</span> <b>ï¼</b></button>
-   <button class="round-action" onclick="showPage('notifications')" aria-label="Notifications">â§</button>
+   <button class="coin-pill" onclick="showPage('recharge')"><span class="piu-gold-coin">P</span> <span id="homeCoinLabel">Coins</span> <b>＋</b></button>
+   <button class="round-action" onclick="showPage('notifications')" aria-label="Notifications">♧</button>
   </div>
  </div>
  <div class="live-tabs">
@@ -351,47 +377,47 @@ button.pink{background:linear-gradient(110deg,#F05A9D,#9A4FD1);color:white;borde
   <div class="live-welcome-copy">
    <span class="live-kicker">TON UNIVERS EN DIRECT</span>
    <h2>Rencontre. Partage. Vis en LIVE.</h2>
-   <p>DÃ©couvre les crÃ©ateurs et rejoins la communautÃ© PIU-PIU.</p>
-   <button class="live-primary" onclick="showPage('lives')">ð´ DÃ©couvrir les LIVE</button>
+   <p>Découvre les créateurs et rejoins la communauté PIU-PIU.</p>
+   <button class="live-primary" onclick="showPage('lives')">🔴 Découvrir les LIVE</button>
   </div>
   <div class="live-welcome-coin"><span class="piu-gold-coin">P</span><small>PIU COINS</small></div>
  </div>
- <div class="live-section-head"><div><h2>En direct maintenant</h2><p>Les crÃ©ateurs qui sont en LIVE</p></div><button onclick="showPage('lives')">Tout voir âº</button></div>
+ <div class="live-section-head"><div><h2>En direct maintenant</h2><p>Les créateurs qui sont en LIVE</p></div><button onclick="showPage('lives')">Tout voir ›</button></div>
  <div id="homeLiveFeed" class="live-feed">
-  <div class="live-empty"><span>â</span><b>Les directs arrivent ici</b><small>Connecte-toi pour dÃ©couvrir les lives en cours.</small></div>
+  <div class="live-empty"><span>◉</span><b>Les directs arrivent ici</b><small>Connecte-toi pour découvrir les lives en cours.</small></div>
  </div>
- <div class="live-section-head"><div><h2>Explorer PIU-PIU</h2><p>Tout un univers Ã  dÃ©couvrir</p></div></div>
+ <div class="live-section-head"><div><h2>Explorer PIU-PIU</h2><p>Tout un univers à découvrir</p></div></div>
  <div class="live-shortcuts">
-  <button onclick="showPage('party')"><span>ð</span><b>Party</b><small>Salles Ã  plusieurs</small></button>
-  <button onclick="showPage('gifts')"><span>ð</span><b>Cadeaux</b><small>Envoie de l'amour</small></button>
-  <button onclick="showPage('rankings')"><span>ð</span><b>Classements</b><small>Les meilleurs</small></button>
-  <button onclick="showPage('clubs')"><span>ð</span><b>Fan Clubs</b><small>Rejoins un groupe</small></button>
+  <button onclick="showPage('party')"><span>🎉</span><b>Party</b><small>Salles à plusieurs</small></button>
+  <button onclick="showPage('gifts')"><span>🎁</span><b>Cadeaux</b><small>Envoie de l'amour</small></button>
+  <button onclick="showPage('rankings')"><span>🏆</span><b>Classements</b><small>Les meilleurs</small></button>
+  <button onclick="showPage('clubs')"><span>💗</span><b>Fan Clubs</b><small>Rejoins un groupe</small></button>
  </div>
  <div class="live-bottom-callout">
-  <div><b>PrÃªt Ã  lancer ton LIVE ?</b><small>CrÃ©e ta salle et retrouve ta communautÃ©.</small></div>
-  <button class="live-primary" onclick="showPage('streamer')">ï¼ DÃ©marrer</button>
+  <div><b>Prêt à lancer ton LIVE ?</b><small>Crée ta salle et retrouve ta communauté.</small></div>
+  <button class="live-primary" onclick="showPage('streamer')">＋ Démarrer</button>
  </div>
  <div id="homeStatus" class="status"></div>
 </section>
 
 <section id="explore" class="page hidden">
- <div class="live-section-head explore-heading"><div><span class="live-kicker">DÃCOUVERTE</span><h2>Explorer les LIVE</h2><p>DÃ©couvre les crÃ©ateurs PIU-PIU</p></div><button class="live-primary" onclick="showPage('streamer')">ï¼ Lancer un LIVE</button></div>
- <div class="piu-pills"><button onclick="showPage('members')">ð Membres</button><button onclick="showPage('lives')">ðï¸ Audio</button><button onclick="showPage('clubs')">ð Fan Clubs</button><button onclick="showPage('rankings')">ð Classements</button><button onclick="showPage('games')">ð® Jeux</button></div>
+ <div class="live-section-head explore-heading"><div><span class="live-kicker">DÉCOUVERTE</span><h2>Explorer les LIVE</h2><p>Découvre les créateurs PIU-PIU</p></div><button class="live-primary" onclick="showPage('streamer')">＋ Lancer un LIVE</button></div>
+ <div class="piu-pills"><button onclick="showPage('members')">🌟 Membres</button><button onclick="showPage('lives')">🎙️ Audio</button><button onclick="showPage('clubs')">💗 Fan Clubs</button><button onclick="showPage('rankings')">🏆 Classements</button><button onclick="showPage('games')">🎮 Jeux</button></div>
  <div class="piu-feature-grid">
-  <div class="piu-feature" onclick="showPage('members')">ð<strong>CrÃ©ateurs</strong><small>DÃ©couvrir les profils</small></div>
-  <div class="piu-feature" onclick="showPage('party')">ð<strong>Party LIVE</strong><small>DÃ©couvrir les salles</small></div>
-  <div class="piu-feature" onclick="showPage('games')">ð®<strong>Jeux</strong><small>Jouer avec la communautÃ©</small></div>
-  <div class="piu-feature" onclick="showPage('rankings')">ð<strong>Classements</strong><small>Voir les niveaux</small></div>
+  <div class="piu-feature" onclick="showPage('members')">🌟<strong>Créateurs</strong><small>Découvrir les profils</small></div>
+  <div class="piu-feature" onclick="showPage('party')">🎉<strong>Party LIVE</strong><small>Découvrir les salles</small></div>
+  <div class="piu-feature" onclick="showPage('games')">🎮<strong>Jeux</strong><small>Jouer avec la communauté</small></div>
+  <div class="piu-feature" onclick="showPage('rankings')">🏆<strong>Classements</strong><small>Voir les niveaux</small></div>
  </div>
  <div class="card"><h3>Les directs en cours</h3><div id="exploreLives">Connecte-toi pour consulter les directs.</div><button onclick="showPage('lives')">Voir tous les directs</button></div>
 </section>
 
 <section id="auth" class="page hidden">
- <div class="card center"><h2>Connexion Ã  PIU-PIU</h2>
+ <div class="card center"><h2>Connexion à PIU-PIU</h2>
   <label>Adresse e-mail</label><input id="authEmail" type="email" autocomplete="email">
   <label>Mot de passe</label><input id="authPassword" type="password" autocomplete="current-password">
-  <div class="row"><button class="gold" onclick="login()">Se connecter</button><button onclick="register()">CrÃ©er un compte</button></div>
-  <button onclick="resetPassword()">Mot de passe oubliÃ© ?</button><p id="authStatus" class="status"></p>
+  <div class="row"><button class="gold" onclick="login()">Se connecter</button><button onclick="register()">Créer un compte</button></div>
+  <button onclick="resetPassword()">Mot de passe oublié ?</button><p id="authStatus" class="status"></p>
  </div>
 </section>
 
@@ -406,112 +432,112 @@ button.pink{background:linear-gradient(110deg,#F05A9D,#9A4FD1);color:white;borde
 
 <section id="publicProfile" class="page hidden">
  <div class="card profile-page">
-  <button onclick="showPage('members')">â Retour</button>
+  <button onclick="showPage('members')">← Retour</button>
   <div id="publicProfileContent"></div>
  </div>
 </section>
 
-<section id="messages" class="page hidden"><div class="card"><h2>Messages privÃ©s</h2><div id="conversationList"></div><hr><div id="chatArea">Choisis un membre pour commencer.</div></div></section>
+<section id="messages" class="page hidden"><div class="card"><h2>Messages privés</h2><div id="conversationList"></div><hr><div id="chatArea">Choisis un membre pour commencer.</div></div></section>
 
 <section id="gifts" class="page hidden">
- <div class="card"><h2>Cadeaux PIU-PIU ð</h2><p id="giftRecipient">Choisis d'abord un membre.</p>
+ <div class="card"><h2>Cadeaux PIU-PIU 🎁</h2><p id="giftRecipient">Choisis d'abord un membre.</p>
  <h3>Cadeaux classiques</h3><div class="grid" id="classicGifts">
-  <div class="tile" onclick="chooseGift('rose')">ð¹ Rose</div><div class="tile" onclick="chooseGift('coeur')">â¤ï¸ CÅur</div><div class="tile" onclick="chooseGift('diamant')">ð Diamant</div><div class="tile" onclick="chooseGift('ourson')">ð§¸ Ourson</div><div class="tile" onclick="chooseGift('couronne')">ð Couronne</div><div class="tile" onclick="chooseGift('trophee')">ð TrophÃ©e</div>
+  <div class="tile" onclick="chooseGift('rose')">🌹 Rose</div><div class="tile" onclick="chooseGift('coeur')">❤️ Cœur</div><div class="tile" onclick="chooseGift('diamant')">💎 Diamant</div><div class="tile" onclick="chooseGift('ourson')">🧸 Ourson</div><div class="tile" onclick="chooseGift('couronne')">👑 Couronne</div><div class="tile" onclick="chooseGift('trophee')">🏆 Trophée</div>
  </div>
  <h3>Boutique premium</h3><div id="giftCatalog" class="grid">Chargement du catalogue...</div>
- <p class="muted">Les achats sÃ©curisÃ©s ne sont pas encore activÃ©s.</p>
- <textarea id="giftMessage" placeholder="Ajouter un petit message"></textarea><button class="gold" onclick="sendGift()">Envoyer le cadeau classique sÃ©lectionnÃ©</button><p id="giftStatus" class="status"></p>
+ <p class="muted">Les achats sécurisés ne sont pas encore activés.</p>
+ <textarea id="giftMessage" placeholder="Ajouter un petit message"></textarea><button class="gold" onclick="sendGift()">Envoyer le cadeau classique sélectionné</button><p id="giftStatus" class="status"></p>
  </div><div class="card"><h3>Historique des cadeaux</h3><div id="giftHistory"></div></div>
 </section>
 
-<section id="vip" class="page hidden"><div class="card"><h2>Club VIP PIU-PIU ð</h2><p>Le statut VIP est indÃ©pendant du niveau de progression.</p><div class="grid"><div class="tile">ð¥<p>Bronze</p></div><div class="tile">ð¥<p>Argent</p></div><div class="tile">ð¥<p>Or</p></div><div class="tile">ð<p>Diamant</p></div><div class="tile">ð<p>Royal</p></div></div><div id="vipStatus" class="notice">Connecte-toi pour consulter ton statut VIP.</div><p class="muted">Aucun achat VIP n'est activÃ© ici.</p></div></section>
+<section id="vip" class="page hidden"><div class="card"><h2>Club VIP PIU-PIU 👑</h2><p>Le statut VIP est indépendant du niveau de progression.</p><div class="grid"><div class="tile">🥉<p>Bronze</p></div><div class="tile">🥈<p>Argent</p></div><div class="tile">🥇<p>Or</p></div><div class="tile">💎<p>Diamant</p></div><div class="tile">👑<p>Royal</p></div></div><div id="vipStatus" class="notice">Connecte-toi pour consulter ton statut VIP.</div><p class="muted">Aucun achat VIP n'est activé ici.</p></div></section>
 
-<section id="wallet" class="page hidden"><div class="card"><h2>Mon portefeuille</h2><div id="walletInfo">Connecte-toi pour consulter ton portefeuille.</div><div class="notice">Les recharges et transferts rÃ©els ne sont pas activÃ©s.</div><button class="gold" onclick="showPage('recharge')">Voir les options de recharge</button></div><div class="card"><h3>Historique des transactions</h3><div id="transactions">Aucune transaction chargÃ©e.</div></div></section>
+<section id="wallet" class="page hidden"><div class="card"><h2>Mon portefeuille</h2><div id="walletInfo">Connecte-toi pour consulter ton portefeuille.</div><div class="notice">Les recharges et transferts réels ne sont pas activés.</div><button class="gold" onclick="showPage('recharge')">Voir les options de recharge</button></div><div class="card"><h3>Historique des transactions</h3><div id="transactions">Aucune transaction chargée.</div></div></section>
 
 <section id="recharge" class="page hidden">
- <div class="piu-hero"><h2><span class="piu-gold-coin" aria-label="PIU Coin dorÃ©">P</span> Recharge PIU-PIU</h2><p>Ton portefeuille personnel</p></div>
+ <div class="piu-hero"><h2><span class="piu-gold-coin" aria-label="PIU Coin doré">P</span> Recharge PIU-PIU</h2><p>Ton portefeuille personnel</p></div>
  <div class="card"><h3>Mon solde</h3><div id="rechargeBalance">Connecte-toi pour voir ton solde.</div>
- <div class="notice">Tarif : 10 000 PIU Coins = 1,00 â¬. Les piÃ¨ces sont ajoutÃ©es uniquement aprÃ¨s confirmation du paiement par Stripe.</div>
+ <div class="notice">Tarif : 10 000 PIU Coins = 1,00 €. Les pièces sont ajoutées uniquement après confirmation du paiement par Stripe.</div>
  <h3>Choisir une recharge</h3>
  <div class="grid">
-  <button class="tile" onclick="selectRecharge(5000)"><span class="piu-gold-coin" aria-label="PIU Coin dorÃ©">P</span><b>5 000</b><p>0,50 â¬</p></button>
-  <button class="tile" onclick="selectRecharge(10000)"><span class="piu-gold-coin" aria-label="PIU Coin dorÃ©">P</span><b>10 000</b><p>1,00 â¬</p></button>
-  <button class="tile" onclick="selectRecharge(50000)"><span class="piu-gold-coin" aria-label="PIU Coin dorÃ©">P</span><b>50 000</b><p>5,00 â¬</p></button>
-  <button class="tile" onclick="selectRecharge(100000)"><span class="piu-gold-coin" aria-label="PIU Coin dorÃ©">P</span><b>100 000</b><p>10,00 â¬</p></button>
-  <button class="tile" onclick="selectRecharge(500000)"><span class="piu-gold-coin" aria-label="PIU Coin dorÃ©">P</span><b>500 000</b><p>50,00 â¬</p></button>
-  <button class="tile" onclick="selectRecharge(1000000)"><span class="piu-gold-coin" aria-label="PIU Coin dorÃ©">P</span><b>1 000 000</b><p>100,00 â¬</p></button>
+  <button class="tile" onclick="selectRecharge(5000)"><span class="piu-gold-coin" aria-label="PIU Coin doré">P</span><b>5 000</b><p>0,50 €</p></button>
+  <button class="tile" onclick="selectRecharge(10000)"><span class="piu-gold-coin" aria-label="PIU Coin doré">P</span><b>10 000</b><p>1,00 €</p></button>
+  <button class="tile" onclick="selectRecharge(50000)"><span class="piu-gold-coin" aria-label="PIU Coin doré">P</span><b>50 000</b><p>5,00 €</p></button>
+  <button class="tile" onclick="selectRecharge(100000)"><span class="piu-gold-coin" aria-label="PIU Coin doré">P</span><b>100 000</b><p>10,00 €</p></button>
+  <button class="tile" onclick="selectRecharge(500000)"><span class="piu-gold-coin" aria-label="PIU Coin doré">P</span><b>500 000</b><p>50,00 €</p></button>
+  <button class="tile" onclick="selectRecharge(1000000)"><span class="piu-gold-coin" aria-label="PIU Coin doré">P</span><b>1 000 000</b><p>100,00 €</p></button>
  </div>
- <label for="customRechargeCoins">Autre montant (de 5 000 Ã  5 000 000, par pas de 1 000)</label>
+ <label for="customRechargeCoins">Autre montant (de 5 000 à 5 000 000, par pas de 1 000)</label>
  <input id="customRechargeCoins" type="number" min="5000" max="5000000" step="1000" inputmode="numeric" placeholder="Ex. 25000" oninput="updateRechargePrice()">
- <p id="rechargePrice" class="status">SÃ©lectionne un montant.</p>
+ <p id="rechargePrice" class="status">Sélectionne un montant.</p>
  <button id="rechargePayButton" class="gold" onclick="startStripeCheckout()" disabled>Continuer vers Stripe</button>
- <p id="rechargeStatus" class="status">Paiements en cours de configuration. Aucun dÃ©bit ne sera lancÃ© tant que la confirmation automatique Stripe n'aura pas Ã©tÃ© vÃ©rifiÃ©e.</p>
+ <p id="rechargeStatus" class="status">Paiements en cours de configuration. Aucun débit ne sera lancé tant que la confirmation automatique Stripe n'aura pas été vérifiée.</p>
  <button onclick="showPage('wallet')">Consulter mon portefeuille</button></div>
 </section>
 
-<section id="clubs" class="page hidden"><div class="card"><h2>Fan Clubs â­</h2><p>DÃ©couvre les clubs des crÃ©ateurs PIU-PIU.</p><div id="clubList">Chargement...</div><p class="muted">La crÃ©ation de clubs et les adhÃ©sions payantes nÃ©cessitent des rÃ¨gles serveur supplÃ©mentaires.</p></div></section>
+<section id="clubs" class="page hidden"><div class="card"><h2>Fan Clubs ⭐</h2><p>Découvre les clubs des créateurs PIU-PIU.</p><div id="clubList">Chargement...</div><p class="muted">La création de clubs et les adhésions payantes nécessitent des règles serveur supplémentaires.</p></div></section>
 
-<section id="games" class="page hidden"><div class="card"><h2>Jeux PIU-PIU ð®</h2><div id="gameList">Chargement des jeux...</div><hr><h3>Mini quiz</h3><p>Quelle est la couleur principale de PIU-PIU ?</p><button onclick="answerQuiz('bleu')">Bleu nuit</button><button onclick="answerQuiz('rose')">Rose</button><button onclick="answerQuiz('vert')">Vert</button><p id="quizResult" class="status"></p><p class="muted">Ce quiz ne crÃ©dite pas de piÃ¨ces ni de points.</p></div><div class="card"><h3>Classement des jeux</h3><div id="gameScores">Chargement...</div></div></section>
+<section id="games" class="page hidden"><div class="card"><h2>Jeux PIU-PIU 🎮</h2><div id="gameList">Chargement des jeux...</div><hr><h3>Mini quiz</h3><p>Quelle est la couleur principale de PIU-PIU ?</p><button onclick="answerQuiz('bleu')">Bleu nuit</button><button onclick="answerQuiz('rose')">Rose</button><button onclick="answerQuiz('vert')">Vert</button><p id="quizResult" class="status"></p><p class="muted">Ce quiz ne crédite pas de pièces ni de points.</p></div><div class="card"><h3>Classement des jeux</h3><div id="gameScores">Chargement...</div></div></section>
 
 <section id="lives" class="page hidden">
  <div class="card">
-  <h2>Lives audio et vidÃ©o ð´</h2><p>DÃ©couvre les directs PIU-PIU et rejoins une salle.</p>
+  <h2>Lives audio et vidéo 🔴</h2><p>Découvre les directs PIU-PIU et rejoins une salle.</p>
   <div id="liveList">Chargement des directs...</div>
-  <button class="pink" onclick="showPage('streamer')">ï¼ CrÃ©er mon direct</button>
+  <button class="pink" onclick="showPage('streamer')">＋ Créer mon direct</button>
  </div>
  <div class="card">
   <h3>Lecteur du direct</h3>
   <div id="liveRoomStatus" class="live-status">Aucun direct rejoint.</div>
-  <div id="liveStage" class="live-stage"><p class="muted">Les vidÃ©os et les sons des participants apparaÃ®tront ici.</p></div>
+  <div id="liveStage" class="live-stage"><p class="muted">Les vidéos et les sons des participants apparaîtront ici.</p></div>
   <div class="live-controls">
-   <button id="liveAudioToggle" onclick="toggleLiveAudio()" disabled>ðï¸ Couper micro</button>
-   <button id="liveVideoToggle" onclick="toggleLiveVideo()" disabled>ð· Couper camÃ©ra</button>
+   <button id="liveAudioToggle" onclick="toggleLiveAudio()" disabled>🎙️ Couper micro</button>
+   <button id="liveVideoToggle" onclick="toggleLiveVideo()" disabled>📷 Couper caméra</button>
    <button onclick="leaveLiveRoom()">Quitter le direct</button>
   </div>
  </div>
 </section>
 
 <section id="party" class="page hidden">
- <div class="piu-hero"><h2>ð PIU-PIU PARTY LIVE</h2><p>Des salles communautaires jusqu'Ã  8 places.</p><button class="pink" onclick="createPartyPreview()">ï¼ CrÃ©er une salle</button></div>
- <div class="notice">Les directs audio et vidÃ©o utilisent maintenant LiveKit. Pour crÃ©er une salle, ouvre le centre streamer ; pour rejoindre un direct, utilise la page Lives.</div>
+ <div class="piu-hero"><h2>🎉 PIU-PIU PARTY LIVE</h2><p>Des salles communautaires jusqu'à 8 places.</p><button class="pink" onclick="createPartyPreview()">＋ Créer une salle</button></div>
+ <div class="notice">Les directs audio et vidéo utilisent maintenant LiveKit. Pour créer une salle, ouvre le centre streamer ; pour rejoindre un direct, utilise la page Lives.</div>
  <div id="partyPreview"></div>
- <div id="partyRooms"><div class="room-card"><h3>ð Salle de dÃ©monstration</h3><span class="badge">ðï¸ Audio / vidÃ©o</span>
+ <div id="partyRooms"><div class="room-card"><h3>🌟 Salle de démonstration</h3><span class="badge">🎙️ Audio / vidéo</span>
   <div class="room-seats">
-   <div class="room-seat occupied"><span class="seat-icon">ð</span>HÃ´te</div>
-   <div class="room-seat"><span class="seat-icon">ï¼</span>Place 2</div><div class="room-seat"><span class="seat-icon">ï¼</span>Place 3</div><div class="room-seat"><span class="seat-icon">ï¼</span>Place 4</div><div class="room-seat"><span class="seat-icon">ï¼</span>Place 5</div><div class="room-seat"><span class="seat-icon">ï¼</span>Place 6</div><div class="room-seat"><span class="seat-icon">ï¼</span>Place 7</div><div class="room-seat"><span class="seat-icon">ï¼</span>Place 8</div>
+   <div class="room-seat occupied"><span class="seat-icon">👑</span>Hôte</div>
+   <div class="room-seat"><span class="seat-icon">＋</span>Place 2</div><div class="room-seat"><span class="seat-icon">＋</span>Place 3</div><div class="room-seat"><span class="seat-icon">＋</span>Place 4</div><div class="room-seat"><span class="seat-icon">＋</span>Place 5</div><div class="room-seat"><span class="seat-icon">＋</span>Place 6</div><div class="room-seat"><span class="seat-icon">＋</span>Place 7</div><div class="room-seat"><span class="seat-icon">＋</span>Place 8</div>
   </div>
-  <button onclick="partyDemoGift('ð¹')">ð¹ Rose</button><button onclick="partyDemoGift('ð')">ð Diamant</button><button onclick="partyDemoGift('ð¦')">ð¦ Lion</button>
-  <p class="muted">Salle de dÃ©monstration â pas de direct rÃ©el.</p>
+  <button onclick="partyDemoGift('🌹')">🌹 Rose</button><button onclick="partyDemoGift('💎')">💎 Diamant</button><button onclick="partyDemoGift('🦁')">🦁 Lion</button>
+  <p class="muted">Salle de démonstration — pas de direct réel.</p>
  </div></div>
- <div class="card"><h3>EntrÃ©es spectaculaires</h3><p>Choisis un effet pour voir son animation de dÃ©monstration.</p><div class="entry-grid">
-  <div class="entry-choice" onclick="partyDemoGift('ð')"><b>ð</b>Dragon</div><div class="entry-choice" onclick="partyDemoGift('ðï¸')"><b>ðï¸</b>Voiture</div><div class="entry-choice" onclick="partyDemoGift('ð§')"><b>ð§</b>Vampire</div><div class="entry-choice" onclick="partyDemoGift('ð¥')"><b>ð¥</b>Phoenix</div><div class="entry-choice" onclick="partyDemoGift('ð¦')"><b>ð¦</b>Lion</div><div class="entry-choice" onclick="partyDemoGift('ð¸')"><b>ð¸</b>OVNI</div>
+ <div class="card"><h3>Entrées spectaculaires</h3><p>Choisis un effet pour voir son animation de démonstration.</p><div class="entry-grid">
+  <div class="entry-choice" onclick="partyDemoGift('🐉')"><b>🐉</b>Dragon</div><div class="entry-choice" onclick="partyDemoGift('🏎️')"><b>🏎️</b>Voiture</div><div class="entry-choice" onclick="partyDemoGift('🧛')"><b>🧛</b>Vampire</div><div class="entry-choice" onclick="partyDemoGift('🔥')"><b>🔥</b>Phoenix</div><div class="entry-choice" onclick="partyDemoGift('🦁')"><b>🦁</b>Lion</div><div class="entry-choice" onclick="partyDemoGift('🛸')"><b>🛸</b>OVNI</div>
  </div></div>
 </section>
 
 <section id="streamer" class="page hidden">
- <div class="piu-hero"><h2>ð¡ Centre streamer</h2><p>CrÃ©e ton propre direct audio ou vidÃ©o.</p></div>
+ <div class="piu-hero"><h2>📡 Centre streamer</h2><p>Crée ton propre direct audio ou vidéo.</p></div>
  <div class="card">
   <label>Titre du direct</label><input id="partyTitle" maxlength="80" placeholder="Bienvenue dans mon LIVE !">
-  <label>Type de direct</label><select id="partyType"><option value="audio">ðï¸ Audio</option><option value="video">ð¹ VidÃ©o</option></select>
-  <button class="pink" id="startLiveButton" onclick="startLive()">ð´ DÃ©marrer mon direct</button>
-  <p id="streamerStatus" class="status">Ton navigateur demandera l'autorisation du micro ou de la camÃ©ra.</p>
+  <label>Type de direct</label><select id="partyType"><option value="audio">🎙️ Audio</option><option value="video">📹 Vidéo</option></select>
+  <button class="pink" id="startLiveButton" onclick="startLive()">🔴 Démarrer mon direct</button>
+  <p id="streamerStatus" class="status">Ton navigateur demandera l'autorisation du micro ou de la caméra.</p>
   <div class="live-stage"><div id="myLivePreview" class="live-stage-grid"></div></div>
   <button onclick="showPage('lives')">Voir les directs</button>
  </div>
 </section>
 
 <section id="creator" class="page hidden">
- <div class="piu-hero"><h2>ð¬ Centre crÃ©ateur</h2><p>DÃ©veloppe ton univers PIU-PIU.</p></div>
+ <div class="piu-hero"><h2>🎬 Centre créateur</h2><p>Développe ton univers PIU-PIU.</p></div>
  <div class="piu-feature-grid">
-  <div class="piu-feature" onclick="showPage('lives')">ð¹<strong>Mes directs</strong><small>Consulter les lives</small></div>
-  <div class="piu-feature" onclick="showPage('clubs')">ð<strong>Mon Fan Club</strong><small>CommunautÃ©</small></div>
-  <div class="piu-feature" onclick="showPage('rankings')">ð<strong>Progression</strong><small>Classements</small></div>
-  <div class="piu-feature" onclick="showPage('gifts')">ð<strong>Cadeaux</strong><small>Catalogue</small></div>
+  <div class="piu-feature" onclick="showPage('lives')">📹<strong>Mes directs</strong><small>Consulter les lives</small></div>
+  <div class="piu-feature" onclick="showPage('clubs')">💗<strong>Mon Fan Club</strong><small>Communauté</small></div>
+  <div class="piu-feature" onclick="showPage('rankings')">🏆<strong>Progression</strong><small>Classements</small></div>
+  <div class="piu-feature" onclick="showPage('gifts')">🎁<strong>Cadeaux</strong><small>Catalogue</small></div>
  </div>
- <div class="notice">Les statistiques de revenus et les retraits crÃ©ateur seront disponibles aprÃ¨s la mise en place du systÃ¨me de paiement sÃ©curisÃ©.</div>
+ <div class="notice">Les statistiques de revenus et les retraits créateur seront disponibles après la mise en place du système de paiement sécurisé.</div>
 </section>
 
-<section id="levels" class="page hidden"><div class="piu-hero"><h2>ð£ Niveaux et rÃ©compenses</h2><p>Progresse dans PIU-PIU.</p></div><div class="card"><h3>Ma progression</h3><p>Les points et niveaux de ton compte restent privÃ©s.</p><button class="gold" onclick="showPage('profile')">Voir ma progression</button></div><div class="grid"><div class="tile">🥉<b>Bronze</b><p>Premiers pas</p></div><div class="tile">🥈<b>Argent</b><p>Communauté</p></div><div class="tile">🥇<b>Or</b><p>Créateur actif</p></div><div class="tile">💎<b>Diamant</b><p>Expert</p></div></div></section>
+<section id="levels" class="page hidden"><div class="piu-hero"><h2>🐣 Niveaux et récompenses</h2><p>Progresse dans PIU-PIU.</p></div><div class="card"><h3>Ma progression</h3><p>Les points et niveaux de ton compte restent privés.</p><button class="gold" onclick="showPage('profile')">Voir ma progression</button></div><div class="grid"><div class="tile">🥉<b>Bronze</b><p>Premiers pas</p></div><div class="tile">🥈<b>Argent</b><p>Communauté</p></div><div class="tile">🥇<b>Or</b><p>Créateur actif</p></div><div class="tile">💎<b>Diamant</b><p>Expert</p></div></div></section>
 
 <section id="rankings" class="page hidden"><div class="card"><h2>Classements PIU-PIU 🌍</h2><p>Classements des membres par progression.</p><div id="rankingList">Chargement...</div></div></section>
 <section id="notifications" class="page hidden"><div class="card"><h2>Notifications 🔔</h2><button onclick="loadNotifications()">Actualiser</button><div id="notificationList"></div></div></section>
@@ -548,11 +574,17 @@ function togglePiuMenu(force){
 function piuMenuGo(page){togglePiuMenu(false);showPage(page);}
 
 function showPage(name){
- document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
- $(name)?.classList.remove("hidden");
+ const target=$(name);
+ if(!target){
+  console.warn("Rubrique PIU-PIU introuvable :",name);
+  return;
+ }
+
+ // Navigation par défilement : aucune rubrique n'est masquée.
  document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));
  const map={explore:"navExplore",home:"navExplore",party:"navParty",lives:"navParty",messages:"navMessages",recharge:"navRecharge",wallet:"navRecharge",profile:"navProfile"};
  if(map[name])$(map[name])?.classList.add("active");
+
  if(name==="members")loadMembers();
  if(name==="profile")loadMyProfile();
  if(name==="messages")loadConversations();
@@ -563,10 +595,12 @@ function showPage(name){
  if(name==="clubs")loadClubs();
  if(name==="games"){loadGames();loadScores();}
  if(name==="lives"){loadLives();loadExploreLives();}
- if(name==="home")loadExploreLives();
+ if(name==="home"||name==="explore")loadExploreLives();
  if(name==="rankings")loadRankings();
  if(name==="vip")loadVip();
- window.scrollTo({top:0,behavior:"smooth"});
+
+ togglePiuMenu(false);
+ target.scrollIntoView({behavior:"smooth",block:"start"});
 }
 function updateAuthButton(){if($("authButton"))$("authButton").textContent="👤";}
 function requireLogin(){if(!currentUser){alert("Connecte-toi pour utiliser cette fonction.");showPage("auth");return false;}return true;}
@@ -599,15 +633,53 @@ async function resetPassword(){
  status.textContent=error?"Erreur : "+error.message:"Si cette adresse correspond à un compte, un e-mail de réinitialisation va être envoyé.";
 }
 async function logout(){
- const {error}=await db.auth.signOut();if(error){alert(error.message);return;}
- currentUser=null;myProfileData=null;updateAuthButton();$("homeStatus").textContent="Tu es déconnecté.";showPage("home");
+ // Ferme d'abord un éventuel direct local avant de terminer la session.
+ if(typeof piuLiveRoom!=="undefined" && piuLiveRoom){
+  try{await leaveLiveRoom(false);}catch(error){console.warn("Fermeture du direct :",error);}
+ }
+ const {error}=await db.auth.signOut();
+ if(error){alert(error.message);return;}
+ currentUser=null;
+ myProfileData=null;
+ updateAuthButton();
+ if($("homeStatus"))$("homeStatus").textContent="Tu es déconnecté.";
+ if($("homeCoinLabel"))$("homeCoinLabel").textContent="Coins";
+ showPage("home");
 }
 async function refreshSession(){
  const {data,error}=await db.auth.getSession();
- if(error){$("homeStatus").textContent="Erreur : "+error.message;return;}
- currentUser=data.session?.user||null;updateAuthButton();
- $("homeStatus").textContent=currentUser?"Bienvenue sur PIU-PIU ! Tu es connecté.":"Connecte-toi pour découvrir PIU-PIU.";
- if(currentUser)await loadMyProfile();
+ if(error){
+  if($("homeStatus"))$("homeStatus").textContent="Erreur de session : "+error.message;
+  return;
+ }
+ currentUser=data.session?.user||null;
+ updateAuthButton();
+ if($("homeStatus")){
+  $("homeStatus").textContent=currentUser
+   ?"Bienvenue sur PIU-PIU ! Tu es connecté."
+   :"Connecte-toi pour découvrir PIU-PIU.";
+ }
+ if(currentUser){
+  await Promise.allSettled([loadMyProfile(),loadHeaderBalance()]);
+ }
+}
+
+async function loadHeaderBalance(){
+ if(!currentUser)return;
+ const {data,error}=await db.from("piu_wallets")
+  .select("coin_balance")
+  .eq("user_id",currentUser.id)
+  .maybeSingle();
+ if(error){
+  console.warn("Solde PIU indisponible :",error.message);
+  return;
+ }
+ const label=$("homeCoinLabel");
+ if(label){
+  label.textContent=data
+   ?Math.max(0,Number(data.coin_balance)||0).toLocaleString("fr-FR")+" Coins"
+   :"Coins";
+ }
 }
 
 /* PROFILS */
@@ -954,12 +1026,26 @@ function chooseGift(type){
  if(!selectedMember){alert("Choisis d'abord un membre.");return;}
  selectedGift=type;$("giftStatus").textContent="Cadeau sélectionné : "+emojis[type];
 }
+// Sécurité : l'insertion directe dans `gifts` ne débite pas nécessairement le portefeuille.
+// Tant que la fonction RPC sécurisée et son schéma réel ne sont pas vérifiés, aucun cadeau payant n'est envoyé.
+const PIU_SECURE_GIFT_RPC = ""; // À renseigner uniquement après vérification de la fonction serveur déployée.
 async function sendGift(){
  if(!requireLogin()||!selectedMember||!selectedGift){alert("Choisis un destinataire et un cadeau.");return;}
- const {error}=await db.from("gifts").insert({sender_id:currentUser.id,receiver_id:selectedMember.id,gift_type:selectedGift,message:$("giftMessage").value.trim()});
- if(error){$("giftStatus").textContent="Erreur : "+error.message;return;}
- $("giftStatus").textContent="Cadeau envoyé ! 🎁";
- partyDemoGift(emojis[selectedGift]);selectedGift=null;await loadGiftHistory();
+ const status=$("giftStatus");
+ if(!PIU_SECURE_GIFT_RPC){
+  status.textContent="Envoi temporairement protégé : le transfert sécurisé des pièces doit être configuré côté serveur. Aucun cadeau ni débit n'a été enregistré.";
+  return;
+ }
+ const button=document.querySelector('[onclick="sendGift()"]');
+ if(button)button.disabled=true;
+ try{
+  const {data,error}=await db.functions.invoke(PIU_SECURE_GIFT_RPC,{body:{recipientId:selectedMember.id,giftType:selectedGift,message:$("giftMessage")?.value.trim()||""}});
+  if(error)throw new Error(error.message||"Le serveur a refusé le cadeau.");
+  if(data?.success!==true)throw new Error(data?.error||"Confirmation du serveur absente. Aucun succès ne peut être affiché.");
+  status.textContent="Cadeau confirmé par le serveur ! 🎁";
+  partyDemoGift(emojis[selectedGift]);selectedGift=null;await loadGiftHistory();
+ }catch(err){status.textContent="Cadeau non envoyé : "+(err?.message||String(err));}
+ finally{if(button)button.disabled=false;}
 }
 async function loadGiftHistory(){
  if(!requireLogin())return;
@@ -986,7 +1072,7 @@ async function loadWallet(){
  const {data,error}=await db.from("piu_wallets").select("coin_balance,usd_balance").eq("user_id",currentUser.id).maybeSingle();
  if(error){$("walletInfo").textContent="Portefeuille indisponible : "+error.message;return;}
  if(!data){$("walletInfo").textContent="Ton portefeuille sera initialisé par le système sécurisé.";return;}
- $("walletInfo").innerHTML=`<div class="grid"><div class="tile"><div class="symbol"><span class="piu-gold-coin" aria-label="PIU Coin doré">P</span></div><b>${Number(data.coin_balance||0).toLocaleString("fr-FR")}</b><p>Pièces PIU-PIU</p></div><div class="tile"><div class="symbol">💵</div><b>${Number(data.usd_balance||0).toFixed(2)} $</b><p>Solde USD</p></div></div>`;
+ $("walletInfo").innerHTML=`<div class="grid"><div class="tile"><div class="symbol"><span class="piu-gold-coin" aria-label="PIU Coin doré">P</span></div><b>${Math.max(0,Number(data.coin_balance)||0).toLocaleString("fr-FR")}</b><p>Pièces PIU-PIU</p></div><div class="tile"><div class="symbol">💵</div><b>${Number(data.usd_balance||0).toFixed(2)} $</b><p>Solde USD</p></div></div>`;
  const {data:tx,error:txError}=await db.from("piu_coin_transactions").select("amount,transaction_type,description,created_at").eq("user_id",currentUser.id).order("created_at",{ascending:false}).limit(30);
  if(txError){$("transactions").textContent="Historique indisponible : "+txError.message;return;}
  $("transactions").innerHTML=(tx||[]).map(t=>`<div class="notice">${esc(t.transaction_type)} · ${Number(t.amount).toLocaleString("fr-FR")} pièces<br><small>${esc(t.description||"")} · ${new Date(t.created_at).toLocaleString("fr-FR")}</small></div>`).join("")||"Aucune transaction.";
@@ -1035,7 +1121,7 @@ async function loadRechargePreview(){
  if(!currentUser){$("rechargeBalance").textContent="Connecte-toi pour voir ton solde.";return;}
  const {data,error}=await db.from("piu_wallets").select("coin_balance").eq("user_id",currentUser.id).maybeSingle();
  if(error){$("rechargeBalance").textContent="Solde indisponible : "+error.message;return;}
- $("rechargeBalance").innerHTML=data?`<h2>${Number(data.coin_balance||0).toLocaleString("fr-FR")} <span class="piu-gold-coin" aria-label="PIU Coin doré">P</span></h2>`:"Portefeuille non initialisé.";
+ $("rechargeBalance").innerHTML=data?`<h2>${Math.max(0,Number(data.coin_balance)||0).toLocaleString("fr-FR")} <span class="piu-gold-coin" aria-label="PIU Coin doré">P</span></h2>`:"Portefeuille non initialisé.";
  updateRechargePrice();
 }
 
@@ -1263,11 +1349,6 @@ async function loadExploreLives(){
  </article>`).join("");
  boxes.forEach(box=>box.innerHTML=`<div class="live-card-grid">${cards}</div>`);
 }
-/* Compatibilité avec les anciens boutons Party / streamer */
-function createPartyPreview(){showPage("streamer");}
-function savePartyPreview(){startLive();}
-function prepareLive(){startLive();}
-
 /* CLASSEMENTS */
 async function loadRankings(){
  if(!requireLogin())return;
@@ -1306,8 +1387,11 @@ function createPartyPreview(){
 }
 function savePartyPreview(){
  const name=$("newPartyName")?.value.trim();
- if(!name){$("newPartyStatus").textContent="Donne un nom à ta salle.";return;}
- $("newPartyStatus").textContent="Aperçu préparé : "+name+". La création d'une vraie salle synchronisée nécessite encore l'activation serveur.";
+ const mode=$("newPartyMode")?.value||"audio";
+ const status=$("newPartyStatus");
+ if(!name){status.textContent="Donne un nom à ta salle.";return;}
+ // Ne crée pas de fausse salle locale : aucune table/fonction Party Room vérifiée n'est encore liée à cet écran.
+ status.textContent="Aperçu uniquement : « "+name+" » ("+(mode==="video"?"vidéo":"audio")+"). La salle n'est pas encore enregistrée ni visible par les autres membres. La création réelle sera activée après vérification du schéma serveur.";
 }
 function prepareLive(){
  // Le bouton historique du centre streamer lance maintenant le vrai direct LiveKit.
@@ -1316,14 +1400,30 @@ function prepareLive(){
 
 /* AUTH SUPABASE */
 db.auth.onAuthStateChange((_event,session)=>{
- currentUser=session?.user||null;updateAuthButton();
+ currentUser=session?.user||null;
+ updateAuthButton();
+
  if(!currentUser){
   myProfileData=null;
-  $("myProfile").textContent="Connecte-toi pour consulter ton profil.";
-  $("ownerBalances").innerHTML="";$("myProgress").innerHTML="";$("myVip").innerHTML="";
+  if($("myProfile"))$("myProfile").textContent="Connecte-toi pour consulter ton profil.";
+  if($("ownerBalances"))$("ownerBalances").innerHTML="";
+  if($("myProgress"))$("myProgress").innerHTML="";
+  if($("myVip"))$("myVip").innerHTML="";
+  if($("homeCoinLabel"))$("homeCoinLabel").textContent="Coins";
+  return;
  }
+
+ // Laisse Supabase terminer son callback avant les requêtes suivantes.
+ setTimeout(()=>{
+  if(currentUser){
+   loadHeaderBalance();
+   loadMyProfile();
+  }
+ },0);
 });
+
 refreshSession();
+loadExploreLives();
 </script>
 </body>
 </html>
